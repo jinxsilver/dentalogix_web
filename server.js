@@ -15,7 +15,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "blob:", "https://images.pexels.com", "https://images.unsplash.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https://images.pexels.com", "https://images.unsplash.com", "https://*.nyu.edu", "https://*.buffalo.edu", "https://*.ucf.edu", "https://*.harvard.edu", "https://*.edu"],
       scriptSrc: ["'self'", "'unsafe-inline'"]
     }
   }
@@ -63,19 +63,21 @@ app.use('/api', apiRoutes);
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).render('404', { 
+  res.status(404).render('404', {
     title: 'Page Not Found',
-    settings: require('./models/settings').getSettings()
+    settings: require('./models/settings').getSettings(),
+    navPages: require('./models/pages').getNavPages()
   });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).render('error', { 
+  res.status(500).render('error', {
     title: 'Server Error',
     error: process.env.NODE_ENV === 'development' ? err : {},
-    settings: require('./models/settings').getSettings()
+    settings: require('./models/settings').getSettings(),
+    navPages: require('./models/pages').getNavPages()
   });
 });
 

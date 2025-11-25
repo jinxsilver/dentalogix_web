@@ -12,6 +12,8 @@ const Team = require('../models/team');
 const Testimonials = require('../models/testimonials');
 const Categories = require('../models/categories');
 const Contacts = require('../models/contacts');
+const Reviews = require('../models/reviews');
+const Insurance = require('../models/insurance');
 
 // Helper to get common data
 const getCommonData = () => ({
@@ -25,14 +27,20 @@ router.get('/', (req, res) => {
   const testimonials = Testimonials.getFeatured();
   const team = Team.getPublished();
   const recentPosts = Posts.getRecent(3);
-  
+  const reviews = Reviews.getFeatured();
+  const reviewStats = Reviews.getStats();
+  const insuranceProviders = Insurance.getPublished();
+
   res.render('public/home', {
     ...getCommonData(),
     title: 'Home',
     services,
     testimonials,
     team,
-    recentPosts
+    recentPosts,
+    reviews,
+    reviewStats,
+    insuranceProviders
   });
 });
 

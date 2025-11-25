@@ -73,13 +73,14 @@ a:hover {
 
 .sidebar-header {
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: #fff;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .sidebar-logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--admin-sidebar-bg);
   text-decoration: none;
 }
 
@@ -155,12 +156,12 @@ a:hover {
 
 /* Header */
 .admin-header {
-  background: var(--admin-card-bg);
+  background: var(--admin-bg);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--admin-border);
+  border-bottom: none;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -800,4 +801,79 @@ textarea {
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* =============================================
+   LOGO STYLING
+   ============================================= */
+
+.sidebar-logo-img {
+  height: 130px;
+  width: auto;
+  object-fit: contain;
+  margin: -35px 0;
+}
+
+/* =============================================
+   THEME OVERRIDES
+   ============================================= */
+
+/* Normal Theme (Default - Direction 2: Blue/Cyan) */
+body:not(.theme-fall):not(.theme-winter) {
+  --admin-primary: #0077B6;
+  --admin-primary-dark: #005A8C;
+  --admin-accent: #84CC16;
+}
+
+/* Fall Theme */
+body.theme-fall {
+  --admin-primary: #D97706;
+  --admin-primary-dark: #B45309;
+  --admin-accent: #F59E0B;
+  --admin-sidebar-bg: #B45309;
+}
+
+body.theme-fall .admin-sidebar {
+  background: linear-gradient(180deg, #D97706 0%, #B45309 100%);
+}
+
+body.theme-fall .sidebar-logo span {
+  color: #FCD34D;
+}
+
+body.theme-fall .nav-item.active,
+body.theme-fall .nav-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+
+body.theme-fall .nav-item.active {
+  border-left-color: #FCD34D;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* Winter Theme */
+body.theme-winter {
+  --admin-primary: #0EA5E9;
+  --admin-primary-dark: #0369A1;
+  --admin-accent: #06B6D4;
+  --admin-sidebar-bg: #1E3A5F;
+}
+
+body.theme-winter .admin-sidebar {
+  background: linear-gradient(180deg, #0369A1 0%, #1E3A5F 100%);
+}
+
+body.theme-winter .sidebar-logo span {
+  color: #38BDF8;
+}
+
+body.theme-winter .nav-item.active,
+body.theme-winter .nav-item:hover {
+  background: rgba(56, 189, 248, 0.15);
+}
+
+body.theme-winter .nav-item.active {
+  border-left-color: #38BDF8;
 }

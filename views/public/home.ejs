@@ -3,14 +3,19 @@
 <main>
   <!-- Hero Section -->
   <section class="hero">
-    <!-- Fall leaves animation -->
-    <div class="fall-leaves">
-      <span>🍂</span>
-      <span>🍁</span>
-      <span>🍂</span>
-      <span>🍁</span>
-      <span>🍂</span>
+    <% if (settings.show_falling_leaves === 'true') { %>
+    <!-- Falling leaves animation -->
+    <div class="falling-leaves">
+      <span class="leaf">🍂</span>
+      <span class="leaf">🍁</span>
+      <span class="leaf">🍂</span>
+      <span class="leaf">🍁</span>
+      <span class="leaf">🍂</span>
+      <span class="leaf">🍁</span>
+      <span class="leaf">🍂</span>
+      <span class="leaf">🍁</span>
     </div>
+    <% } %>
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
@@ -72,7 +77,12 @@
       
       <div class="services-grid">
         <% services.forEach(function(service) { %>
-        <div class="service-card">
+        <div class="service-card<%= service.image ? ' has-image' : '' %>">
+          <% if (service.image) { %>
+          <div class="service-image">
+            <img src="<%= service.image %>" alt="<%= service.title %>">
+          </div>
+          <% } else { %>
           <div class="service-icon">
             <% if (service.icon === 'sparkles') { %>
               <!-- Cosmetic/Sparkles -->
@@ -109,12 +119,15 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <% } %>
           </div>
-          <h3><%= service.title %></h3>
-          <p><%= service.short_description %></p>
-          <a href="/services/<%= service.slug %>" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          <% } %>
+          <div class="service-content">
+            <h3><%= service.title %></h3>
+            <p><%= service.short_description %></p>
+            <a href="/services/<%= service.slug %>" class="service-link">
+              Learn More
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
         </div>
         <% }); %>
       </div>
@@ -127,14 +140,22 @@
       <div class="about-content">
         <div class="about-images">
           <div class="about-image-main">
-            <div class="image-placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            </div>
+            <% if (settings.about_image_main) { %>
+              <img src="<%= settings.about_image_main %>" alt="About Dentalogix">
+            <% } else { %>
+              <div class="image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+            <% } %>
           </div>
           <div class="about-image-secondary">
-            <div class="image-placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            </div>
+            <% if (settings.about_image_secondary) { %>
+              <img src="<%= settings.about_image_secondary %>" alt="Our Practice">
+            <% } else { %>
+              <div class="image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+            <% } %>
           </div>
         </div>
         <div class="about-text">
@@ -288,6 +309,71 @@
   </section>
   <% } %>
 
+  <!-- Reviews Section -->
+  <% if (reviews && reviews.length > 0) { %>
+  <section class="reviews-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Patient Reviews</span>
+        <h2>What Our Patients Are Saying</h2>
+        <% if (reviewStats && reviewStats.total > 0) { %>
+        <div class="reviews-summary">
+          <div class="reviews-rating-large">
+            <span class="rating-number-lg"><%= reviewStats.average_rating ? reviewStats.average_rating.toFixed(1) : '5.0' %></span>
+            <div class="rating-stars-lg">
+              <% for(let i = 0; i < 5; i++) { %>
+                <svg viewBox="0 0 24 24" class="<%= reviewStats.average_rating && i < Math.round(reviewStats.average_rating) ? 'star-filled' : 'star-empty' %>"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <% } %>
+            </div>
+            <span class="rating-count-lg">Based on <%= reviewStats.total %> reviews</span>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="reviews-grid">
+        <% reviews.forEach(function(review) { %>
+        <div class="review-card">
+          <div class="review-header">
+            <% if (review.reviewer_photo) { %>
+              <img src="<%= review.reviewer_photo %>" alt="<%= review.reviewer_name %>" class="reviewer-photo">
+            <% } else { %>
+              <div class="reviewer-avatar"><%= review.reviewer_name.charAt(0).toUpperCase() %></div>
+            <% } %>
+            <div class="reviewer-info">
+              <strong><%= review.reviewer_name %></strong>
+              <div class="review-meta">
+                <span class="review-source <%= review.source %>">
+                  <% if (review.source === 'google') { %>
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="source-icon"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                  <% } else if (review.source === 'yelp') { %>
+                    <span style="font-weight: bold; color: #D32323;">Y</span>
+                  <% } else if (review.source === 'facebook') { %>
+                    <span style="font-weight: bold; color: #1877F2;">f</span>
+                  <% } %>
+                </span>
+                <% if (review.review_date) { %>
+                  <span class="review-date"><%= new Date(review.review_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="review-rating">
+            <% for(let i = 0; i < review.rating; i++) { %>
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <% } %>
+          </div>
+          <p class="review-content">"<%= review.content %>"</p>
+          <% if (review.source_url) { %>
+          <a href="<%= review.source_url %>" target="_blank" rel="noopener" class="review-link">View on <%= review.source.charAt(0).toUpperCase() + review.source.slice(1) %></a>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
   <!-- Insurance & Trust Section -->
   <section class="trust-section">
     <div class="container">
@@ -304,7 +390,7 @@
               </div>
               <div class="rating-info">
                 <div class="rating-stars">
-                  <span class="rating-number">4.8</span>
+                  <span class="rating-number"><%= reviewStats && reviewStats.average_rating ? reviewStats.average_rating.toFixed(1) : '4.8' %></span>
                   <div class="stars">
                     <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -313,7 +399,7 @@
                     <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                   </div>
                 </div>
-                <span class="rating-count">2,394 reviews</span>
+                <span class="rating-count"><%= reviewStats && reviewStats.total ? reviewStats.total.toLocaleString() : '2,394' %> reviews</span>
                 <span class="rating-source">Google Reviews</span>
               </div>
             </div>
@@ -335,23 +421,61 @@
             <span class="section-label">Insurance</span>
             <h3>We Accept Most Major Insurance Plans</h3>
           </div>
-          <div class="insurance-grid">
-            <div class="insurance-logo">
-              <span>United Healthcare</span>
-            </div>
-            <div class="insurance-logo">
-              <span>Delta Dental</span>
-            </div>
-            <div class="insurance-logo">
-              <span>Guardian</span>
-            </div>
-            <div class="insurance-logo">
-              <span>Anthem</span>
-            </div>
-            <div class="insurance-logo">
-              <span>Principal</span>
+          <% if (insuranceProviders && insuranceProviders.length > 0) { %>
+          <div class="insurance-carousel-wrapper">
+            <div class="insurance-carousel <%= insuranceProviders.length > 5 ? 'auto-scroll' : '' %>" id="insuranceCarousel">
+              <% insuranceProviders.forEach(function(provider) { %>
+              <div class="insurance-logo">
+                <% if (provider.logo) { %>
+                  <% if (provider.website_url) { %>
+                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
+                      <img src="<%= provider.logo %>" alt="<%= provider.name %>">
+                    </a>
+                  <% } else { %>
+                    <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
+                  <% } %>
+                <% } else { %>
+                  <% if (provider.website_url) { %>
+                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
+                  <% } else { %>
+                    <span><%= provider.name %></span>
+                  <% } %>
+                <% } %>
+              </div>
+              <% }); %>
+              <% if (insuranceProviders.length > 5) { %>
+              <!-- Duplicate for seamless loop -->
+              <% insuranceProviders.forEach(function(provider) { %>
+              <div class="insurance-logo">
+                <% if (provider.logo) { %>
+                  <% if (provider.website_url) { %>
+                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
+                      <img src="<%= provider.logo %>" alt="<%= provider.name %>">
+                    </a>
+                  <% } else { %>
+                    <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
+                  <% } %>
+                <% } else { %>
+                  <% if (provider.website_url) { %>
+                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
+                  <% } else { %>
+                    <span><%= provider.name %></span>
+                  <% } %>
+                <% } %>
+              </div>
+              <% }); %>
+              <% } %>
             </div>
           </div>
+          <% } else { %>
+          <div class="insurance-grid">
+            <div class="insurance-logo"><span>United Healthcare</span></div>
+            <div class="insurance-logo"><span>Delta Dental</span></div>
+            <div class="insurance-logo"><span>Guardian</span></div>
+            <div class="insurance-logo"><span>Anthem</span></div>
+            <div class="insurance-logo"><span>Principal</span></div>
+          </div>
+          <% } %>
           <p class="insurance-note">Don't see your insurance? <a href="/contact">Contact us</a> - we work with most providers!</p>
         </div>
       </div>

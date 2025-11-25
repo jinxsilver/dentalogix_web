@@ -63,6 +63,69 @@
   </a>
 </div>
 
+<% if (reviewStats && reviewStats.total > 0) { %>
+<div class="card" style="margin-bottom: 1.5rem;">
+  <div class="card-header">
+    <h2>Reviews Overview</h2>
+    <a href="/admin/reviews" class="btn btn-secondary btn-sm">Manage Reviews</a>
+  </div>
+  <div class="card-body">
+    <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+      <div style="text-align: center;">
+        <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-primary);"><%= reviewStats.average_rating ? reviewStats.average_rating.toFixed(1) : '0.0' %></div>
+        <div style="color: var(--text-muted);">Avg Rating</div>
+        <div style="color: #F59E0B; font-size: 1.25rem; margin-top: 0.25rem;">
+          <% for(var i = 0; i < 5; i++) { %>
+            <% if (reviewStats.average_rating && i < Math.round(reviewStats.average_rating)) { %>★<% } else { %>☆<% } %>
+          <% } %>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 200px;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <span style="width: 60px; font-size: 0.875rem;">5 stars</span>
+          <div style="flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 8px;">
+            <div style="width: <%= reviewStats.total > 0 ? (reviewStats.five_star / reviewStats.total * 100) : 0 %>%; background: #10B981; height: 100%; border-radius: 4px;"></div>
+          </div>
+          <span style="width: 30px; font-size: 0.875rem; text-align: right;"><%= reviewStats.five_star || 0 %></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <span style="width: 60px; font-size: 0.875rem;">4 stars</span>
+          <div style="flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 8px;">
+            <div style="width: <%= reviewStats.total > 0 ? (reviewStats.four_star / reviewStats.total * 100) : 0 %>%; background: #84CC16; height: 100%; border-radius: 4px;"></div>
+          </div>
+          <span style="width: 30px; font-size: 0.875rem; text-align: right;"><%= reviewStats.four_star || 0 %></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <span style="width: 60px; font-size: 0.875rem;">3 stars</span>
+          <div style="flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 8px;">
+            <div style="width: <%= reviewStats.total > 0 ? (reviewStats.three_star / reviewStats.total * 100) : 0 %>%; background: #FBBF24; height: 100%; border-radius: 4px;"></div>
+          </div>
+          <span style="width: 30px; font-size: 0.875rem; text-align: right;"><%= reviewStats.three_star || 0 %></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+          <span style="width: 60px; font-size: 0.875rem;">2 stars</span>
+          <div style="flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 8px;">
+            <div style="width: <%= reviewStats.total > 0 ? (reviewStats.two_star / reviewStats.total * 100) : 0 %>%; background: #F97316; height: 100%; border-radius: 4px;"></div>
+          </div>
+          <span style="width: 30px; font-size: 0.875rem; text-align: right;"><%= reviewStats.two_star || 0 %></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="width: 60px; font-size: 0.875rem;">1 star</span>
+          <div style="flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 8px;">
+            <div style="width: <%= reviewStats.total > 0 ? (reviewStats.one_star / reviewStats.total * 100) : 0 %>%; background: #EF4444; height: 100%; border-radius: 4px;"></div>
+          </div>
+          <span style="width: 30px; font-size: 0.875rem; text-align: right;"><%= reviewStats.one_star || 0 %></span>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; font-weight: 700;"><%= reviewStats.total %></div>
+        <div style="color: var(--text-muted);">Total Reviews</div>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
   <!-- Recent Messages -->
   <div class="card">
@@ -130,5 +193,40 @@
     </div>
   </div>
 </div>
+
+<% if (recentReviews && recentReviews.length > 0) { %>
+<div class="card" style="margin-top: 1.5rem;">
+  <div class="card-header">
+    <h2>Recent Reviews</h2>
+    <a href="/admin/reviews" class="btn btn-secondary btn-sm">View All</a>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <ul class="recent-list" style="padding: 1rem 1.5rem;">
+      <% recentReviews.forEach(function(review) { %>
+      <li class="recent-item" style="align-items: flex-start;">
+        <div class="recent-item-info" style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <% if (review.reviewer_photo) { %>
+              <img src="<%= review.reviewer_photo %>" alt="<%= review.reviewer_name %>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+            <% } else { %>
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;"><%= review.reviewer_name.charAt(0).toUpperCase() %></div>
+            <% } %>
+            <div>
+              <div class="recent-item-title"><%= review.reviewer_name %></div>
+              <div class="recent-item-meta">
+                <span style="color: #F59E0B;"><%= '★'.repeat(review.rating) %><%= '☆'.repeat(5 - review.rating) %></span>
+                <span class="badge" style="margin-left: 0.5rem; text-transform: capitalize;"><%= review.source %></span>
+              </div>
+            </div>
+          </div>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.875rem;"><%= review.content.length > 120 ? review.content.substring(0, 120) + '...' : review.content %></p>
+        </div>
+        <a href="/admin/reviews/<%= review.id %>/edit" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Edit</a>
+      </li>
+      <% }); %>
+    </ul>
+  </div>
+</div>
+<% } %>
 
 <%- include('partials/footer') %>

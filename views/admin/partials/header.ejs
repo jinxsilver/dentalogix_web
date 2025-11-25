@@ -6,12 +6,18 @@
   <title><%= title %> | Dentalogix Admin</title>
   <link rel="stylesheet" href="/css/admin.css">
 </head>
-<body>
+<body class="<%= settings.site_theme && settings.site_theme !== 'normal' ? 'theme-' + settings.site_theme : '' %>">
   <div class="admin-layout">
     <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="sidebar-header">
-        <a href="/admin" class="sidebar-logo">Dental<span>ogix</span></a>
+        <a href="/admin" class="sidebar-logo">
+          <% if (settings.site_logo) { %>
+            <img src="<%= settings.site_logo %>" alt="Dentalogix" class="sidebar-logo-img">
+          <% } else { %>
+            Dental<span>ogix</span>
+          <% } %>
+        </a>
       </div>
       
       <nav class="sidebar-nav">
@@ -53,7 +59,17 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
           Testimonials
         </a>
-        
+
+        <a href="/admin/reviews" class="nav-item <%= currentPath.includes('/admin/reviews') ? 'active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Reviews
+        </a>
+
+        <a href="/admin/insurance" class="nav-item <%= currentPath.includes('/admin/insurance') ? 'active' : '' %>">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Insurance
+        </a>
+
         <div class="nav-section">
           <div class="nav-section-title">Inbox</div>
         </div>

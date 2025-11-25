@@ -1,0 +1,159 @@
+<%- include('../partials/header') %>
+
+<% if (stats && stats.total > 0) { %>
+<div class="stats-grid" style="margin-bottom: 2rem;">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: var(--color-primary);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.total %></div>
+      <div class="stat-label">Total Reviews</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #10B981;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.average_rating ? stats.average_rating.toFixed(1) : '0.0' %></div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #F59E0B;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.five_star || 0 %></div>
+      <div class="stat-label">5-Star Reviews</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #6366F1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= countBySource.length %></div>
+      <div class="stat-label">Sources</div>
+    </div>
+  </div>
+</div>
+
+<% if (countBySource.length > 0) { %>
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="card-header">
+    <h2>Reviews by Source</h2>
+  </div>
+  <div class="card-body">
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <% countBySource.forEach(function(item) { %>
+        <div style="background: var(--bg-secondary); padding: 0.75rem 1.25rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem;">
+          <% if (item.source === 'google') { %>
+            <span style="color: #EA4335;">G</span>
+          <% } else if (item.source === 'yelp') { %>
+            <span style="color: #D32323;">Y</span>
+          <% } else if (item.source === 'facebook') { %>
+            <span style="color: #1877F2;">f</span>
+          <% } else { %>
+            <span style="color: var(--text-secondary);">M</span>
+          <% } %>
+          <span style="text-transform: capitalize;"><%= item.source %></span>
+          <span class="badge"><%= item.count %></span>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+<% } %>
+<% } %>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Reviews</h2>
+    <a href="/admin/reviews/new" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Review
+    </a>
+  </div>
+
+  <% if (reviews.length === 0) { %>
+  <div class="card-body">
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; color: var(--text-muted);"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <h3>No reviews yet</h3>
+      <p>Add your first review to get started.</p>
+      <a href="/admin/reviews/new" class="btn btn-primary">Add Review</a>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Reviewer</th>
+          <th>Content</th>
+          <th>Rating</th>
+          <th>Source</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reviews.forEach(function(r) { %>
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <% if (r.reviewer_photo) { %>
+                <img src="<%= r.reviewer_photo %>" alt="<%= r.reviewer_name %>" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+              <% } else { %>
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;"><%= r.reviewer_name.charAt(0).toUpperCase() %></div>
+              <% } %>
+              <div>
+                <strong><%= r.reviewer_name %></strong>
+                <% if (r.featured) { %><span class="badge" style="margin-left: 0.5rem; background: #F59E0B;">Featured</span><% } %>
+              </div>
+            </div>
+          </td>
+          <td style="max-width: 300px;"><%= r.content.length > 100 ? r.content.substring(0, 100) + '...' : r.content %></td>
+          <td><%= '⭐'.repeat(r.rating) %></td>
+          <td>
+            <span class="badge" style="text-transform: capitalize;
+              <% if (r.source === 'google') { %>background: #EA4335;<% }
+                 else if (r.source === 'yelp') { %>background: #D32323;<% }
+                 else if (r.source === 'facebook') { %>background: #1877F2;<% }
+                 else { %>background: var(--text-secondary);<% } %>">
+              <%= r.source %>
+            </span>
+          </td>
+          <td><%= r.review_date ? new Date(r.review_date).toLocaleDateString() : '-' %></td>
+          <td>
+            <span class="badge <%= r.status === 'published' ? 'badge-success' : 'badge-secondary' %>">
+              <%= r.status %>
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <a href="/admin/reviews/<%= r.id %>/edit" class="btn btn-secondary btn-sm btn-icon" title="Edit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </a>
+              <form action="/admin/reviews/<%= r.id %>/delete" method="POST" class="delete-form" style="display: inline;">
+                <button type="submit" class="btn btn-danger btn-sm btn-icon" title="Delete">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

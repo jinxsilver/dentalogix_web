@@ -62,12 +62,15 @@
         <p>Our experienced team is dedicated to providing you with personalized, gentle care.</p>
       </div>
 
-      <% if (teamGrouped.dentists && teamGrouped.dentists.length > 0) { %>
-      <!-- Dentists -->
+      <%
+        const providers = [...(teamGrouped.dentists || []), ...(teamGrouped.hygienists || [])];
+        if (providers.length > 0) {
+      %>
+      <!-- Our Providers (Dentists + Hygienists) -->
       <div class="team-category">
-        <h3 class="category-title">Our Dentists</h3>
+        <h3 class="category-title">Our Providers</h3>
         <div class="team-grid">
-          <% teamGrouped.dentists.forEach(function(member) { %>
+          <% providers.forEach(function(member) { %>
           <div class="team-card <%= member.bio_page_enabled ? 'has-bio-page' : '' %>">
             <% if (member.bio_page_enabled) { %>
             <a href="/team/<%= member.slug %>" class="team-photo-link">
@@ -108,12 +111,15 @@
       </div>
       <% } %>
 
-      <% if (teamGrouped.executives && teamGrouped.executives.length > 0) { %>
-      <!-- Leadership / Executives -->
+      <%
+        const teamMembers = [...(teamGrouped.executives || []), ...(teamGrouped.staff || [])];
+        if (teamMembers.length > 0) {
+      %>
+      <!-- Team Members (Executives + Staff) -->
       <div class="team-category">
-        <h3 class="category-title">Leadership</h3>
+        <h3 class="category-title">Team Members</h3>
         <div class="team-grid">
-          <% teamGrouped.executives.forEach(function(member) { %>
+          <% teamMembers.forEach(function(member) { %>
           <div class="team-card <%= member.bio_page_enabled ? 'has-bio-page' : '' %>">
             <% if (member.bio_page_enabled) { %>
             <a href="/team/<%= member.slug %>" class="team-photo-link">
@@ -140,80 +146,15 @@
               <h3><%= member.name %></h3>
               <% } %>
               <p class="team-title"><%= member.title %></p>
+              <% if (member.bio) { %>
               <p class="team-bio"><%= member.bio.substring(0, 200) %><%= member.bio.length > 200 ? '...' : '' %></p>
+              <% } %>
               <% if (member.credentials) { %>
                 <p class="team-credentials"><em><%= member.credentials %></em></p>
               <% } %>
               <% if (member.bio_page_enabled) { %>
               <a href="/team/<%= member.slug %>" class="read-more-link">Read Full Bio →</a>
               <% } %>
-            </div>
-          </div>
-          <% }); %>
-        </div>
-      </div>
-      <% } %>
-
-      <% if (teamGrouped.hygienists && teamGrouped.hygienists.length > 0) { %>
-      <!-- Hygienists -->
-      <div class="team-category">
-        <h3 class="category-title">Dental Hygienists</h3>
-        <div class="team-grid">
-          <% teamGrouped.hygienists.forEach(function(member) { %>
-          <div class="team-card <%= member.bio_page_enabled ? 'has-bio-page' : '' %>">
-            <% if (member.bio_page_enabled) { %>
-            <a href="/team/<%= member.slug %>" class="team-photo-link">
-            <% } %>
-              <div class="team-photo">
-                <% if (member.photo) { %>
-                  <img src="<%= member.photo %>" alt="<%= member.name %>">
-                <% } else { %>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <% } %>
-                <% if (member.bio_page_enabled) { %>
-                <div class="photo-overlay">
-                  <span>View Full Bio</span>
-                </div>
-                <% } %>
-              </div>
-            <% if (member.bio_page_enabled) { %>
-            </a>
-            <% } %>
-            <div class="team-info">
-              <% if (member.bio_page_enabled) { %>
-              <h3><a href="/team/<%= member.slug %>"><%= member.name %></a></h3>
-              <% } else { %>
-              <h3><%= member.name %></h3>
-              <% } %>
-              <p class="team-title"><%= member.title %></p>
-              <p class="team-bio"><%= member.bio %></p>
-              <% if (member.credentials) { %>
-                <p class="team-credentials"><em><%= member.credentials %></em></p>
-              <% } %>
-            </div>
-          </div>
-          <% }); %>
-        </div>
-      </div>
-      <% } %>
-
-      <% if (teamGrouped.staff && teamGrouped.staff.length > 0) { %>
-      <!-- General Staff -->
-      <div class="team-category">
-        <h3 class="category-title">Our Staff</h3>
-        <div class="team-grid team-grid-small">
-          <% teamGrouped.staff.forEach(function(member) { %>
-          <div class="team-card team-card-compact">
-            <div class="team-photo">
-              <% if (member.photo) { %>
-                <img src="<%= member.photo %>" alt="<%= member.name %>">
-              <% } else { %>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <% } %>
-            </div>
-            <div class="team-info">
-              <h3><%= member.name %></h3>
-              <p class="team-title"><%= member.title %></p>
             </div>
           </div>
           <% }); %>

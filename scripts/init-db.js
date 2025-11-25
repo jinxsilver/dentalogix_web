@@ -180,6 +180,10 @@ const insertSetting = db.prepare(`
 const defaultSettings = [
   ['site_name', 'Dentalogix', 'text'],
   ['site_tagline', 'Modern Dentistry, Exceptional Care', 'text'],
+  ['site_logo', '', 'file'],
+  ['footer_logo', '', 'file'],
+  ['site_theme', 'normal', 'select'],
+  ['show_falling_leaves', 'false', 'boolean'],
   ['phone', '(555) 123-4567', 'text'],
   ['email', 'info@dentalogix.com', 'text'],
   ['address', '123 Smile Avenue, Suite 100', 'text'],

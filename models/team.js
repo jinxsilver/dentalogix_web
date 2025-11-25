@@ -41,8 +41,8 @@ module.exports = {
   create(data) {
     const slug = data.slug || data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     return db.prepare(`
-      INSERT INTO team (name, title, bio, full_bio, photo, email, specialties, credentials, category, bio_page_enabled, slug, sort_order, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO team (name, title, bio, full_bio, photo, email, specialties, credentials, category, bio_page_enabled, slug, sort_order, status, linkedin_url, undergrad_school, undergrad_degree, undergrad_logo, grad_school, grad_degree, grad_logo)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       data.name,
       data.title || '',
@@ -56,7 +56,14 @@ module.exports = {
       data.bio_page_enabled ? 1 : 0,
       slug,
       data.sort_order || 0,
-      data.status || 'published'
+      data.status || 'published',
+      data.linkedin_url || '',
+      data.undergrad_school || '',
+      data.undergrad_degree || '',
+      data.undergrad_logo || '',
+      data.grad_school || '',
+      data.grad_degree || '',
+      data.grad_logo || ''
     );
   },
 
@@ -77,6 +84,13 @@ module.exports = {
         slug = ?,
         sort_order = ?,
         status = ?,
+        linkedin_url = ?,
+        undergrad_school = ?,
+        undergrad_degree = ?,
+        undergrad_logo = ?,
+        grad_school = ?,
+        grad_degree = ?,
+        grad_logo = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `).run(
@@ -93,6 +107,13 @@ module.exports = {
       slug,
       data.sort_order || 0,
       data.status || 'published',
+      data.linkedin_url || '',
+      data.undergrad_school || '',
+      data.undergrad_degree || '',
+      data.undergrad_logo || '',
+      data.grad_school || '',
+      data.grad_degree || '',
+      data.grad_logo || '',
       id
     );
   },

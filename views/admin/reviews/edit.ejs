@@ -1,0 +1,94 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= review ? 'Edit Review' : 'Add Review' %></h2>
+    <a href="/admin/reviews" class="btn btn-secondary">← Back to Reviews</a>
+  </div>
+
+  <div class="card-body">
+    <form action="<%= review ? '/admin/reviews/' + review.id : '/admin/reviews' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="reviewer_name">Reviewer Name *</label>
+          <input type="text" id="reviewer_name" name="reviewer_name" required value="<%= review ? review.reviewer_name : '' %>" placeholder="John Smith">
+        </div>
+
+        <div class="form-group">
+          <label for="rating">Rating</label>
+          <select id="rating" name="rating">
+            <option value="5" <%= (!review || review.rating === 5) ? 'selected' : '' %>>5 Stars</option>
+            <option value="4" <%= review && review.rating === 4 ? 'selected' : '' %>>4 Stars</option>
+            <option value="3" <%= review && review.rating === 3 ? 'selected' : '' %>>3 Stars</option>
+            <option value="2" <%= review && review.rating === 2 ? 'selected' : '' %>>2 Stars</option>
+            <option value="1" <%= review && review.rating === 1 ? 'selected' : '' %>>1 Star</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Review Content *</label>
+        <textarea id="content" name="content" rows="5" required placeholder="What did the reviewer say about their experience?"><%= review ? review.content : '' %></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="source">Source *</label>
+          <select id="source" name="source" required>
+            <option value="google" <%= (!review || review.source === 'google') ? 'selected' : '' %>>Google</option>
+            <option value="yelp" <%= review && review.source === 'yelp' ? 'selected' : '' %>>Yelp</option>
+            <option value="facebook" <%= review && review.source === 'facebook' ? 'selected' : '' %>>Facebook</option>
+            <option value="manual" <%= review && review.source === 'manual' ? 'selected' : '' %>>Manual Entry</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="review_date">Review Date</label>
+          <input type="date" id="review_date" name="review_date" value="<%= review && review.review_date ? review.review_date.split('T')[0] : '' %>">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="source_url">Source URL (optional)</label>
+        <input type="url" id="source_url" name="source_url" value="<%= review ? review.source_url || '' : '' %>" placeholder="https://www.google.com/maps/...">
+        <small style="color: var(--text-muted);">Link to the original review on Google, Yelp, etc.</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="published" <%= (!review || review.status === 'published') ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= review && review.status === 'draft' ? 'selected' : '' %>>Draft</option>
+            <option value="hidden" <%= review && review.status === 'hidden' ? 'selected' : '' %>>Hidden</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: flex-end;">
+          <div class="form-check">
+            <input type="checkbox" id="featured" name="featured" value="1" <%= review && review.featured ? 'checked' : '' %>>
+            <label for="featured">Featured on homepage</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reviewer_photo">Reviewer Photo (optional)</label>
+        <% if (review && review.reviewer_photo) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= review.reviewer_photo %>" alt="Reviewer photo" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.5rem;">Current photo. Upload new to replace.</p>
+          </div>
+        <% } %>
+        <input type="file" id="reviewer_photo" name="reviewer_photo" accept="image/*">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= review ? 'Update Review' : 'Add Review' %></button>
+        <a href="/admin/reviews" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

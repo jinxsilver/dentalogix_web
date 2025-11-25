@@ -7,7 +7,7 @@
 </div>
 <% } %>
 
-<form action="/admin/settings" method="POST">
+<form action="/admin/settings" method="POST" enctype="multipart/form-data">
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
     <!-- General Settings -->
     <div class="card">
@@ -44,9 +44,21 @@
           <label for="footer_text">Footer Text</label>
           <input type="text" id="footer_text" name="footer_text" value="<%= settings.footer_text || '' %>">
         </div>
+
+        <div class="form-group">
+          <label for="privacy_url">Privacy Policy URL</label>
+          <input type="text" id="privacy_url" name="privacy_url" value="<%= settings.privacy_url || '/privacy' %>" placeholder="/privacy or https://...">
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Use /privacy for the built-in page, or enter a full URL for an external page.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="terms_url">Terms of Service URL</label>
+          <input type="text" id="terms_url" name="terms_url" value="<%= settings.terms_url || '/terms' %>" placeholder="/terms or https://...">
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Use /terms for the built-in page, or enter a full URL for an external page.</small>
+        </div>
       </div>
     </div>
-    
+
     <!-- Contact Info -->
     <div class="card">
       <div class="card-header">
@@ -85,6 +97,46 @@
       </div>
     </div>
     
+    <!-- Site Logo -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Site Logo</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="site_logo">Header Logo</label>
+          <% if (settings.site_logo) { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #64748B; margin-bottom: 0.5rem;">Current Logo:</p>
+              <img src="<%= settings.site_logo %>" alt="Current logo" style="max-height: 80px; max-width: 100%; object-fit: contain;">
+            </div>
+          <% } else { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #64748B; margin: 0;">No logo uploaded. Using default SVG logo.</p>
+            </div>
+          <% } %>
+          <input type="file" id="site_logo" name="site_logo" accept="image/png,image/jpeg,image/svg+xml,image/webp" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Displayed in the navigation bar (light background). Supports PNG, JPG, SVG, WebP.</small>
+        </div>
+
+        <div class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+          <label for="footer_logo">Footer Logo</label>
+          <% if (settings.footer_logo) { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #1E293B; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #94A3B8; margin-bottom: 0.5rem;">Current Logo:</p>
+              <img src="<%= settings.footer_logo %>" alt="Current footer logo" style="max-height: 80px; max-width: 100%; object-fit: contain;">
+            </div>
+          <% } else { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #1E293B; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #94A3B8; margin: 0;">No footer logo uploaded. Using default SVG logo.</p>
+            </div>
+          <% } %>
+          <input type="file" id="footer_logo" name="footer_logo" accept="image/png,image/jpeg,image/svg+xml,image/webp" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Displayed in the footer (dark background). Use a light-colored or inverted version if needed.</small>
+        </div>
+      </div>
+    </div>
+
     <!-- Social Media -->
     <div class="card">
       <div class="card-header">
@@ -95,12 +147,12 @@
           <label for="facebook">Facebook URL</label>
           <input type="url" id="facebook" name="facebook" value="<%= settings.facebook || '' %>" placeholder="https://facebook.com/...">
         </div>
-        
+
         <div class="form-group">
           <label for="instagram">Instagram URL</label>
           <input type="url" id="instagram" name="instagram" value="<%= settings.instagram || '' %>" placeholder="https://instagram.com/...">
         </div>
-        
+
         <div class="form-group">
           <label for="twitter">Twitter URL</label>
           <input type="url" id="twitter" name="twitter" value="<%= settings.twitter || '' %>" placeholder="https://twitter.com/...">
@@ -108,42 +160,115 @@
       </div>
     </div>
     
-    <!-- Brand Colors -->
+    <!-- Site Theme -->
     <div class="card">
       <div class="card-header">
-        <h2>Brand Colors</h2>
+        <h2>Site Theme</h2>
       </div>
       <div class="card-body">
         <div class="form-group">
-          <label for="primary_color">Primary Color</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input type="color" id="primary_color" name="primary_color" value="<%= settings.primary_color || '#0D9488' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
-            <input type="text" value="<%= settings.primary_color || '#0D9488' %>" style="flex: 1;" readonly>
+          <label for="site_theme">Theme</label>
+          <select id="site_theme" name="site_theme" style="width: 100%; padding: 0.75rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 1rem;">
+            <option value="normal" <%= settings.site_theme === 'normal' ? 'selected' : '' %>>Normal (Blue/Cyan)</option>
+            <option value="fall" <%= settings.site_theme === 'fall' ? 'selected' : '' %>>Fall (Amber/Orange)</option>
+            <option value="winter" <%= settings.site_theme === 'winter' ? 'selected' : '' %>>Winter (Sky Blue/Ice)</option>
+          </select>
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Changes the color scheme across the entire website.</small>
+        </div>
+
+        <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+          <strong style="font-size: 0.875rem; color: #334155;">Theme Preview:</strong>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;" id="theme-preview">
+            <%
+              let previewColors = { primary: '#0077B6', accent: '#84CC16', secondary: '#1A365D' };
+              if (settings.site_theme === 'fall') {
+                previewColors = { primary: '#B45309', accent: '#DC2626', secondary: '#78350F' };
+              } else if (settings.site_theme === 'winter') {
+                previewColors = { primary: '#0EA5E9', accent: '#06B6D4', secondary: '#1E3A5F' };
+              }
+            %>
+            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.primary %>;" title="Primary"></div>
+            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.accent %>;" title="Accent"></div>
+            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.secondary %>;" title="Secondary"></div>
           </div>
         </div>
-        
+
+        <div class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" name="show_falling_leaves" value="true" <%= settings.show_falling_leaves === 'true' ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: #0077B6;">
+            <span style="font-weight: 600;">Enable Falling Leaves Animation</span>
+          </label>
+          <small style="color: #64748B; display: block; margin-top: 0.5rem; margin-left: 2rem;">Adds animated falling leaves to the hero section. Great for fall/autumn seasonal feel!</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Settings -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Reviews Settings</h2>
+      </div>
+      <div class="card-body">
         <div class="form-group">
-          <label for="secondary_color">Secondary Color</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input type="color" id="secondary_color" name="secondary_color" value="<%= settings.secondary_color || '#1E293B' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
-            <input type="text" value="<%= settings.secondary_color || '#1E293B' %>" style="flex: 1;" readonly>
+          <label for="reviews_source">Reviews Source</label>
+          <select id="reviews_source" name="reviews_source" style="width: 100%; padding: 0.75rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 1rem;">
+            <option value="manual" <%= (!settings.reviews_source || settings.reviews_source === 'manual') ? 'selected' : '' %>>Manual Entry (Recommended)</option>
+            <option value="google_api" <%= settings.reviews_source === 'google_api' ? 'selected' : '' %>>Google Places API</option>
+            <option value="third_party" <%= settings.reviews_source === 'third_party' ? 'selected' : '' %>>Third-Party Service</option>
+          </select>
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Manual entry is recommended - you control which reviews appear on your site.</small>
+        </div>
+
+        <div id="google-api-settings" style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; display: <%= settings.reviews_source === 'google_api' ? 'block' : 'none' %>;">
+          <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Google Places API Settings</h4>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="google_places_api_key">API Key</label>
+            <input type="password" id="google_places_api_key" name="google_places_api_key" value="<%= settings.google_places_api_key || '' %>" placeholder="AIza..." style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+            <small style="color: #64748B; display: block; margin-top: 0.25rem;">Get your API key from the <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color: #0077B6;">Google Cloud Console</a></small>
+          </div>
+
+          <div class="form-group">
+            <label for="google_place_id">Place ID</label>
+            <input type="text" id="google_place_id" name="google_place_id" value="<%= settings.google_place_id || '' %>" placeholder="ChIJ..." style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+            <small style="color: #64748B; display: block; margin-top: 0.25rem;">Find your Place ID using the <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" style="color: #0077B6;">Place ID Finder</a></small>
+          </div>
+
+          <div style="margin-top: 1rem; padding: 0.75rem; background: #FEF3C7; border-radius: 0.375rem; font-size: 0.875rem; color: #92400E;">
+            <strong>Note:</strong> Google Places API requires a billing account. Costs approximately $0.02 per review fetch.
           </div>
         </div>
-        
-        <div class="form-group">
-          <label for="accent_color">Accent Color</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input type="color" id="accent_color" name="accent_color" value="<%= settings.accent_color || '#F59E0B' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
-            <input type="text" value="<%= settings.accent_color || '#F59E0B' %>" style="flex: 1;" readonly>
+
+        <div id="third-party-settings" style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; display: <%= settings.reviews_source === 'third_party' ? 'block' : 'none' %>;">
+          <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Third-Party Integration</h4>
+
+          <div class="form-group">
+            <label for="third_party_embed_code">Embed Code</label>
+            <textarea id="third_party_embed_code" name="third_party_embed_code" rows="4" placeholder="Paste embed code from services like Birdeye, Podium, or ReviewTrackers..." style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem;"><%= settings.third_party_embed_code || '' %></textarea>
+            <small style="color: #64748B; display: block; margin-top: 0.25rem;">Paste the embed code from your review management service.</small>
           </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #E2E8F0;">
+          <a href="/admin/reviews" class="btn btn-secondary" style="width: 100%; text-align: center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Manage Reviews
+          </a>
         </div>
       </div>
     </div>
   </div>
-  
+
   <div style="margin-top: 1.5rem;">
     <button type="submit" class="btn btn-primary btn-lg">Save All Settings</button>
   </div>
 </form>
+
+<script>
+document.getElementById('reviews_source').addEventListener('change', function() {
+  document.getElementById('google-api-settings').style.display = this.value === 'google_api' ? 'block' : 'none';
+  document.getElementById('third-party-settings').style.display = this.value === 'third_party' ? 'block' : 'none';
+});
+</script>
 
 <%- include('partials/footer') %>

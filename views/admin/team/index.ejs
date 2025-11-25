@@ -36,11 +36,11 @@
           <td><%= member.title %></td>
           <td>
             <% if (member.category === 'dentist') { %>
-              <span class="badge badge-primary">Dentist</span>
+              <span class="badge badge-danger">Dentist</span>
             <% } else if (member.category === 'executive') { %>
-              <span class="badge badge-info">Leadership</span>
+              <span class="badge badge-info">Team Member</span>
             <% } else if (member.category === 'hygienist') { %>
-              <span class="badge badge-secondary">Hygienist</span>
+              <span class="badge badge-success">Hygienist</span>
             <% } else { %>
               <span class="badge">Staff</span>
             <% } %>
