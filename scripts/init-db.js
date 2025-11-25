@@ -182,6 +182,7 @@ const defaultSettings = [
   ['site_tagline', 'Modern Dentistry, Exceptional Care', 'text'],
   ['site_logo', '', 'file'],
   ['footer_logo', '', 'file'],
+  ['favicon', '', 'file'],
   ['site_theme', 'normal', 'select'],
   ['show_falling_leaves', 'false', 'boolean'],
   ['phone', '(555) 123-4567', 'text'],

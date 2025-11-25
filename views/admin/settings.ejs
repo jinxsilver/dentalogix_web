@@ -134,6 +134,22 @@
           <input type="file" id="footer_logo" name="footer_logo" accept="image/png,image/jpeg,image/svg+xml,image/webp" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
           <small style="color: #64748B; display: block; margin-top: 0.5rem;">Displayed in the footer (dark background). Use a light-colored or inverted version if needed.</small>
         </div>
+
+        <div class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+          <label for="favicon">Favicon</label>
+          <% if (settings.favicon) { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #64748B; margin-bottom: 0.5rem;">Current Favicon:</p>
+              <img src="<%= settings.favicon %>" alt="Current favicon" style="width: 32px; height: 32px; object-fit: contain;">
+            </div>
+          <% } else { %>
+            <div style="margin-bottom: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; text-align: center;">
+              <p style="font-size: 0.875rem; color: #64748B; margin: 0;">No favicon uploaded. Using default tooth icon.</p>
+            </div>
+          <% } %>
+          <input type="file" id="favicon" name="favicon" accept="image/png,image/svg+xml,image/x-icon,image/ico" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.5rem;">Browser tab icon. Recommended: 32x32px PNG or SVG. Supports PNG, SVG, ICO.</small>
+        </div>
       </div>
     </div>
 
@@ -254,6 +270,107 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             Manage Reviews
           </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Content Section -->
+  <div style="grid-column: 1 / -1; margin-top: 1.5rem;">
+    <div class="card">
+      <div class="card-header">
+        <h2>Footer Content</h2>
+      </div>
+      <div class="card-body">
+        <p style="color: #64748B; margin-bottom: 1.5rem;">Configure the locations and quick links displayed in your website footer.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+          <!-- Location 1 -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Location 1 (Primary)</h4>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location1_name" style="font-size: 0.8125rem;">Name</label>
+              <input type="text" id="footer_location1_name" name="footer_location1_name" value="<%= settings.footer_location1_name || '' %>" placeholder="e.g., Main Office" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location1_address" style="font-size: 0.8125rem;">Street Address</label>
+              <input type="text" id="footer_location1_address" name="footer_location1_address" value="<%= settings.footer_location1_address || '' %>" placeholder="e.g., 123 Main St" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location1_city" style="font-size: 0.8125rem;">City, State, ZIP</label>
+              <input type="text" id="footer_location1_city" name="footer_location1_city" value="<%= settings.footer_location1_city || '' %>" placeholder="e.g., Buffalo, NY 14210" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.8125rem;">
+                <input type="checkbox" name="footer_location1_show_phone" value="true" <%= settings.footer_location1_show_phone === 'true' ? 'checked' : '' %> style="width: 16px; height: 16px;">
+                <span>Show phone number</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Location 2 -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Location 2</h4>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location2_name" style="font-size: 0.8125rem;">Name</label>
+              <input type="text" id="footer_location2_name" name="footer_location2_name" value="<%= settings.footer_location2_name || '' %>" placeholder="e.g., Coming Soon Location" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location2_text" style="font-size: 0.8125rem;">Description Text</label>
+              <input type="text" id="footer_location2_text" name="footer_location2_text" value="<%= settings.footer_location2_text || '' %>" placeholder="e.g., Coming Soon!" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location2_link_text" style="font-size: 0.8125rem;">Link Text</label>
+              <input type="text" id="footer_location2_link_text" name="footer_location2_link_text" value="<%= settings.footer_location2_link_text || '' %>" placeholder="e.g., Reserve Your Spot" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group">
+              <label for="footer_location2_link_url" style="font-size: 0.8125rem;">Link URL</label>
+              <input type="text" id="footer_location2_link_url" name="footer_location2_link_url" value="<%= settings.footer_location2_link_url || '' %>" placeholder="e.g., /contact?location=new" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+          </div>
+
+          <!-- Location 3 -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Location 3</h4>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location3_name" style="font-size: 0.8125rem;">Name</label>
+              <input type="text" id="footer_location3_name" name="footer_location3_name" value="<%= settings.footer_location3_name || '' %>" placeholder="e.g., Mobile Dentistry" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location3_text" style="font-size: 0.8125rem;">Description Text</label>
+              <input type="text" id="footer_location3_text" name="footer_location3_text" value="<%= settings.footer_location3_text || '' %>" placeholder="e.g., Serving all of NY State" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label for="footer_location3_link_text" style="font-size: 0.8125rem;">Link Text</label>
+              <input type="text" id="footer_location3_link_text" name="footer_location3_link_text" value="<%= settings.footer_location3_link_text || '' %>" placeholder="e.g., Learn More" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+
+            <div class="form-group">
+              <label for="footer_location3_link_url" style="font-size: 0.8125rem;">Link URL</label>
+              <input type="text" id="footer_location3_link_url" name="footer_location3_link_url" value="<%= settings.footer_location3_link_url || '' %>" placeholder="e.g., /mobile-dentistry" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+          <h4 style="font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 1rem;">Quick Links</h4>
+          <p style="font-size: 0.8125rem; color: #64748B; margin-bottom: 1rem;">Enter links as JSON array. Format: [{"label":"Link Text","url":"/page-url"}]</p>
+
+          <div class="form-group">
+            <textarea id="footer_quick_links" name="footer_quick_links" rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem;"><%= settings.footer_quick_links || '[{"label":"Home","url":"/"},{"label":"About Us","url":"/about"},{"label":"Our Services","url":"/services"},{"label":"Contact","url":"/contact"}]' %></textarea>
+          </div>
         </div>
       </div>
     </div>

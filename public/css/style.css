@@ -871,6 +871,8 @@ section {
   display: flex;
   flex-direction: column;
   flex: 1;
+  text-align: center;
+  align-items: center;
 }
 
 .service-card.has-image .service-content h3 {

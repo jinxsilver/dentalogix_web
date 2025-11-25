@@ -46,33 +46,60 @@
         <div class="footer-column">
           <h4>Quick Links</h4>
           <ul class="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/services">Our Services</a></li>
-            <li><a href="/locations">Locations</a></li>
-            <li><a href="/mobile-dentistry">Mobile Dentistry</a></li>
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <%
+              let quickLinks = [];
+              try {
+                quickLinks = JSON.parse(settings.footer_quick_links || '[]');
+              } catch(e) {
+                quickLinks = [
+                  {label: 'Home', url: '/'},
+                  {label: 'About Us', url: '/about'},
+                  {label: 'Our Services', url: '/services'},
+                  {label: 'Contact', url: '/contact'}
+                ];
+              }
+              quickLinks.forEach(function(link) {
+            %>
+              <li><a href="<%= link.url %>"><%= link.label %></a></li>
+            <% }); %>
           </ul>
         </div>
 
         <div class="footer-column">
           <h4>Our Locations</h4>
+          <% if (settings.footer_location1_name) { %>
           <div class="footer-location">
-            <strong>Dentist on Seneca</strong>
-            <p>2233 W Seneca St<br>Buffalo, NY 14210</p>
-            <p><%= settings.phone %></p>
+            <strong><%= settings.footer_location1_name %></strong>
+            <% if (settings.footer_location1_address) { %>
+              <p><%= settings.footer_location1_address %><% if (settings.footer_location1_city) { %><br><%= settings.footer_location1_city %><% } %></p>
+            <% } %>
+            <% if (settings.footer_location1_show_phone === 'true' && settings.phone) { %>
+              <p><%= settings.phone %></p>
+            <% } %>
           </div>
-          <div class="footer-location coming-soon-text">
-            <strong>Brooklyn, NY</strong>
-            <p>Coming Soon!</p>
-            <a href="/contact?location=brooklyn">Reserve Your Spot</a>
+          <% } %>
+          <% if (settings.footer_location2_name) { %>
+          <div class="footer-location<%= settings.footer_location2_text && settings.footer_location2_text.toLowerCase().includes('coming') ? ' coming-soon-text' : '' %>">
+            <strong><%= settings.footer_location2_name %></strong>
+            <% if (settings.footer_location2_text) { %>
+              <p><%= settings.footer_location2_text %></p>
+            <% } %>
+            <% if (settings.footer_location2_link_text && settings.footer_location2_link_url) { %>
+              <a href="<%= settings.footer_location2_link_url %>"><%= settings.footer_location2_link_text %></a>
+            <% } %>
           </div>
+          <% } %>
+          <% if (settings.footer_location3_name) { %>
           <div class="footer-location">
-            <strong>Mobile Dentistry</strong>
-            <p>Serving all of NY State</p>
-            <a href="/mobile-dentistry">Learn More</a>
+            <strong><%= settings.footer_location3_name %></strong>
+            <% if (settings.footer_location3_text) { %>
+              <p><%= settings.footer_location3_text %></p>
+            <% } %>
+            <% if (settings.footer_location3_link_text && settings.footer_location3_link_url) { %>
+              <a href="<%= settings.footer_location3_link_url %>"><%= settings.footer_location3_link_text %></a>
+            <% } %>
           </div>
+          <% } %>
         </div>
 
         <div class="footer-column">

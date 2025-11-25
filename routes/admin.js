@@ -597,12 +597,16 @@ router.get('/settings', requireAuth, (req, res) => {
 
 router.post('/settings', requireAuth, upload.fields([
   { name: 'site_logo', maxCount: 1 },
-  { name: 'footer_logo', maxCount: 1 }
+  { name: 'footer_logo', maxCount: 1 },
+  { name: 'favicon', maxCount: 1 }
 ]), (req, res) => {
   // Handle checkbox fields - if not present in body, set to 'false'
   const settingsData = { ...req.body };
   if (!settingsData.show_falling_leaves) {
     settingsData.show_falling_leaves = 'false';
+  }
+  if (!settingsData.footer_location1_show_phone) {
+    settingsData.footer_location1_show_phone = 'false';
   }
   // Handle file uploads
   if (req.files) {
@@ -611,6 +615,9 @@ router.post('/settings', requireAuth, upload.fields([
     }
     if (req.files.footer_logo && req.files.footer_logo[0]) {
       settingsData.footer_logo = '/uploads/' + req.files.footer_logo[0].filename;
+    }
+    if (req.files.favicon && req.files.favicon[0]) {
+      settingsData.favicon = '/uploads/' + req.files.favicon[0].filename;
     }
   }
   Settings.updateSettings(settingsData);
