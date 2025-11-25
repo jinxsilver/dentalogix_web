@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= post ? 'Edit Post' : 'Create New Post' %></h2>
+    <a href="/admin/posts" class="btn btn-secondary">← Back to Posts</a>
+  </div>
+  
+  <div class="card-body">
+    <form action="<%= post ? '/admin/posts/' + post.id : '/admin/posts' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title">Post Title *</label>
+        <input type="text" id="title" name="title" required value="<%= post ? post.title : '' %>" placeholder="Enter post title">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="slug">URL Slug</label>
+          <input type="text" id="slug" name="slug" value="<%= post ? post.slug : '' %>" placeholder="auto-generated-from-title">
+          <div class="hint">Leave blank to auto-generate from title</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="category_id">Category</label>
+          <select id="category_id" name="category_id">
+            <option value="">Select a category</option>
+            <% categories.forEach(function(cat) { %>
+              <option value="<%= cat.id %>" <%= post && post.category_id === cat.id ? 'selected' : '' %>><%= cat.name %></option>
+            <% }); %>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="excerpt">Excerpt</label>
+        <textarea id="excerpt" name="excerpt" rows="3" placeholder="Brief summary of the post (shown in listings)"><%= post ? post.excerpt : '' %></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="content">Post Content *</label>
+        <textarea id="content" name="content" rows="20" placeholder="Write your post content here... (Markdown and HTML supported)"><%= post ? post.content : '' %></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="meta_description">Meta Description</label>
+          <textarea id="meta_description" name="meta_description" rows="2" placeholder="SEO description for search engines"><%= post ? post.meta_description : '' %></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="draft" <%= (!post || post.status === 'draft') ? 'selected' : '' %>>Draft</option>
+            <option value="published" <%= post && post.status === 'published' ? 'selected' : '' %>>Published</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="featured_image">Featured Image</label>
+        <% if (post && post.featured_image) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= post.featured_image %>" alt="Current featured image" style="max-width: 300px; border-radius: 8px;">
+          </div>
+        <% } %>
+        <input type="file" id="featured_image" name="featured_image" accept="image/*">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= post ? 'Update Post' : 'Create Post' %></button>
+        <a href="/admin/posts" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

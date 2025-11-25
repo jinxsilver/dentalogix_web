@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Message from <%= contact.name %></h2>
+    <a href="/admin/contacts" class="btn btn-secondary">← Back to Messages</a>
+  </div>
+  
+  <div class="card-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+      <div>
+        <p><strong>From:</strong> <%= contact.name %></p>
+        <p><strong>Email:</strong> <a href="mailto:<%= contact.email %>"><%= contact.email %></a></p>
+        <% if (contact.phone) { %>
+        <p><strong>Phone:</strong> <a href="tel:<%= contact.phone %>"><%= contact.phone %></a></p>
+        <% } %>
+      </div>
+      <div>
+        <p><strong>Subject:</strong> <%= contact.subject || '(No subject)' %></p>
+        <p><strong>Date:</strong> <%= new Date(contact.created_at).toLocaleString() %></p>
+      </div>
+    </div>
+    
+    <div style="background: var(--admin-bg); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+      <h4 style="margin-top: 0;">Message:</h4>
+      <p style="white-space: pre-wrap; margin: 0;"><%= contact.message %></p>
+    </div>
+    
+    <div class="form-actions">
+      <a href="mailto:<%= contact.email %>?subject=Re: <%= contact.subject || 'Your inquiry' %>" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Reply via Email
+      </a>
+      <form action="/admin/contacts/<%= contact.id %>/delete" method="POST" class="delete-form" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Delete Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

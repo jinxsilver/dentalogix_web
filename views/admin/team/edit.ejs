@@ -1,0 +1,109 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= member ? 'Edit Team Member' : 'Add Team Member' %></h2>
+    <a href="/admin/team" class="btn btn-secondary">← Back to Team</a>
+  </div>
+
+  <div class="card-body">
+    <form action="<%= member ? '/admin/team/' + member.id : '/admin/team' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" name="name" required value="<%= member ? member.name : '' %>" placeholder="Dr. Jane Smith">
+        </div>
+
+        <div class="form-group">
+          <label for="title">Job Title *</label>
+          <input type="text" id="title" name="title" value="<%= member ? member.title : '' %>" placeholder="Lead Dentist">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <select id="category" name="category">
+            <option value="dentist" <%= member && member.category === 'dentist' ? 'selected' : '' %>>Dentist</option>
+            <option value="executive" <%= member && member.category === 'executive' ? 'selected' : '' %>>Leadership / Executive</option>
+            <option value="hygienist" <%= member && member.category === 'hygienist' ? 'selected' : '' %>>Dental Hygienist</option>
+            <option value="staff" <%= (!member || member.category === 'staff' || !member.category) ? 'selected' : '' %>>General Staff</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bio_page_enabled">Bio Page</label>
+          <select id="bio_page_enabled" name="bio_page_enabled">
+            <option value="0" <%= (!member || !member.bio_page_enabled) ? 'selected' : '' %>>Disabled (Basic info only)</option>
+            <option value="1" <%= member && member.bio_page_enabled ? 'selected' : '' %>>Enabled (Clickable detailed bio)</option>
+          </select>
+          <small style="color: var(--admin-text-secondary); display: block; margin-top: 0.5rem;">
+            When enabled, clicking the photo will show a detailed bio page.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Short Biography (shown on About page)</label>
+        <textarea id="bio" name="bio" rows="4" placeholder="Brief biography about the team member"><%= member ? member.bio : '' %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="full_bio">Full Biography (shown on individual bio page)</label>
+        <textarea id="full_bio" name="full_bio" rows="8" placeholder="Detailed biography for the individual team member page. Only used if Bio Page is enabled."><%= member ? member.full_bio : '' %></textarea>
+        <small style="color: var(--admin-text-secondary); display: block; margin-top: 0.5rem;">
+          This is displayed on the team member's dedicated bio page. Leave blank to use Short Biography instead.
+        </small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="specialties">Specialties</label>
+          <input type="text" id="specialties" name="specialties" value="<%= member ? member.specialties : '' %>" placeholder="Cosmetic Dentistry, Implants">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="<%= member ? member.email : '' %>" placeholder="dr.smith@dentalogix.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="credentials">Credentials</label>
+        <input type="text" id="credentials" name="credentials" value="<%= member ? member.credentials : '' %>" placeholder="DDS, NYU College of Dentistry">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sort_order">Sort Order</label>
+          <input type="number" id="sort_order" name="sort_order" value="<%= member ? member.sort_order : 0 %>">
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="published" <%= (!member || member.status === 'published') ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= member && member.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Photo</label>
+        <% if (member && member.photo) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= member.photo %>" alt="Current photo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+          </div>
+        <% } %>
+        <input type="file" id="photo" name="photo" accept="image/*">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= member ? 'Update Member' : 'Add Member' %></button>
+        <a href="/admin/team" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

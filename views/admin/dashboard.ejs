@@ -1,0 +1,134 @@
+<%- include('partials/header') %>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    </div>
+    <div class="stat-details">
+      <div class="stat-value"><%= stats.pages %></div>
+      <div class="stat-label">Pages</div>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon success">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="stat-details">
+      <div class="stat-value"><%= stats.posts %></div>
+      <div class="stat-label">Blog Posts</div>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon warning">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
+    </div>
+    <div class="stat-details">
+      <div class="stat-value"><%= stats.services %></div>
+      <div class="stat-label">Services</div>
+    </div>
+  </div>
+  
+  <div class="stat-card">
+    <div class="stat-icon info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <div class="stat-details">
+      <div class="stat-value"><%= stats.contacts %></div>
+      <div class="stat-label">Unread Messages</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+  <a href="/admin/posts/new" class="quick-action">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    <span>New Post</span>
+  </a>
+  <a href="/admin/pages/new" class="quick-action">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+    <span>New Page</span>
+  </a>
+  <a href="/admin/services/new" class="quick-action">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
+    <span>New Service</span>
+  </a>
+  <a href="/admin/contacts" class="quick-action">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    <span>View Messages</span>
+  </a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  <!-- Recent Messages -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Recent Messages</h2>
+      <a href="/admin/contacts" class="btn btn-secondary btn-sm">View All</a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+      <% if (recentContacts.length > 0) { %>
+      <ul class="recent-list" style="padding: 1rem 1.5rem;">
+        <% recentContacts.forEach(function(contact) { %>
+        <li class="recent-item">
+          <div class="recent-item-info">
+            <div class="recent-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="recent-item-title"><%= contact.name %></div>
+              <div class="recent-item-meta"><%= contact.subject || contact.email %></div>
+            </div>
+          </div>
+          <a href="/admin/contacts/<%= contact.id %>" class="btn btn-secondary btn-sm">View</a>
+        </li>
+        <% }); %>
+      </ul>
+      <% } else { %>
+      <div style="padding: 2rem; text-align: center; color: var(--admin-text-light);">
+        <p>No unread messages</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  
+  <!-- Recent Posts -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Recent Posts</h2>
+      <a href="/admin/posts" class="btn btn-secondary btn-sm">View All</a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+      <% if (recentPosts.length > 0) { %>
+      <ul class="recent-list" style="padding: 1rem 1.5rem;">
+        <% recentPosts.forEach(function(post) { %>
+        <li class="recent-item">
+          <div class="recent-item-info">
+            <div class="recent-item-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <div>
+              <div class="recent-item-title"><%= post.title %></div>
+              <div class="recent-item-meta">
+                <span class="badge badge-<%= post.status === 'published' ? 'success' : 'warning' %>"><%= post.status %></span>
+              </div>
+            </div>
+          </div>
+          <a href="/admin/posts/<%= post.id %>/edit" class="btn btn-secondary btn-sm">Edit</a>
+        </li>
+        <% }); %>
+      </ul>
+      <% } else { %>
+      <div style="padding: 2rem; text-align: center; color: var(--admin-text-light);">
+        <p>No posts yet. <a href="/admin/posts/new">Create one!</a></p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

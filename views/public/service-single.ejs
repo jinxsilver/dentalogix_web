@@ -1,0 +1,73 @@
+<%- include('../partials/header') %>
+
+<main class="service-single">
+  <div class="container">
+    <div class="service-header">
+      <span class="section-label">Our Services</span>
+      <h1><%= service.title %></h1>
+      <p class="lead"><%= service.short_description %></p>
+    </div>
+    
+    <div class="service-content">
+      <div class="service-main">
+        <% if (service.image) { %>
+          <img src="<%= service.image %>" alt="<%= service.title %>" style="width: 100%; border-radius: 1rem; margin-bottom: 2rem;">
+        <% } %>
+        
+        <% if (service.full_description) { %>
+          <%- service.full_description %>
+        <% } else { %>
+          <p><%= service.short_description %></p>
+        <% } %>
+        
+        <h3 style="margin-top: 2rem;">Why Choose Us for <%= service.title %>?</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg style="width: 24px; height: 24px; color: var(--color-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Experienced specialists with years of expertise</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg style="width: 24px; height: 24px; color: var(--color-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>State-of-the-art technology and equipment</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg style="width: 24px; height: 24px; color: var(--color-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Personalized treatment plans tailored to your needs</span>
+          </li>
+          <li style="display: flex; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg style="width: 24px; height: 24px; color: var(--color-primary); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Comfortable, relaxing environment</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="service-sidebar">
+        <div class="service-cta">
+          <h4>Ready to Get Started?</h4>
+          <p>Book your appointment today and take the first step toward a healthier smile.</p>
+          <a href="/contact" class="btn btn-primary" style="background: #fff; color: var(--color-primary);">Book Appointment</a>
+        </div>
+        
+        <div class="sidebar-widget" style="margin-top: 1.5rem;">
+          <h4>Other Services</h4>
+          <ul class="category-list">
+            <% allServices.forEach(function(s) { %>
+              <% if (s.id !== service.id) { %>
+              <li><a href="/services/<%= s.slug %>"><%= s.title %></a></li>
+              <% } %>
+            <% }); %>
+          </ul>
+        </div>
+        
+        <div class="sidebar-widget">
+          <h4>Contact Us</h4>
+          <p style="margin-bottom: 0.5rem;"><strong>Phone:</strong> <%= settings.phone %></p>
+          <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> <%= settings.email %></p>
+          <p><strong>Hours:</strong><br><%= settings.hours_weekday %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

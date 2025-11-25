@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+
+<main class="contact-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Get In Touch</span>
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you. Reach out to schedule an appointment or ask any questions.</p>
+    </div>
+    
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Visit Our Office</h3>
+        
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <h4>Address</h4>
+            <p><%= settings.address %><br><%= settings.city %></p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <h4>Phone</h4>
+            <p><a href="tel:<%= settings.phone %>"><%= settings.phone %></a></p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <h4>Email</h4>
+            <p><a href="mailto:<%= settings.email %>"><%= settings.email %></a></p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="contact-item-text">
+            <h4>Office Hours</h4>
+            <p><%= settings.hours_weekday %><br><%= settings.hours_weekend %></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <h3 style="margin-bottom: 1.5rem;">Send Us a Message</h3>
+        
+        <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Thank you for your message! We'll get back to you soon.
+        </div>
+        <% } %>
+        
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <%= error %>
+        </div>
+        <% } %>
+        
+        <form action="/contact" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Your Name *</label>
+              <input type="text" id="name" name="name" required placeholder="John Doe">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required placeholder="john@example.com">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject">
+                <option value="">Select a topic...</option>
+                <option value="appointment">Book an Appointment</option>
+                <option value="question">General Question</option>
+                <option value="emergency">Dental Emergency</option>
+                <option value="insurance">Insurance Inquiry</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Your Message *</label>
+            <textarea id="message" name="message" required placeholder="How can we help you?"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

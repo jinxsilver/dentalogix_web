@@ -1,0 +1,79 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= testimonial ? 'Edit Testimonial' : 'Add Testimonial' %></h2>
+    <a href="/admin/testimonials" class="btn btn-secondary">← Back to Testimonials</a>
+  </div>
+  
+  <div class="card-body">
+    <form action="<%= testimonial ? '/admin/testimonials/' + testimonial.id : '/admin/testimonials' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="patient_name">Patient Name *</label>
+          <input type="text" id="patient_name" name="patient_name" required value="<%= testimonial ? testimonial.patient_name : '' %>" placeholder="John D.">
+        </div>
+        
+        <div class="form-group">
+          <label for="rating">Rating</label>
+          <select id="rating" name="rating">
+            <option value="5" <%= (!testimonial || testimonial.rating === 5) ? 'selected' : '' %>>⭐⭐⭐⭐⭐ (5)</option>
+            <option value="4" <%= testimonial && testimonial.rating === 4 ? 'selected' : '' %>>⭐⭐⭐⭐ (4)</option>
+            <option value="3" <%= testimonial && testimonial.rating === 3 ? 'selected' : '' %>>⭐⭐⭐ (3)</option>
+            <option value="2" <%= testimonial && testimonial.rating === 2 ? 'selected' : '' %>>⭐⭐ (2)</option>
+            <option value="1" <%= testimonial && testimonial.rating === 1 ? 'selected' : '' %>>⭐ (1)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="content">Testimonial Content *</label>
+        <textarea id="content" name="content" rows="5" required placeholder="What did the patient say about their experience?"><%= testimonial ? testimonial.content : '' %></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="service_id">Related Service</label>
+          <select id="service_id" name="service_id">
+            <option value="">None</option>
+            <% services.forEach(function(s) { %>
+              <option value="<%= s.id %>" <%= testimonial && testimonial.service_id === s.id ? 'selected' : '' %>><%= s.title %></option>
+            <% }); %>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="published" <%= (!testimonial || testimonial.status === 'published') ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= testimonial && testimonial.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="form-check">
+          <input type="checkbox" id="featured" name="featured" value="1" <%= testimonial && testimonial.featured ? 'checked' : '' %>>
+          <label for="featured">Featured on homepage</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="patient_photo">Patient Photo (optional)</label>
+        <% if (testimonial && testimonial.patient_photo) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= testimonial.patient_photo %>" alt="Patient photo" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+          </div>
+        <% } %>
+        <input type="file" id="patient_photo" name="patient_photo" accept="image/*">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= testimonial ? 'Update Testimonial' : 'Add Testimonial' %></button>
+        <a href="/admin/testimonials" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,149 @@
+<%- include('partials/header') %>
+
+<% if (typeof success !== 'undefined' && success) { %>
+<div class="alert alert-success">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  Settings saved successfully!
+</div>
+<% } %>
+
+<form action="/admin/settings" method="POST">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- General Settings -->
+    <div class="card">
+      <div class="card-header">
+        <h2>General Settings</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="site_name">Site Name</label>
+          <input type="text" id="site_name" name="site_name" value="<%= settings.site_name || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="site_tagline">Tagline</label>
+          <input type="text" id="site_tagline" name="site_tagline" value="<%= settings.site_tagline || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="hero_title">Hero Title</label>
+          <input type="text" id="hero_title" name="hero_title" value="<%= settings.hero_title || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="hero_subtitle">Hero Subtitle</label>
+          <textarea id="hero_subtitle" name="hero_subtitle" rows="2"><%= settings.hero_subtitle || '' %></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="about_text">About Text</label>
+          <textarea id="about_text" name="about_text" rows="3"><%= settings.about_text || '' %></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="footer_text">Footer Text</label>
+          <input type="text" id="footer_text" name="footer_text" value="<%= settings.footer_text || '' %>">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Contact Info -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Contact Information</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" name="phone" value="<%= settings.phone || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" value="<%= settings.email || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Street Address</label>
+          <input type="text" id="address" name="address" value="<%= settings.address || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="city">City, State, ZIP</label>
+          <input type="text" id="city" name="city" value="<%= settings.city || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="hours_weekday">Weekday Hours</label>
+          <input type="text" id="hours_weekday" name="hours_weekday" value="<%= settings.hours_weekday || '' %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="hours_weekend">Weekend Hours</label>
+          <input type="text" id="hours_weekend" name="hours_weekend" value="<%= settings.hours_weekend || '' %>">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Social Media -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Social Media</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="facebook">Facebook URL</label>
+          <input type="url" id="facebook" name="facebook" value="<%= settings.facebook || '' %>" placeholder="https://facebook.com/...">
+        </div>
+        
+        <div class="form-group">
+          <label for="instagram">Instagram URL</label>
+          <input type="url" id="instagram" name="instagram" value="<%= settings.instagram || '' %>" placeholder="https://instagram.com/...">
+        </div>
+        
+        <div class="form-group">
+          <label for="twitter">Twitter URL</label>
+          <input type="url" id="twitter" name="twitter" value="<%= settings.twitter || '' %>" placeholder="https://twitter.com/...">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Brand Colors -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Brand Colors</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="primary_color">Primary Color</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="color" id="primary_color" name="primary_color" value="<%= settings.primary_color || '#0D9488' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
+            <input type="text" value="<%= settings.primary_color || '#0D9488' %>" style="flex: 1;" readonly>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="secondary_color">Secondary Color</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="color" id="secondary_color" name="secondary_color" value="<%= settings.secondary_color || '#1E293B' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
+            <input type="text" value="<%= settings.secondary_color || '#1E293B' %>" style="flex: 1;" readonly>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="accent_color">Accent Color</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="color" id="accent_color" name="accent_color" value="<%= settings.accent_color || '#F59E0B' %>" style="width: 50px; height: 40px; padding: 0; border: none;">
+            <input type="text" value="<%= settings.accent_color || '#F59E0B' %>" style="flex: 1;" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-top: 1.5rem;">
+    <button type="submit" class="btn btn-primary btn-lg">Save All Settings</button>
+  </div>
+</form>
+
+<%- include('partials/footer') %>

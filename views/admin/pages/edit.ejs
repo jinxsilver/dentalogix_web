@@ -1,0 +1,95 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= page ? 'Edit Page' : 'Create New Page' %></h2>
+    <a href="/admin/pages" class="btn btn-secondary">← Back to Pages</a>
+  </div>
+  
+  <div class="card-body">
+    <form action="<%= page ? '/admin/pages/' + page.id : '/admin/pages' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Page Title *</label>
+          <input type="text" id="title" name="title" required value="<%= page ? page.title : '' %>" placeholder="Enter page title">
+        </div>
+        
+        <div class="form-group">
+          <label for="slug">URL Slug</label>
+          <input type="text" id="slug" name="slug" value="<%= page ? page.slug : '' %>" placeholder="auto-generated-from-title">
+          <div class="hint">Leave blank to auto-generate from title</div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="content">Page Content</label>
+        <textarea id="content" name="content" rows="15" placeholder="Enter page content (HTML supported)"><%= page ? page.content : '' %></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="meta_description">Meta Description</label>
+          <textarea id="meta_description" name="meta_description" rows="2" placeholder="SEO description for search engines"><%= page ? page.meta_description : '' %></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="meta_keywords">Meta Keywords</label>
+          <input type="text" id="meta_keywords" name="meta_keywords" value="<%= page ? page.meta_keywords : '' %>" placeholder="keyword1, keyword2, keyword3">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="template">Page Template</label>
+          <select id="template" name="template">
+            <option value="default" <%= page && page.template === 'default' ? 'selected' : '' %>>Default</option>
+            <option value="home" <%= page && page.template === 'home' ? 'selected' : '' %>>Home</option>
+            <option value="services" <%= page && page.template === 'services' ? 'selected' : '' %>>Services</option>
+            <option value="blog" <%= page && page.template === 'blog' ? 'selected' : '' %>>Blog</option>
+            <option value="contact" <%= page && page.template === 'contact' ? 'selected' : '' %>>Contact</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="published" <%= page && page.status === 'published' ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= page && page.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sort_order">Sort Order</label>
+          <input type="number" id="sort_order" name="sort_order" value="<%= page ? page.sort_order : 0 %>">
+        </div>
+        
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <div class="form-check">
+            <input type="checkbox" id="show_in_nav" name="show_in_nav" value="1" <%= page && page.show_in_nav ? 'checked' : '' %>>
+            <label for="show_in_nav">Show in navigation menu</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="hero_image">Hero Image</label>
+        <% if (page && page.hero_image) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= page.hero_image %>" alt="Current hero image" style="max-width: 200px; border-radius: 8px;">
+          </div>
+        <% } %>
+        <input type="file" id="hero_image" name="hero_image" accept="image/*">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= page ? 'Update Page' : 'Create Page' %></button>
+        <a href="/admin/pages" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,75 @@
+<%- include('../partials/header') %>
+
+<main class="team-member-page">
+  <div class="container">
+    <div class="team-member-hero">
+      <div class="member-photo-large">
+        <% if (member.photo) { %>
+          <img src="<%= member.photo %>" alt="<%= member.name %>">
+        <% } else { %>
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+        <% } %>
+      </div>
+      <div class="member-intro">
+        <span class="section-label">
+          <% if (member.category === 'dentist') { %>
+            Dentist
+          <% } else if (member.category === 'executive') { %>
+            Leadership
+          <% } else if (member.category === 'hygienist') { %>
+            Dental Hygienist
+          <% } else { %>
+            Team Member
+          <% } %>
+        </span>
+        <h1><%= member.name %></h1>
+        <p class="member-title"><%= member.title %></p>
+
+        <% if (member.specialties) { %>
+        <div class="member-specialties">
+          <h4>Specialties</h4>
+          <div class="specialty-tags">
+            <% member.specialties.split(',').forEach(function(specialty) { %>
+              <span class="specialty-tag"><%= specialty.trim() %></span>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+
+        <% if (member.credentials) { %>
+        <div class="member-credentials">
+          <h4>Credentials</h4>
+          <p><%= member.credentials %></p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="member-bio-full">
+      <h2>About <%= member.name.split(' ')[0] %></h2>
+      <div class="bio-content">
+        <%= member.full_bio || member.bio %>
+      </div>
+    </div>
+
+    <div class="member-cta">
+      <h3>Schedule an Appointment</h3>
+      <p>Ready to meet <%= member.name.split(' ')[0] %>? Book your appointment today.</p>
+      <a href="/contact" class="btn btn-primary btn-lg">Book Appointment</a>
+    </div>
+  </div>
+
+  <!-- Back to Team -->
+  <section class="back-to-team">
+    <div class="container">
+      <a href="/about" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Our Team
+      </a>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

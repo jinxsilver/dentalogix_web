@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+
+<main class="error-page">
+  <div class="error-content">
+    <h1>Oops!</h1>
+    <h2>Something Went Wrong</h2>
+    <p>We're sorry, but something unexpected happened. Please try again later.</p>
+    <% if (typeof error !== 'undefined' && error.message) { %>
+      <p style="color: var(--color-gray-400); font-size: 0.875rem;"><%= error.message %></p>
+    <% } %>
+    <div style="display: flex; gap: 1rem; justify-content: center;">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <a href="/contact" class="btn btn-secondary">Contact Us</a>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

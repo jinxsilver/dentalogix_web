@@ -1,0 +1,92 @@
+<%- include('../partials/header') %>
+
+<div class="card">
+  <div class="card-header">
+    <h2><%= service ? 'Edit Service' : 'Create New Service' %></h2>
+    <a href="/admin/services" class="btn btn-secondary">← Back to Services</a>
+  </div>
+  
+  <div class="card-body">
+    <form action="<%= service ? '/admin/services/' + service.id : '/admin/services' %>" method="POST" enctype="multipart/form-data">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Service Title *</label>
+          <input type="text" id="title" name="title" required value="<%= service ? service.title : '' %>" placeholder="e.g., Teeth Whitening">
+        </div>
+        
+        <div class="form-group">
+          <label for="slug">URL Slug</label>
+          <input type="text" id="slug" name="slug" value="<%= service ? service.slug : '' %>" placeholder="auto-generated">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="short_description">Short Description</label>
+        <textarea id="short_description" name="short_description" rows="2" placeholder="Brief description for service cards"><%= service ? service.short_description : '' %></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="full_description">Full Description</label>
+        <textarea id="full_description" name="full_description" rows="10" placeholder="Detailed description (HTML supported)"><%= service ? service.full_description : '' %></textarea>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="icon">Icon</label>
+          <select id="icon" name="icon">
+            <option value="star" <%= service && service.icon === 'star' ? 'selected' : '' %>>⭐ Star</option>
+            <option value="sparkles" <%= service && service.icon === 'sparkles' ? 'selected' : '' %>>✨ Sparkles</option>
+            <option value="tooth" <%= service && service.icon === 'tooth' ? 'selected' : '' %>>🦷 Tooth</option>
+            <option value="scan" <%= service && service.icon === 'scan' ? 'selected' : '' %>>📷 Scan</option>
+            <option value="implant" <%= service && service.icon === 'implant' ? 'selected' : '' %>>🔩 Implant</option>
+            <option value="aligners" <%= service && service.icon === 'aligners' ? 'selected' : '' %>>😁 Aligners</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="price_range">Price Range</label>
+          <input type="text" id="price_range" name="price_range" value="<%= service ? service.price_range : '' %>" placeholder="e.g., Starting at $299">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sort_order">Sort Order</label>
+          <input type="number" id="sort_order" name="sort_order" value="<%= service ? service.sort_order : 0 %>">
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="published" <%= (!service || service.status === 'published') ? 'selected' : '' %>>Published</option>
+            <option value="draft" <%= service && service.status === 'draft' ? 'selected' : '' %>>Draft</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="form-check">
+          <input type="checkbox" id="featured" name="featured" value="1" <%= service && service.featured ? 'checked' : '' %>>
+          <label for="featured">Featured on homepage</label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="image">Service Image</label>
+        <% if (service && service.image) { %>
+          <div class="file-preview" style="margin-bottom: 1rem;">
+            <img src="<%= service.image %>" alt="Current image" style="max-width: 200px; border-radius: 8px;">
+          </div>
+        <% } %>
+        <input type="file" id="image" name="image" accept="image/*">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= service ? 'Update Service' : 'Create Service' %></button>
+        <a href="/admin/services" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

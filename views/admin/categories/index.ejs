@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  <!-- Add New Category -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Add New Category</h2>
+    </div>
+    <div class="card-body">
+      <form action="/admin/categories" method="POST">
+        <div class="form-group">
+          <label for="name">Category Name *</label>
+          <input type="text" id="name" name="name" required placeholder="e.g., Oral Health Tips">
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="3" placeholder="Brief description of this category"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Add Category</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Existing Categories -->
+  <div class="card">
+    <div class="card-header">
+      <h2>All Categories</h2>
+    </div>
+    <div class="card-body" style="padding: 0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach(function(cat) { %>
+          <tr>
+            <td><strong><%= cat.name %></strong></td>
+            <td><code><%= cat.slug %></code></td>
+            <td>
+              <div class="actions">
+                <form action="/admin/categories/<%= cat.id %>/delete" method="POST" class="delete-form" style="display: inline;">
+                  <button type="submit" class="btn btn-danger btn-sm btn-icon" title="Delete">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
