@@ -12,10 +12,13 @@ if (!fs.existsSync(importFile)) {
 
 console.log('📥 Importing data...\n');
 
+// Disable foreign key checks during import
+db.pragma('foreign_keys = OFF');
+
 const importData = JSON.parse(fs.readFileSync(importFile, 'utf8'));
 
 // Tables to import (order matters for foreign keys)
-const tableOrder = ['users', 'settings', 'categories', 'pages', 'posts', 'services', 'team', 'testimonials', 'reviews', 'insurance', 'contacts', 'appointments'];
+const tableOrder = ['users', 'settings', 'categories', 'pages', 'posts', 'services', 'team', 'testimonials', 'reviews', 'insurance_providers', 'contacts', 'appointments', 'media'];
 
 // Clear existing data and import new data
 tableOrder.forEach(tableName => {
@@ -28,7 +31,11 @@ tableOrder.forEach(tableName => {
     }
 
     // Clear existing data
-    db.prepare(`DELETE FROM ${tableName}`).run();
+    try {
+      db.prepare(`DELETE FROM ${tableName}`).run();
+    } catch (e) {
+      console.log(`  ⚠ ${tableName}: could not clear (${e.message})`);
+    }
 
     // Get column names from first row
     const columns = Object.keys(rows[0]);
@@ -44,10 +51,17 @@ tableOrder.forEach(tableName => {
       }
     });
 
-    insertMany(rows);
-    console.log(`  ✓ ${tableName}: ${rows.length} rows imported`);
+    try {
+      insertMany(rows);
+      console.log(`  ✓ ${tableName}: ${rows.length} rows imported`);
+    } catch (e) {
+      console.log(`  ❌ ${tableName}: import failed (${e.message})`);
+    }
   }
 });
+
+// Re-enable foreign key checks
+db.pragma('foreign_keys = ON');
 
 console.log('\n✅ Data import complete!');
 console.log('\n⚠️  Remember to also copy your /uploads folder for images.');
