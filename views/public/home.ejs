@@ -374,111 +374,110 @@
   </section>
   <% } %>
 
-  <!-- Insurance & Trust Section -->
+  <!-- Trust & Reviews Section -->
   <section class="trust-section">
     <div class="container">
-      <div class="trust-content">
-        <div class="trust-ratings">
-          <div class="section-header">
-            <span class="section-label">Trusted by Thousands</span>
-            <h2>Our Reputation Speaks for Itself</h2>
+      <div class="section-header text-center">
+        <span class="section-label">Trusted by Thousands</span>
+        <h2>Our Reputation Speaks for Itself</h2>
+      </div>
+      <div class="ratings-grid">
+        <div class="rating-card">
+          <div class="rating-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="google-icon"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           </div>
-          <div class="ratings-grid">
-            <div class="rating-card">
-              <div class="rating-logo">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="google-icon"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-              </div>
-              <div class="rating-info">
-                <div class="rating-stars">
-                  <span class="rating-number"><%= reviewStats && reviewStats.average_rating ? reviewStats.average_rating.toFixed(1) : '4.8' %></span>
-                  <div class="stars">
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  </div>
-                </div>
-                <span class="rating-count"><%= reviewStats && reviewStats.total ? reviewStats.total.toLocaleString() : '2,394' %> reviews</span>
-                <span class="rating-source">Google Reviews</span>
+          <div class="rating-info">
+            <div class="rating-stars">
+              <span class="rating-number"><%= reviewStats && reviewStats.average_rating ? reviewStats.average_rating.toFixed(1) : '4.8' %></span>
+              <div class="stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               </div>
             </div>
-            <div class="rating-card bbb-card">
-              <div class="rating-logo">
-                <span class="bbb-badge">BBB</span>
-              </div>
-              <div class="rating-info">
-                <div class="rating-grade">A+</div>
-                <span class="rating-count">125 reviews</span>
-                <span class="rating-source">BBB Accredited</span>
-              </div>
-            </div>
+            <span class="rating-count"><%= reviewStats && reviewStats.total ? reviewStats.total.toLocaleString() : '2,394' %> reviews</span>
+            <span class="rating-source">Google Reviews</span>
           </div>
         </div>
-
-        <div class="insurance-section">
-          <div class="section-header">
-            <span class="section-label">Insurance</span>
-            <h3>We Accept Most Major Insurance Plans</h3>
+        <div class="rating-card bbb-card">
+          <div class="rating-logo">
+            <span class="bbb-badge">BBB</span>
           </div>
-          <% if (insuranceProviders && insuranceProviders.length > 0) { %>
-          <div class="insurance-carousel-wrapper">
-            <div class="insurance-carousel <%= insuranceProviders.length > 5 ? 'auto-scroll' : '' %>" id="insuranceCarousel">
-              <% insuranceProviders.forEach(function(provider) { %>
-              <div class="insurance-logo">
-                <% if (provider.logo) { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
-                      <img src="<%= provider.logo %>" alt="<%= provider.name %>">
-                    </a>
-                  <% } else { %>
-                    <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
-                  <% } %>
-                <% } else { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
-                  <% } else { %>
-                    <span><%= provider.name %></span>
-                  <% } %>
-                <% } %>
-              </div>
-              <% }); %>
-              <% if (insuranceProviders.length > 5) { %>
-              <!-- Duplicate for seamless loop -->
-              <% insuranceProviders.forEach(function(provider) { %>
-              <div class="insurance-logo">
-                <% if (provider.logo) { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
-                      <img src="<%= provider.logo %>" alt="<%= provider.name %>">
-                    </a>
-                  <% } else { %>
-                    <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
-                  <% } %>
-                <% } else { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
-                  <% } else { %>
-                    <span><%= provider.name %></span>
-                  <% } %>
-                <% } %>
-              </div>
-              <% }); %>
-              <% } %>
-            </div>
+          <div class="rating-info">
+            <div class="rating-grade">A+</div>
+            <span class="rating-count">125 reviews</span>
+            <span class="rating-source">BBB Accredited</span>
           </div>
-          <% } else { %>
-          <div class="insurance-grid">
-            <div class="insurance-logo"><span>United Healthcare</span></div>
-            <div class="insurance-logo"><span>Delta Dental</span></div>
-            <div class="insurance-logo"><span>Guardian</span></div>
-            <div class="insurance-logo"><span>Anthem</span></div>
-            <div class="insurance-logo"><span>Principal</span></div>
-          </div>
-          <% } %>
-          <p class="insurance-note">Don't see your insurance? <a href="/contact">Contact us</a> - we work with most providers!</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Insurance Section -->
+  <section class="insurance-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-label">Insurance</span>
+        <h3>We Accept Most Major Insurance Plans</h3>
+      </div>
+      <% if (insuranceProviders && insuranceProviders.length > 0) { %>
+      <div class="insurance-carousel-wrapper">
+        <div class="insurance-carousel <%= insuranceProviders.length > 4 ? 'auto-scroll' : '' %>" id="insuranceCarousel">
+          <% insuranceProviders.forEach(function(provider) { %>
+          <div class="insurance-logo">
+            <% if (provider.logo) { %>
+              <% if (provider.website_url) { %>
+                <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
+                  <img src="<%= provider.logo %>" alt="<%= provider.name %>">
+                </a>
+              <% } else { %>
+                <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
+              <% } %>
+            <% } else { %>
+              <% if (provider.website_url) { %>
+                <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
+              <% } else { %>
+                <span><%= provider.name %></span>
+              <% } %>
+            <% } %>
+          </div>
+          <% }); %>
+          <% if (insuranceProviders.length > 4) { %>
+          <!-- Duplicate for seamless loop -->
+          <% insuranceProviders.forEach(function(provider) { %>
+          <div class="insurance-logo">
+            <% if (provider.logo) { %>
+              <% if (provider.website_url) { %>
+                <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
+                  <img src="<%= provider.logo %>" alt="<%= provider.name %>">
+                </a>
+              <% } else { %>
+                <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
+              <% } %>
+            <% } else { %>
+              <% if (provider.website_url) { %>
+                <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
+              <% } else { %>
+                <span><%= provider.name %></span>
+              <% } %>
+            <% } %>
+          </div>
+          <% }); %>
+          <% } %>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="insurance-grid">
+        <div class="insurance-logo"><span>United Healthcare</span></div>
+        <div class="insurance-logo"><span>Delta Dental</span></div>
+        <div class="insurance-logo"><span>Guardian</span></div>
+        <div class="insurance-logo"><span>Anthem</span></div>
+        <div class="insurance-logo"><span>Principal</span></div>
+      </div>
+      <% } %>
+      <p class="insurance-note text-center">Don't see your insurance? <a href="/contact">Contact us</a> - we work with most providers!</p>
     </div>
   </section>
 
