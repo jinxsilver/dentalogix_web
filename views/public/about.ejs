@@ -21,15 +21,15 @@
         </div>
       </div>
       <div class="about-text">
-        <h2>Our Story</h2>
         <% if (page && page.content) { %>
           <%- page.htmlContent || page.content %>
         <% } else { %>
+          <h2>Our Story</h2>
           <p>Founded with a vision to transform dental care, our practice has been serving the community for over 15 years. We believe that everyone deserves access to high-quality dental care in a comfortable, welcoming environment.</p>
           <p>Our team of dedicated professionals combines expertise with compassion to deliver outstanding dental care. We stay at the forefront of dental technology and techniques to ensure our patients receive the best possible treatment.</p>
         <% } %>
 
-        <div class="about-features mt-3">
+        <div class="about-features">
           <div class="about-feature">
             <div class="feature-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>

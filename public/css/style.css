@@ -974,7 +974,7 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-lg);
-  margin-top: var(--space-2xl);
+  margin-top: var(--space-3xl);
 }
 
 .about-feature {
