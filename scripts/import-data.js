@@ -37,8 +37,19 @@ tableOrder.forEach(tableName => {
       console.log(`  ⚠ ${tableName}: could not clear (${e.message})`);
     }
 
-    // Get column names from first row
-    const columns = Object.keys(rows[0]);
+    // Get existing columns in the table
+    const tableInfo = db.prepare(`PRAGMA table_info(${tableName})`).all();
+    const existingColumns = tableInfo.map(col => col.name);
+
+    // Filter to only columns that exist in both export and table
+    const exportColumns = Object.keys(rows[0]);
+    const columns = exportColumns.filter(col => existingColumns.includes(col));
+
+    if (columns.length === 0) {
+      console.log(`  ⚠ ${tableName}: no matching columns, skipped`);
+      return;
+    }
+
     const placeholders = columns.map(() => '?').join(', ');
     const insertSQL = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${placeholders})`;
     const insert = db.prepare(insertSQL);
