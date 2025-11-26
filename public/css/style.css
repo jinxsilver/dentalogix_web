@@ -1832,11 +1832,12 @@ section {
 .trust-reviews .section-header,
 .trust-insurance .section-header {
   text-align: left;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
-.trust-insurance .section-header h3 {
-  font-size: 1.25rem;
+.trust-reviews .section-header h2,
+.trust-insurance .section-header h2 {
+  font-size: 1.5rem;
   margin-bottom: 0;
 }
 
