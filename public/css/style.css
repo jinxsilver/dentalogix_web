@@ -2859,6 +2859,10 @@ section {
   font-weight: normal;
 }
 
+.footer-location-centered {
+  text-align: center;
+}
+
 /* =============================================
    MOBILE DENTISTRY PAGE
    ============================================= */
