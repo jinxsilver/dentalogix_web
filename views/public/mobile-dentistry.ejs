@@ -7,8 +7,8 @@
       <div class="mobile-hero-content">
         <div class="mobile-hero-text">
           <span class="section-label">Mobile Corporate Dentistry</span>
-          <h1>We Bring the <span>Dentist to You</span></h1>
-          <p class="hero-description">Eliminate the hassle of dental appointments for your employees. Our fully-equipped mobile dental team delivers comprehensive care right at your workplace—no travel, no lost productivity, no stress.</p>
+          <h1><%= page && page.title ? page.title : 'We Bring the Dentist to You' %></h1>
+          <p class="hero-description"><%= page && page.meta_description ? page.meta_description : 'Eliminate the hassle of dental appointments for your employees. Our fully-equipped mobile dental team delivers comprehensive care right at your workplace—no travel, no lost productivity, no stress.' %></p>
           <div class="hero-buttons">
             <a href="/contact?service=mobile" class="btn btn-primary btn-lg">Schedule a Consultation</a>
             <a href="#how-it-works" class="btn btn-secondary btn-lg">How It Works</a>
@@ -29,7 +29,11 @@
           </div>
         </div>
         <div class="mobile-hero-image">
-          <img src="https://images.pexels.com/photos/3845806/pexels-photo-3845806.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mobile dental team providing care at workplace">
+          <% if (page && page.hero_image) { %>
+            <img src="<%= page.hero_image %>" alt="Mobile dental team providing care at workplace">
+          <% } else { %>
+            <img src="https://images.pexels.com/photos/3845806/pexels-photo-3845806.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mobile dental team providing care at workplace">
+          <% } %>
         </div>
       </div>
     </div>
@@ -111,44 +115,80 @@
 
       <div class="mobile-services-grid">
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
-          </div>
+          <% if (settings.mobile_service_cleanings_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_cleanings_image %>" alt="Cleanings & Exams">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
+            </div>
+          <% } %>
           <h4>Cleanings & Exams</h4>
           <p>Professional cleanings, comprehensive exams, and oral cancer screenings</p>
         </div>
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 12h10"/><path d="M12 7v10"/></svg>
-          </div>
+          <% if (settings.mobile_service_xrays_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_xrays_image %>" alt="Digital X-Rays">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 12h10"/><path d="M12 7v10"/></svg>
+            </div>
+          <% } %>
           <h4>Digital X-Rays</h4>
           <p>State-of-the-art digital imaging for accurate diagnostics</p>
         </div>
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-          </div>
+          <% if (settings.mobile_service_whitening_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_whitening_image %>" alt="Teeth Whitening">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </div>
+          <% } %>
           <h4>Teeth Whitening</h4>
           <p>Professional whitening treatments for a brighter smile</p>
         </div>
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-          </div>
+          <% if (settings.mobile_service_fillings_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_fillings_image %>" alt="Fillings">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+          <% } %>
           <h4>Fillings</h4>
           <p>Tooth-colored composite fillings for cavities</p>
         </div>
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-          </div>
+          <% if (settings.mobile_service_consultations_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_consultations_image %>" alt="Consultations">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            </div>
+          <% } %>
           <h4>Consultations</h4>
           <p>Treatment planning and specialist referrals when needed</p>
         </div>
         <div class="mobile-service-item">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          </div>
+          <% if (settings.mobile_service_periodontal_image) { %>
+            <div class="service-image">
+              <img src="<%= settings.mobile_service_periodontal_image %>" alt="Periodontal Care">
+            </div>
+          <% } else { %>
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          <% } %>
           <h4>Periodontal Care</h4>
           <p>Deep cleaning and gum disease treatment</p>
         </div>

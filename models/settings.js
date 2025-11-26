@@ -24,10 +24,10 @@ module.exports = {
   },
 
   updateSettings(settings) {
-    const update = db.prepare('UPDATE settings SET value = ? WHERE key = ?');
+    const upsert = db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
     const transaction = db.transaction((items) => {
       for (const [key, value] of Object.entries(items)) {
-        update.run(value, key);
+        upsert.run(key, value);
       }
     });
     transaction(settings);

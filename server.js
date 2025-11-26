@@ -84,4 +84,8 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🦷 Dentalogix server running at http://localhost:${PORT}`);
   console.log(`📊 Admin panel: http://localhost:${PORT}/admin`);
+
+  // Start background schedulers
+  const Scheduler = require('./services/scheduler');
+  Scheduler.startGoogleReviewsSync(24); // Sync Google reviews every 24 hours
 });

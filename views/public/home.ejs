@@ -48,17 +48,7 @@
           <div class="hero-image-wrapper">
             <img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Caring dentist helping a patient with a warm smile" class="hero-image">
             <div class="hero-image-overlay">
-              <span class="hero-location">📍 Buffalo, NY</span>
               <span class="hero-tagline">The Service You Expect<br>Results You'll Love</span>
-            </div>
-          </div>
-          <div class="hero-floating-card">
-            <div class="floating-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
-            <div class="floating-card-text">
-              <strong>High-Tech Diagnostics</strong>
-              <span>iTero 5D Plus Scanner</span>
             </div>
           </div>
         </div>
@@ -333,7 +323,13 @@
 
       <div class="reviews-grid">
         <% reviews.forEach(function(review) { %>
-        <div class="review-card">
+        <div class="review-card<%= review.featured ? ' featured' : '' %>">
+          <% if (review.featured) { %>
+          <div class="featured-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Featured
+          </div>
+          <% } %>
           <div class="review-header">
             <% if (review.reviewer_photo) { %>
               <img src="<%= review.reviewer_photo %>" alt="<%= review.reviewer_name %>" class="reviewer-photo">

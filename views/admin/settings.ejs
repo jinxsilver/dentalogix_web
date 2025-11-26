@@ -250,6 +250,14 @@
             <small style="color: #64748B; display: block; margin-top: 0.25rem;">Find your Place ID using the <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" style="color: #0077B6;">Place ID Finder</a></small>
           </div>
 
+          <div class="form-group" style="margin-top: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+              <input type="checkbox" name="google_auto_sync" value="true" <%= settings.google_auto_sync === 'true' ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: #EA4335;">
+              <span style="font-weight: 600;">Enable Auto-Sync (every 24 hours)</span>
+            </label>
+            <small style="color: #64748B; display: block; margin-top: 0.5rem; margin-left: 2rem;">Automatically fetch new Google reviews daily. You can also manually sync from the Reviews page.</small>
+          </div>
+
           <div style="margin-top: 1rem; padding: 0.75rem; background: #FEF3C7; border-radius: 0.375rem; font-size: 0.875rem; color: #92400E;">
             <strong>Note:</strong> Google Places API requires a billing account. Costs approximately $0.02 per review fetch.
           </div>
@@ -380,6 +388,85 @@
     <button type="submit" class="btn btn-primary btn-lg">Save All Settings</button>
   </div>
 </form>
+
+<!-- Backup & Restore Section (outside main settings form) -->
+<div style="margin-top: 2rem;">
+  <div class="card">
+    <div class="card-header">
+      <h2>Backup & Restore</h2>
+    </div>
+    <div class="card-body">
+      <p style="color: #64748B; margin-bottom: 1.5rem;">Export all your site configuration and content as a JSON file, or restore from a previous backup.</p>
+
+      <% if (typeof importSuccess !== 'undefined' && importSuccess) { %>
+      <div class="alert alert-success" style="margin-bottom: 1.5rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Backup restored successfully!
+      </div>
+      <% } %>
+
+      <% if (typeof importError !== 'undefined' && importError) { %>
+      <div class="alert alert-danger" style="margin-bottom: 1.5rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <%= importError %>
+      </div>
+      <% } %>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <!-- Export -->
+        <div style="padding: 1.5rem; background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" style="width: 24px; height: 24px;">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <h4 style="font-weight: 600; color: #166534; margin: 0;">Export Configuration</h4>
+          </div>
+          <p style="font-size: 0.875rem; color: #166534; margin-bottom: 1rem;">Download a complete backup of all settings, pages, posts, services, team members, testimonials, and reviews.</p>
+          <a href="/admin/export" class="btn btn-primary" style="background: #16A34A; border-color: #16A34A;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download Backup
+          </a>
+        </div>
+
+        <!-- Import -->
+        <div style="padding: 1.5rem; background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" style="width: 24px; height: 24px;">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <h4 style="font-weight: 600; color: #92400E; margin: 0;">Restore from Backup</h4>
+          </div>
+          <p style="font-size: 0.875rem; color: #92400E; margin-bottom: 1rem;">Upload a previously exported JSON backup file to restore your configuration. This will overwrite existing data.</p>
+          <form action="/admin/import" method="POST" enctype="multipart/form-data" style="display: flex; gap: 0.75rem; align-items: flex-end;">
+            <div style="flex: 1;">
+              <input type="file" name="backup_file" accept=".json,application/json" required style="width: 100%; padding: 0.5rem; border: 1px solid #FCD34D; border-radius: 0.375rem; background: white; font-size: 0.875rem;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="background: #D97706; border-color: #D97706;" onclick="return confirm('Are you sure you want to restore from this backup? This will overwrite your current configuration.');">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              Restore
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem; font-size: 0.875rem; color: #64748B;">
+        <strong style="color: #334155;">Note:</strong> Backups include all text content and configuration but do not include uploaded images. Image files should be backed up separately from the <code style="background: #E2E8F0; padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/uploads</code> directory.
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 document.getElementById('reviews_source').addEventListener('change', function() {

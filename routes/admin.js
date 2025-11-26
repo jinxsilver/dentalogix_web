@@ -16,6 +16,7 @@ const Contacts = require('../models/contacts');
 const Users = require('../models/users');
 const Reviews = require('../models/reviews');
 const Insurance = require('../models/insurance');
+const GoogleReviewsService = require('../services/googleReviews');
 
 // File upload configuration
 const storage = multer.diskStorage({
@@ -30,7 +31,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -55,23 +56,25 @@ router.get('/login', (req, res) => {
   if (req.session.user) {
     return res.redirect('/admin');
   }
-  res.render('admin/login', { 
+  res.render('admin/login', {
     title: 'Admin Login',
-    error: null
+    error: null,
+    settings: Settings.getSettings()
   });
 });
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = Users.authenticate(username, password);
-  
+
   if (user) {
     req.session.user = user;
     res.redirect('/admin');
   } else {
-    res.render('admin/login', { 
+    res.render('admin/login', {
       title: 'Admin Login',
-      error: 'Invalid username or password'
+      error: 'Invalid username or password',
+      settings: Settings.getSettings()
     });
   }
 });
@@ -180,12 +183,52 @@ router.get('/pages/:id/edit', requireAuth, (req, res) => {
   });
 });
 
-router.post('/pages/:id', requireAuth, upload.single('hero_image'), (req, res) => {
+router.post('/pages/:id', requireAuth, upload.fields([
+  { name: 'hero_image', maxCount: 1 },
+  { name: 'mobile_service_cleanings_image', maxCount: 1 },
+  { name: 'mobile_service_xrays_image', maxCount: 1 },
+  { name: 'mobile_service_whitening_image', maxCount: 1 },
+  { name: 'mobile_service_fillings_image', maxCount: 1 },
+  { name: 'mobile_service_consultations_image', maxCount: 1 },
+  { name: 'mobile_service_periodontal_image', maxCount: 1 }
+]), (req, res) => {
+  console.log('Files received:', req.files);
   const data = { ...req.body };
-  if (req.file) {
-    data.hero_image = '/uploads/' + req.file.filename;
+  const settingsData = {};
+
+  if (req.files) {
+    // Handle hero image for the page
+    if (req.files.hero_image && req.files.hero_image[0]) {
+      data.hero_image = '/uploads/' + req.files.hero_image[0].filename;
+    }
+    // Handle mobile dentistry service images (saved to settings)
+    if (req.files.mobile_service_cleanings_image && req.files.mobile_service_cleanings_image[0]) {
+      settingsData.mobile_service_cleanings_image = '/uploads/' + req.files.mobile_service_cleanings_image[0].filename;
+    }
+    if (req.files.mobile_service_xrays_image && req.files.mobile_service_xrays_image[0]) {
+      settingsData.mobile_service_xrays_image = '/uploads/' + req.files.mobile_service_xrays_image[0].filename;
+    }
+    if (req.files.mobile_service_whitening_image && req.files.mobile_service_whitening_image[0]) {
+      settingsData.mobile_service_whitening_image = '/uploads/' + req.files.mobile_service_whitening_image[0].filename;
+    }
+    if (req.files.mobile_service_fillings_image && req.files.mobile_service_fillings_image[0]) {
+      settingsData.mobile_service_fillings_image = '/uploads/' + req.files.mobile_service_fillings_image[0].filename;
+    }
+    if (req.files.mobile_service_consultations_image && req.files.mobile_service_consultations_image[0]) {
+      settingsData.mobile_service_consultations_image = '/uploads/' + req.files.mobile_service_consultations_image[0].filename;
+    }
+    if (req.files.mobile_service_periodontal_image && req.files.mobile_service_periodontal_image[0]) {
+      settingsData.mobile_service_periodontal_image = '/uploads/' + req.files.mobile_service_periodontal_image[0].filename;
+    }
   }
+
   Pages.update(req.params.id, data);
+
+  // Save mobile dentistry images to settings if any were uploaded
+  if (Object.keys(settingsData).length > 0) {
+    Settings.updateSettings(settingsData);
+  }
+
   res.redirect('/admin/pages');
 });
 
@@ -496,13 +539,29 @@ router.get('/reviews', requireAuth, (req, res) => {
   const reviews = Reviews.getAll();
   const stats = Reviews.getStats();
   const countBySource = Reviews.getCountBySource();
+  const googleSync = GoogleReviewsService.getSyncStatus();
   res.render('admin/reviews/index', {
     ...getAdminData(),
     title: 'Manage Reviews',
     reviews,
     stats,
-    countBySource
+    countBySource,
+    googleSync,
+    syncMessage: req.query.syncMessage,
+    syncError: req.query.syncError
   });
+});
+
+// Sync Google Reviews
+router.post('/reviews/sync-google', requireAuth, async (req, res) => {
+  try {
+    const result = await GoogleReviewsService.importReviews();
+    const message = `Synced from ${result.placeName}: ${result.imported} new, ${result.updated} updated, ${result.skipped} skipped. Overall rating: ${result.overallRating}/5 (${result.totalReviews} total reviews)`;
+    res.redirect('/admin/reviews?syncMessage=' + encodeURIComponent(message));
+  } catch (error) {
+    console.error('Google sync error:', error);
+    res.redirect('/admin/reviews?syncError=' + encodeURIComponent(error.message));
+  }
 });
 
 router.get('/reviews/new', requireAuth, (req, res) => {
@@ -591,7 +650,9 @@ router.get('/settings', requireAuth, (req, res) => {
     ...getAdminData(),
     title: 'Site Settings',
     allSettings,
-    success: req.query.success
+    success: req.query.success,
+    importSuccess: req.query.imported,
+    importError: req.query.error
   });
 });
 
@@ -622,6 +683,160 @@ router.post('/settings', requireAuth, upload.fields([
   }
   Settings.updateSettings(settingsData);
   res.redirect('/admin/settings?success=1');
+});
+
+// =====================
+// Backup & Restore
+// =====================
+
+// Export all data as JSON
+router.get('/export', requireAuth, (req, res) => {
+  const exportData = {
+    exportDate: new Date().toISOString(),
+    version: '1.0',
+    settings: Settings.getSettings(),
+    pages: Pages.getAll(),
+    posts: Posts.getAll(),
+    services: Services.getAll(),
+    team: Team.getAll(),
+    testimonials: Testimonials.getAll(),
+    categories: Categories.getAll(),
+    reviews: Reviews.getAll(),
+    insurance: Insurance.getAll()
+  };
+
+  const filename = `dentalogix-backup-${new Date().toISOString().split('T')[0]}.json`;
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send(JSON.stringify(exportData, null, 2));
+});
+
+// Import data from JSON
+router.post('/import', requireAuth, upload.single('backup_file'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.redirect('/admin/settings?error=No file uploaded');
+    }
+
+    const fs = require('fs');
+    const fileContent = fs.readFileSync(req.file.path, 'utf8');
+    const importData = JSON.parse(fileContent);
+
+    // Validate the backup file
+    if (!importData.version || !importData.settings) {
+      fs.unlinkSync(req.file.path);
+      return res.redirect('/admin/settings?error=Invalid backup file format');
+    }
+
+    // Import settings
+    if (importData.settings) {
+      Settings.updateSettings(importData.settings);
+    }
+
+    // Import pages (update existing or create new)
+    if (importData.pages && Array.isArray(importData.pages)) {
+      importData.pages.forEach(page => {
+        const existing = Pages.getBySlug(page.slug);
+        if (existing) {
+          Pages.update(existing.id, page);
+        } else {
+          Pages.create(page);
+        }
+      });
+    }
+
+    // Import posts
+    if (importData.posts && Array.isArray(importData.posts)) {
+      importData.posts.forEach(post => {
+        const existing = Posts.getBySlug(post.slug);
+        if (existing) {
+          Posts.update(existing.id, post);
+        } else {
+          Posts.create(post);
+        }
+      });
+    }
+
+    // Import services
+    if (importData.services && Array.isArray(importData.services)) {
+      importData.services.forEach(service => {
+        const existing = Services.getBySlug(service.slug);
+        if (existing) {
+          Services.update(existing.id, service);
+        } else {
+          Services.create(service);
+        }
+      });
+    }
+
+    // Import team members
+    if (importData.team && Array.isArray(importData.team)) {
+      importData.team.forEach(member => {
+        const existing = Team.getBySlug(member.slug);
+        if (existing) {
+          Team.update(existing.id, member);
+        } else {
+          Team.create(member);
+        }
+      });
+    }
+
+    // Import testimonials
+    if (importData.testimonials && Array.isArray(importData.testimonials)) {
+      importData.testimonials.forEach(testimonial => {
+        const existing = Testimonials.getById(testimonial.id);
+        if (existing) {
+          Testimonials.update(testimonial.id, testimonial);
+        } else {
+          Testimonials.create(testimonial);
+        }
+      });
+    }
+
+    // Import categories
+    if (importData.categories && Array.isArray(importData.categories)) {
+      importData.categories.forEach(category => {
+        const existing = Categories.getBySlug(category.slug);
+        if (existing) {
+          Categories.update(existing.id, category);
+        } else {
+          Categories.create(category);
+        }
+      });
+    }
+
+    // Import reviews
+    if (importData.reviews && Array.isArray(importData.reviews)) {
+      importData.reviews.forEach(review => {
+        const existing = Reviews.getById(review.id);
+        if (existing) {
+          Reviews.update(review.id, review);
+        } else {
+          Reviews.create(review);
+        }
+      });
+    }
+
+    // Import insurance providers
+    if (importData.insurance && Array.isArray(importData.insurance)) {
+      importData.insurance.forEach(ins => {
+        const existing = Insurance.getById(ins.id);
+        if (existing) {
+          Insurance.update(ins.id, ins);
+        } else {
+          Insurance.create(ins);
+        }
+      });
+    }
+
+    // Clean up uploaded file
+    fs.unlinkSync(req.file.path);
+
+    res.redirect('/admin/settings?success=1&imported=1');
+  } catch (error) {
+    console.error('Import error:', error);
+    res.redirect('/admin/settings?error=Import failed: ' + error.message);
+  }
 });
 
 // =====================

@@ -159,10 +159,41 @@
   </div>
   <% } %>
 
+  <!-- Mobile Dentistry Page Card -->
+  <% const mobilePage = pages.find(p => p.slug === 'mobile-dentistry'); %>
+  <% if (mobilePage) { %>
+  <div class="card" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border: 1px solid #FED7AA;">
+    <div class="card-body" style="padding: 1.25rem;">
+      <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+        <div style="width: 48px; height: 48px; background: #EA580C; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 24px; height: 24px;"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 012 2v6a2 2 0 01-2 2h-4"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <h3 style="margin: 0; font-size: 1.125rem; color: #9A3412;">Mobile Dentistry</h3>
+            <span class="badge badge-<%= mobilePage.status === 'published' ? 'success' : 'warning' %>" style="font-size: 0.7rem;"><%= mobilePage.status %></span>
+          </div>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.875rem; color: #EA580C;">On-site corporate dental services</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <a href="/mobile-dentistry" target="_blank" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          View
+        </a>
+        <a href="/admin/pages/<%= mobilePage.id %>/edit" class="btn btn-primary btn-sm" style="flex: 1; justify-content: center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit
+        </a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+
 </div>
 
 <!-- Other Custom Pages -->
-<% const customPages = pages.filter(p => !['home', 'about', 'services', 'blog', 'contact'].includes(p.slug)); %>
+<% const customPages = pages.filter(p => !['home', 'about', 'services', 'blog', 'contact', 'mobile-dentistry'].includes(p.slug)); %>
 <% if (customPages.length > 0) { %>
 <div class="card" style="margin-top: 1.5rem;">
   <div class="card-header">

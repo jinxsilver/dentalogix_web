@@ -192,9 +192,11 @@ router.get('/locations', (req, res) => {
 
 // Mobile Dentistry page
 router.get('/mobile-dentistry', (req, res) => {
+  const page = Pages.getBySlug('mobile-dentistry');
   res.render('public/mobile-dentistry', {
     ...getCommonData(),
-    title: 'Mobile Corporate Dentistry'
+    page: page,
+    title: page ? page.title : 'Mobile Corporate Dentistry'
   });
 });
 

@@ -3,13 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login | Dentalogix</title>
+  <title>Admin Login | <%= settings.site_name || 'Dentalogix' %></title>
+  <% if (settings.favicon) { %>
+  <link rel="icon" type="image/x-icon" href="<%= settings.favicon %>">
+  <% } %>
   <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body class="login-page">
   <div class="login-card">
     <div class="login-header">
-      <div class="login-logo">Dental<span>ogix</span></div>
+      <% if (settings.site_logo) { %>
+        <img src="<%= settings.site_logo %>" alt="<%= settings.site_name || 'Dentalogix' %>" class="login-logo-img">
+      <% } else { %>
+        <div class="login-logo">Dental<span>ogix</span></div>
+      <% } %>
       <p class="login-subtitle">Admin Panel</p>
     </div>
     

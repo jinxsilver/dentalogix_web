@@ -83,7 +83,83 @@
         <% } %>
         <input type="file" id="hero_image" name="hero_image" accept="image/*">
       </div>
-      
+
+      <% if (page && page.slug === 'mobile-dentistry') { %>
+      <!-- Mobile Dentistry Service Images -->
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #E2E8F0;">
+        <h3 style="margin-bottom: 1rem; color: #334155;">Service Images</h3>
+        <p style="color: #64748B; margin-bottom: 1.5rem;">Upload images for the "Comprehensive Dental Services On-Site" section.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+          <!-- Cleanings & Exams -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Cleanings & Exams</label>
+            <% if (settings.mobile_service_cleanings_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_cleanings_image %>" alt="Cleanings" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_cleanings_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+
+          <!-- Digital X-Rays -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Digital X-Rays</label>
+            <% if (settings.mobile_service_xrays_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_xrays_image %>" alt="X-Rays" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_xrays_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+
+          <!-- Teeth Whitening -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Teeth Whitening</label>
+            <% if (settings.mobile_service_whitening_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_whitening_image %>" alt="Whitening" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_whitening_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+
+          <!-- Fillings -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Fillings</label>
+            <% if (settings.mobile_service_fillings_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_fillings_image %>" alt="Fillings" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_fillings_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+
+          <!-- Consultations -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Consultations</label>
+            <% if (settings.mobile_service_consultations_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_consultations_image %>" alt="Consultations" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_consultations_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+
+          <!-- Periodontal Care -->
+          <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <label style="font-size: 0.875rem; font-weight: 600; color: #334155; display: block; margin-bottom: 0.75rem;">Periodontal Care</label>
+            <% if (settings.mobile_service_periodontal_image) { %>
+              <div style="margin-bottom: 0.75rem;">
+                <img src="<%= settings.mobile_service_periodontal_image %>" alt="Periodontal" style="width: 100%; height: 80px; object-fit: cover; border-radius: 0.375rem;">
+              </div>
+            <% } %>
+            <input type="file" name="mobile_service_periodontal_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+          </div>
+        </div>
+      </div>
+      <% } %>
+
       <div class="form-actions">
         <button type="submit" class="btn btn-primary"><%= page ? 'Update Page' : 'Create Page' %></button>
         <a href="/admin/pages" class="btn btn-secondary">Cancel</a>

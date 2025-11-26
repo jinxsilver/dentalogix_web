@@ -671,6 +671,13 @@ textarea {
   color: var(--admin-primary);
 }
 
+.login-logo-img {
+  max-height: 140px;
+  max-width: 320px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
 .login-subtitle {
   color: var(--admin-text-light);
 }
