@@ -2653,6 +2653,8 @@ section {
   box-shadow: var(--shadow-lg);
   position: relative;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
+  display: flex;
+  flex-direction: column;
 }
 
 .location-card:hover {
@@ -2720,6 +2722,13 @@ section {
 
 .location-info {
   padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.location-info .btn {
+  margin-top: auto;
 }
 
 .location-info h2 {
@@ -2787,6 +2796,19 @@ section {
 
 .location-cta-text p:first-child {
   margin-bottom: var(--space-sm);
+}
+
+/* Mobile Corporate Dentistry card - centered content */
+.location-mobile .location-info {
+  text-align: center;
+}
+
+.location-mobile .location-details .detail-item {
+  justify-content: center;
+}
+
+.location-mobile .location-features {
+  justify-content: center;
 }
 
 .why-locations {
