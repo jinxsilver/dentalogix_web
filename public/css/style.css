@@ -1955,7 +1955,7 @@ section {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 60px;
+  width: 40px;
   z-index: 2;
   pointer-events: none;
 }
@@ -1972,8 +1972,9 @@ section {
 
 .insurance-carousel {
   display: flex;
-  gap: var(--space-md);
-  padding: var(--space-sm) 0;
+  gap: var(--space-lg);
+  padding: var(--space-md) 0;
+  align-items: center;
 }
 
 .insurance-carousel:not(.auto-scroll) {
@@ -1982,7 +1983,7 @@ section {
 }
 
 .insurance-carousel.auto-scroll {
-  animation: scrollInsurance 30s linear infinite;
+  animation: scrollInsurance 40s linear infinite;
   width: max-content;
 }
 
@@ -2001,22 +2002,23 @@ section {
 
 .insurance-logo {
   background: var(--color-white);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-gray-200);
   transition: var(--transition-base);
-  min-width: 150px;
-  height: 70px;
+  width: 160px;
+  height: 80px;
   flex-shrink: 0;
 }
 
 .insurance-logo:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--color-primary);
+  transform: translateY(-2px);
 }
 
 .insurance-logo a {
@@ -2028,11 +2030,13 @@ section {
 }
 
 .insurance-logo img {
-  max-width: 120px;
-  max-height: 50px;
+  max-width: 130px;
+  max-height: 55px;
+  width: auto;
+  height: auto;
   object-fit: contain;
-  filter: grayscale(30%);
-  opacity: 0.85;
+  filter: grayscale(20%);
+  opacity: 0.9;
   transition: var(--transition-base);
 }
 
@@ -2043,9 +2047,10 @@ section {
 
 .insurance-logo span {
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--color-gray-700);
   text-align: center;
+  line-height: 1.3;
 }
 
 .insurance-note {
