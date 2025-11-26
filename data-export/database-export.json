@@ -1,0 +1,825 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@dentalogix.com",
+      "password": "$2a$10$j9RG4myqS8Aup2B9uYU/NeVXzxOL3K07QQPpUmUyrpg/8vgwLLghe",
+      "role": "admin",
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 03:29:22"
+    }
+  ],
+  "pages": [
+    {
+      "id": 2,
+      "title": "About Us",
+      "slug": "about",
+      "content": "<h2>Our Story</h2><p>Founded with a vision to transform dental care, Dentalogix has been serving our community for over 15 years. Our team of dedicated professionals combines expertise with compassion to deliver outstanding dental care.</p><h2>Our Mission</h2><p>To provide exceptional dental care in a comfortable, welcoming environment using the latest technology and techniques.</p>",
+      "meta_description": "Learn about Dentalogix dental practice and our dedicated team",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "default",
+      "status": "published",
+      "sort_order": 2,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 3,
+      "title": "Services",
+      "slug": "services",
+      "content": "Explore our comprehensive dental services",
+      "meta_description": "Comprehensive dental services including cosmetic dentistry, implants, and more",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "services",
+      "status": "published",
+      "sort_order": 3,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 4,
+      "title": "Blog",
+      "slug": "blog",
+      "content": "",
+      "meta_description": "Dental health tips, news, and insights from Dentalogix",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "blog",
+      "status": "published",
+      "sort_order": 4,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 5,
+      "title": "Contact",
+      "slug": "contact",
+      "content": "<p>We would love to hear from you! Reach out to schedule an appointment or ask any questions.</p>",
+      "meta_description": "Contact Dentalogix for appointments and inquiries",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "contact",
+      "status": "published",
+      "sort_order": 5,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 6,
+      "title": "Privacy Policy",
+      "slug": "privacy",
+      "content": "<h2>Privacy Policy</h2>\n<p><strong>Last Updated:</strong> [Date]</p>\n\n<h3>Information We Collect</h3>\n<p>We collect information you provide directly to us, such as when you schedule an appointment, fill out a form, or contact us.</p>\n\n<h3>How We Use Your Information</h3>\n<p>We use the information we collect to provide, maintain, and improve our services, communicate with you about appointments and treatments, and comply with legal obligations.</p>\n\n<h3>Information Sharing</h3>\n<p>We do not sell or share your personal information with third parties except as required by law or to provide our dental services.</p>\n\n<h3>Contact Us</h3>\n<p>If you have questions about this Privacy Policy, please contact us.</p>",
+      "meta_description": "Our privacy policy explains how we collect, use, and protect your personal information.",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "default",
+      "status": "published",
+      "sort_order": 0,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 16:06:27",
+      "updated_at": "2025-11-25 16:06:27"
+    },
+    {
+      "id": 7,
+      "title": "Terms of Service",
+      "slug": "terms",
+      "content": "<h2>Terms of Service</h2>\n<p><strong>Last Updated:</strong> [Date]</p>\n\n<h3>Acceptance of Terms</h3>\n<p>By accessing and using this website, you accept and agree to be bound by these Terms of Service.</p>\n\n<h3>Use of Services</h3>\n<p>Our website provides information about our dental services and allows you to schedule appointments. You agree to use our services only for lawful purposes.</p>\n\n<h3>Appointments</h3>\n<p>Scheduling an appointment through our website does not guarantee availability. We will confirm all appointments via phone or email.</p>\n\n<h3>Limitation of Liability</h3>\n<p>The information on this website is for general informational purposes only and should not be considered medical advice.</p>\n\n<h3>Changes to Terms</h3>\n<p>We reserve the right to modify these terms at any time. Continued use of the website constitutes acceptance of modified terms.</p>",
+      "meta_description": "Terms and conditions for using our dental practice website and services.",
+      "meta_keywords": null,
+      "hero_image": null,
+      "template": "default",
+      "status": "published",
+      "sort_order": 0,
+      "show_in_nav": 1,
+      "created_at": "2025-11-25 16:06:27",
+      "updated_at": "2025-11-25 16:06:27"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "The Benefits of Deep Bleaching Techniques",
+      "slug": "benefits-deep-bleaching-techniques",
+      "excerpt": "Discover how professional deep bleaching can transform your smile with long-lasting results.",
+      "content": "<p>Professional teeth whitening has come a long way from the days of uncomfortable trays and mediocre results. Today's deep bleaching techniques offer dramatic improvements that last.</p><h3>What Makes Deep Bleaching Different?</h3><p>Unlike over-the-counter whitening products that only address surface stains, deep bleaching penetrates the enamel to remove intrinsic stains that have built up over years.</p><h3>The Process</h3><p>Our deep bleaching protocol involves both in-office treatment and customized take-home trays for maintenance. This combination approach ensures you achieve and maintain your desired level of whiteness.</p><h3>Who Is a Good Candidate?</h3><p>Most patients with healthy teeth and gums are excellent candidates for deep bleaching. During your consultation, we'll evaluate your oral health and discuss realistic expectations for your results.</p>",
+      "featured_image": "/uploads/1764109880318-199569136.png",
+      "author_id": 1,
+      "category_id": 2,
+      "meta_description": "",
+      "meta_keywords": "",
+      "status": "published",
+      "published_at": "2024-01-15 10:00:00",
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 22:31:20"
+    },
+    {
+      "id": 2,
+      "title": "How to Find the Best Dentist That Works for You",
+      "slug": "find-best-dentist-works-for-you",
+      "excerpt": "Tips for choosing a dental practice that meets your needs and makes you feel comfortable.",
+      "content": "<p>Finding the right dentist is about more than just convenience. Your dental health partner should make you feel comfortable, heard, and confident in your care.</p><h3>Key Factors to Consider</h3><p>When evaluating potential dentists, consider their credentials, the technology they use, office atmosphere, and how their team communicates with you.</p><h3>Questions to Ask</h3><p>Don't be afraid to ask about their approach to patient comfort, continuing education, and how they handle dental emergencies. A great dental practice will welcome your questions.</p><h3>The Importance of Technology</h3><p>Modern dental technology like digital X-rays and intraoral scanners means more accurate diagnoses, less discomfort, and better outcomes. Ask about the technology a practice uses.</p>",
+      "featured_image": "/uploads/1764109888794-603420283.png",
+      "author_id": 1,
+      "category_id": 1,
+      "meta_description": "",
+      "meta_keywords": "",
+      "status": "published",
+      "published_at": "2024-01-20 14:30:00",
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 22:31:28"
+    },
+    {
+      "id": 3,
+      "title": "Introducing the Itero 5D Plus Scanner",
+      "slug": "introducing-itero-5d-plus-scanner",
+      "excerpt": "Learn about our newest technology for more comfortable and accurate dental impressions.",
+      "content": "<p>We're excited to announce the addition of the Itero 5D Plus scanner to our practice. This revolutionary device is changing how we approach dental diagnostics and treatment planning.</p><h3>No More Gooey Impressions</h3><p>Say goodbye to uncomfortable impression trays filled with gooey material. The Itero scanner captures detailed 3D images of your teeth in minutes, with no discomfort.</p><h3>Advanced Diagnostic Capabilities</h3><p>The 5D Plus doesn't just create digital impressions—it can detect interproximal cavities that might be missed by traditional X-rays and even visualize changes in your gum health over time.</p><h3>Better Fitting Restorations</h3><p>Digital impressions are more accurate than traditional ones, which means your crowns, bridges, and aligners will fit better from the start.</p>",
+      "featured_image": "/uploads/1764109858433-617411207.png",
+      "author_id": 1,
+      "category_id": 3,
+      "meta_description": "",
+      "meta_keywords": "",
+      "status": "published",
+      "published_at": "2024-02-01 09:00:00",
+      "created_at": "2025-11-25 03:29:22",
+      "updated_at": "2025-11-25 22:30:58"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Oral Health",
+      "slug": "oral-health",
+      "description": "Tips and information about maintaining good oral health",
+      "created_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 2,
+      "name": "Cosmetic Dentistry",
+      "slug": "cosmetic-dentistry",
+      "description": "Everything about cosmetic dental procedures",
+      "created_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 3,
+      "name": "Dental Technology",
+      "slug": "dental-technology",
+      "description": "Latest advancements in dental technology",
+      "created_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 4,
+      "name": "Patient Stories",
+      "slug": "patient-stories",
+      "description": "Success stories from our patients",
+      "created_at": "2025-11-25 03:29:22"
+    },
+    {
+      "id": 5,
+      "name": "News & Updates",
+      "slug": "news-updates",
+      "description": "Practice news and announcements",
+      "created_at": "2025-11-25 03:29:22"
+    }
+  ],
+  "services": [
+    {
+      "id": 47,
+      "title": "General & Preventive Care",
+      "slug": "general-preventive-care",
+      "short_description": "Comprehensive care to protect and maintain your smile",
+      "full_description": "Our general and preventive dentistry services focus on maintaining healthy teeth and gums through regular exams, cleanings, and preventive treatments. We use advanced diagnostic tools like digital X-rays and provide personalized oral hygiene education. Our comprehensive oral health services evaluate your gums, jaw, bite alignment, and overall oral health to ensure everything is functioning properly.",
+      "icon": "tooth",
+      "image": "https://images.pexels.com/photos/3845653/pexels-photo-3845653.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 1,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 48,
+      "title": "Cosmetic Dentistry",
+      "slug": "cosmetic-dentistry",
+      "short_description": "Transform your smile with confidence",
+      "full_description": "Enhance the appearance of your teeth with our cosmetic dentistry options, including professional teeth whitening, porcelain veneers, and Invisalign® clear aligners. Whether you're preparing for a big event or simply want a brighter smile, we offer solutions tailored to your goals. Our cosmetic procedures combine artistry with dental science for natural-looking, beautiful results.",
+      "icon": "sparkles",
+      "image": "https://images.pexels.com/photos/3762453/pexels-photo-3762453.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 2,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 49,
+      "title": "Restorative Dentistry",
+      "slug": "restorative-dentistry",
+      "short_description": "Restore function and beauty to your teeth",
+      "full_description": "From fillings and crowns to dental implants and dentures, our restorative treatments repair damaged or missing teeth to improve your oral health and confidence. We use durable, natural-looking materials to ensure long-lasting results. Whether you need a simple filling or a complete smile reconstruction, we have the expertise to help.",
+      "icon": "repair",
+      "image": "https://images.pexels.com/photos/6627536/pexels-photo-6627536.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 3,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 50,
+      "title": "Crowns & Bridges",
+      "slug": "crowns-bridges",
+      "short_description": "Durable solutions for damaged or missing teeth",
+      "full_description": "Dental crowns and bridges are reliable solutions for restoring damaged, decayed, or missing teeth. Crowns cap and protect weakened teeth while restoring their shape and function. Bridges replace one or more missing teeth by anchoring to adjacent teeth. We use high-quality materials including porcelain and ceramic for a natural appearance that blends seamlessly with your smile.",
+      "icon": "crown",
+      "image": "https://images.pexels.com/photos/3779709/pexels-photo-3779709.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 4,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 51,
+      "title": "Dentures",
+      "slug": "dentures",
+      "short_description": "Custom-fitted dentures for a complete smile",
+      "full_description": "Whether you need full or partial dentures, we create custom-fitted solutions that look natural and feel comfortable. Our dentures are crafted using advanced materials and techniques to ensure a secure fit and optimal function. We also offer implant-supported dentures for enhanced stability. Our team will guide you through the process and ensure your dentures meet your needs.",
+      "icon": "dentures",
+      "image": "https://images.pexels.com/photos/3952005/pexels-photo-3952005.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 5,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 52,
+      "title": "Orthodontics",
+      "slug": "orthodontics",
+      "short_description": "Straighten your smile discreetly",
+      "full_description": "Achieve a well-aligned smile with clear aligners like Invisalign® and custom retainers. Our orthodontic solutions are ideal for teens and adults seeking a comfortable, nearly invisible way to improve their bite and appearance. Straightening your teeth has never been more convenient or discreet.",
+      "icon": "aligners",
+      "image": "https://images.pexels.com/photos/3845806/pexels-photo-3845806.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 6,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 53,
+      "title": "Pediatric Dentistry",
+      "slug": "pediatric-dentistry",
+      "short_description": "Gentle dental care for growing smiles",
+      "full_description": "We offer essential pediatric dental services including exams, cleanings, and fluoride treatments. Our team creates a welcoming environment to help children feel comfortable while building healthy habits from an early age. Starting dental care early sets the foundation for a lifetime of healthy smiles.",
+      "icon": "child",
+      "image": "https://images.pexels.com/photos/3845625/pexels-photo-3845625.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 7,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 54,
+      "title": "Sedation Dentistry",
+      "slug": "sedation-dentistry",
+      "short_description": "Relax with gentle sedation options",
+      "full_description": "For patients with dental anxiety, we offer Nitrous Oxide (laughing gas) to help you feel calm and comfortable during treatment. Safe and effective, it's a great option for both children and adults needing a little extra ease in the chair. Don't let fear keep you from the care you need.",
+      "icon": "relax",
+      "image": "https://images.pexels.com/photos/3881449/pexels-photo-3881449.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 8,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 55,
+      "title": "Periodontal Care",
+      "slug": "periodontal-care",
+      "short_description": "Protect your gums and preserve your smile",
+      "full_description": "Healthy gums are the foundation of a healthy mouth. Our periodontal services include deep cleanings and ongoing maintenance to treat and manage gum disease, helping you avoid tooth loss and other complications. Early intervention is key to maintaining your oral health.",
+      "icon": "gums",
+      "image": "https://images.pexels.com/photos/6627531/pexels-photo-6627531.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 9,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 56,
+      "title": "Oral Surgery",
+      "slug": "oral-surgery",
+      "short_description": "Expert care for complex dental needs",
+      "full_description": "Our oral surgery services include wisdom tooth extractions, dental implant placement, bone grafting, and PRF (Platelet-Rich Fibrin) therapy to support healing and regeneration. We prioritize comfort and precision in every procedure, using the latest techniques to ensure the best outcomes.",
+      "icon": "surgery",
+      "image": "https://images.pexels.com/photos/3845766/pexels-photo-3845766.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "price_range": null,
+      "sort_order": 10,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01"
+    }
+  ],
+  "team": [
+    {
+      "id": 23,
+      "name": "Dr. Jin Mai-Soto",
+      "title": "General Dentist ",
+      "bio": "Dr. Jin Mai-Soto brings a unique blend of disciplined service and advanced clinical skill to her practice. Originally inspired by a lifelong passion for healthcare, she honed her resilience and commitment to patient service while in the Army National Guard. Dr. Mai-Soto has a special focus on surgical dentistry, having completed extensive advanced training in complex procedures, including dental implants and impacted wisdom tooth extractions, to ensure precise, high-level care for every patient.",
+      "photo": "/uploads/1764044494895-648584815.jpg",
+      "email": "drsoto@dentalogix.net",
+      "specialties": "General Dentist, Surgical Dentistry, Implants, Third Molar Extractions",
+      "credentials": "DDS - NYU College of Dentistry, Army National Guard Veteran, 300+ Hours Implant Training",
+      "sort_order": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 08:04:57",
+      "category": "dentist",
+      "bio_page_enabled": 1,
+      "slug": "dr-jin-mai-soto",
+      "full_bio": "Dr. Jin Mai-Soto's journey into dentistry began with a childhood dream of practicing medicine. Originally from China, she immigrated to the United States with a deep passion for healthcare and a desire to make a meaningful impact. Inspired by the emphasis on preventive dental care in the U.S., she chose to pursue dentistry as her lifelong career.\r\n\r\nWhile working toward her dental degree, Dr. Mai-Soto proudly joined the Army National Guard, where she developed discipline, resilience, and a commitment to service that she brings into her practice every day.\r\n\r\nDr. Mai-Soto has a special interest in surgical procedures and continues to expand her expertise through advanced training. She has completed impacted third molar extraction training and over 300 hours of implant course continuum, equipping her with the skills to perform complex procedures with precision and care.\r\n\r\nOutside of the clinic, Dr. Mai-Soto dedicates her time to personal growth and continuous learning, always striving to provide the highest level of care to her patients.",
+      "linkedin_url": "https://www.linkedin.com/in/jin-mai-a2b3562b/",
+      "undergrad_school": "University at Buffalo",
+      "undergrad_degree": "Bachelor of Science",
+      "grad_school": "NYU College of Dentistry",
+      "grad_degree": "Doctor of Dental Surgery (DDS)",
+      "undergrad_logo": "https://www.buffalo.edu/content/www/brand/resources-tools/downloads/jcr:content/par/image_0.img.209.auto.png/1660936740764.png",
+      "grad_logo": "/uploads/1764052499656-416691979.jpg"
+    },
+    {
+      "id": 24,
+      "name": "Rey Soto",
+      "title": "Chief Operations Officer",
+      "bio": "Rey Soto brings over 24 years of US Army experience to Dentalogix, combining military precision with healthcare operations expertise. With a business management background from Harvard University and specialized experience in cybersecurity within the healthcare sector, Rey ensures that Dentalogix operates with the highest standards of efficiency, security, and patient care.",
+      "photo": "/uploads/1764052178729-976229748.jpg",
+      "email": "rey@dentalogix.net",
+      "specialties": "Healthcare Operations, Cybersecurity, Business Management, Strategic Planning",
+      "credentials": "Harvard University Business Management, 23-Year US Army Veteran, Healthcare Cybersecurity Specialist",
+      "sort_order": 2,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 06:36:57",
+      "category": "executive",
+      "bio_page_enabled": 1,
+      "slug": "rey-soto",
+      "full_bio": "Rey Soto brings over two decades of U.S. Army service and healthcare technology expertise to Dentalogix, ensuring your visit runs smoothly and your personal information stays protected.\r\n\r\nAs an Operations NCO with the Army's Weapons of Mass Destruction Civil Support Team in New York City, Rey spent 20+ years coordinating with federal agencies including Homeland Security and the FBI—work that demands precision, accountability, and an unwavering commitment to protecting people. He holds a Bachelor of Liberal Arts in Sciences from Harvard University and is HIPAA certified, with specialized experience building secure systems for medical and dental practices.\r\n\r\nRey oversees the technology and operations that keep Dentalogix running efficiently, from the systems that manage your appointments and records to the security measures that safeguard your sensitive health and financial information. Under his leadership, the practices he supports have maintained zero data breaches—because your privacy isn't just a policy, it's a priority.\r\n\r\nWhen you visit Dentalogix, you can focus on your smile knowing that a dedicated team is working behind the scenes to protect everything else.",
+      "linkedin_url": "https://www.linkedin.com/in/rey-soto-a112455b/",
+      "undergrad_school": "Harvard University",
+      "undergrad_degree": "Bachelor of Liberal Arts, Computer Science, Extension Studies",
+      "grad_school": "University of Central Florida",
+      "grad_degree": "Masters in Fintech, Masters in Digital Forensics",
+      "undergrad_logo": "/uploads/1764051616660-856771980.png",
+      "grad_logo": "https://www.ucf.edu/brand/wp-content/blogs.dir/13/files/2016/07/UCF-tab-NoBleed_vert-KG-7406.png"
+    },
+    {
+      "id": 25,
+      "name": "Dr. Sarah Chen",
+      "title": "Associate Dentist",
+      "bio": "Dr. Chen brings expertise in restorative and cosmetic dentistry. Her gentle approach and attention to detail make her a favorite among patients seeking smile makeovers and complex dental work.",
+      "photo": null,
+      "email": null,
+      "specialties": "Cosmetic Dentistry, Veneers, Dental Implants, Invisalign",
+      "credentials": "DMD, Certified Invisalign Provider",
+      "sort_order": 3,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01",
+      "category": "dentist",
+      "bio_page_enabled": 0,
+      "slug": "dr-sarah-chen",
+      "full_bio": null,
+      "linkedin_url": null,
+      "undergrad_school": null,
+      "undergrad_degree": null,
+      "grad_school": null,
+      "grad_degree": null,
+      "undergrad_logo": null,
+      "grad_logo": null
+    },
+    {
+      "id": 26,
+      "name": "Maria Rodriguez",
+      "title": "Lead Dental Hygienist",
+      "bio": "Maria has been with Dentalogix since its founding. She is passionate about patient education and preventive care, helping patients maintain healthy smiles between visits.",
+      "photo": null,
+      "email": null,
+      "specialties": "Preventive Care, Deep Cleaning, Patient Education, Periodontal Maintenance",
+      "credentials": "RDH, Certified in Laser Dentistry",
+      "sort_order": 4,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01",
+      "updated_at": "2025-11-25 04:33:01",
+      "category": "hygienist",
+      "bio_page_enabled": 0,
+      "slug": "maria-rodriguez",
+      "full_bio": null,
+      "linkedin_url": null,
+      "undergrad_school": null,
+      "undergrad_degree": null,
+      "grad_school": null,
+      "grad_degree": null,
+      "undergrad_logo": null,
+      "grad_logo": null
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 9,
+      "patient_name": "Michael R.",
+      "patient_photo": null,
+      "content": "Dr. Mai-Soto and her team made me feel completely at ease during my root canal. I was dreading it, but they explained everything and the procedure was virtually painless. Highly recommend Dentalogix!",
+      "rating": 5,
+      "service_id": null,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 10,
+      "patient_name": "Sarah T.",
+      "patient_photo": null,
+      "content": "I got my Invisalign through Dentalogix and couldn't be happier with the results. The staff was always helpful with my questions and my teeth look amazing now!",
+      "rating": 5,
+      "service_id": null,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 11,
+      "patient_name": "James L.",
+      "patient_photo": null,
+      "content": "After years of being embarrassed about my smile, I finally got veneers at Dentalogix. The transformation is incredible and the team made the whole process comfortable.",
+      "rating": 5,
+      "service_id": null,
+      "featured": 1,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 12,
+      "patient_name": "Linda M.",
+      "patient_photo": null,
+      "content": "My kids actually look forward to their dental visits now! The staff is so gentle and patient with children. We've found our family dentist for life.",
+      "rating": 5,
+      "service_id": null,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01"
+    },
+    {
+      "id": 13,
+      "patient_name": "Robert K.",
+      "patient_photo": null,
+      "content": "The sedation dentistry option was a game-changer for me. I've avoided the dentist for years due to anxiety, but Dentalogix made it possible for me to get the care I needed.",
+      "rating": 5,
+      "service_id": null,
+      "featured": 0,
+      "status": "published",
+      "created_at": "2025-11-25 04:33:01"
+    }
+  ],
+  "settings": [
+    {
+      "id": 1,
+      "key": "site_name",
+      "value": "Dentalogix",
+      "type": "text"
+    },
+    {
+      "id": 2,
+      "key": "site_tagline",
+      "value": "Your Smile is Our Priority",
+      "type": "text"
+    },
+    {
+      "id": 3,
+      "key": "phone",
+      "value": "(716) 555-0123",
+      "type": "text"
+    },
+    {
+      "id": 4,
+      "key": "email",
+      "value": "info@dentalogix.us",
+      "type": "text"
+    },
+    {
+      "id": 5,
+      "key": "address",
+      "value": "2233 W Seneca St",
+      "type": "text"
+    },
+    {
+      "id": 6,
+      "key": "city",
+      "value": "Buffalo, NY 14210",
+      "type": "text"
+    },
+    {
+      "id": 7,
+      "key": "hours_weekday",
+      "value": "Mon-Sat: 9:00 AM - 5:00 PM",
+      "type": "text"
+    },
+    {
+      "id": 8,
+      "key": "hours_weekend",
+      "value": "Sunday: Closed",
+      "type": "text"
+    },
+    {
+      "id": 9,
+      "key": "facebook",
+      "value": "https://www.facebook.com/search/top?q=dentalogix",
+      "type": "text"
+    },
+    {
+      "id": 10,
+      "key": "instagram",
+      "value": "https://instagram.com/dentalogix",
+      "type": "text"
+    },
+    {
+      "id": 11,
+      "key": "twitter",
+      "value": "https://twitter.com/dentalogix",
+      "type": "text"
+    },
+    {
+      "id": 12,
+      "key": "primary_color",
+      "value": "#B45309",
+      "type": "color"
+    },
+    {
+      "id": 13,
+      "key": "secondary_color",
+      "value": "#78350F",
+      "type": "color"
+    },
+    {
+      "id": 14,
+      "key": "accent_color",
+      "value": "#F59E0B",
+      "type": "color"
+    },
+    {
+      "id": 15,
+      "key": "hero_title",
+      "value": "Your Smile is Our Priority",
+      "type": "text"
+    },
+    {
+      "id": 16,
+      "key": "hero_subtitle",
+      "value": "Comprehensive dental care services using state-of-the-art technology. Experience modern dentistry with cutting-edge equipment and compassionate care.",
+      "type": "textarea"
+    },
+    {
+      "id": 17,
+      "key": "about_text",
+      "value": "Dentalogix provides comprehensive dental care services using state-of-the-art technology. We combine quality care with up-to-date equipment to serve patients of all ages, diagnosing underlying causes of oral issues before treatment.",
+      "type": "textarea"
+    },
+    {
+      "id": 18,
+      "key": "footer_text",
+      "value": "© 2025 Dentalogix. All rights reserved. | Website developed by INX Labs division of FRS Management",
+      "type": "text"
+    },
+    {
+      "id": 19,
+      "key": "site_theme",
+      "value": "fall",
+      "type": "select"
+    },
+    {
+      "id": 21,
+      "key": "show_falling_leaves",
+      "value": "true",
+      "type": "boolean"
+    },
+    {
+      "id": 22,
+      "key": "site_logo",
+      "value": "/uploads/1764056246156-697295770.png",
+      "type": "file"
+    },
+    {
+      "id": 23,
+      "key": "reviews_source",
+      "value": "manual",
+      "type": "select"
+    },
+    {
+      "id": 24,
+      "key": "google_places_api_key",
+      "value": "",
+      "type": "text"
+    },
+    {
+      "id": 25,
+      "key": "google_place_id",
+      "value": "",
+      "type": "text"
+    },
+    {
+      "id": 26,
+      "key": "third_party_embed_code",
+      "value": "",
+      "type": "text"
+    },
+    {
+      "id": 27,
+      "key": "about_image_main",
+      "value": "/uploads/1764059327648-689263111.jpg",
+      "type": "text"
+    },
+    {
+      "id": 28,
+      "key": "about_image_secondary",
+      "value": "/uploads/1764059327649-614176530.jpg",
+      "type": "text"
+    },
+    {
+      "id": 29,
+      "key": "footer_logo",
+      "value": "/uploads/1764086240721-377876566.png",
+      "type": "file"
+    },
+    {
+      "id": 30,
+      "key": "privacy_url",
+      "value": "/privacy",
+      "type": "text"
+    },
+    {
+      "id": 31,
+      "key": "terms_url",
+      "value": "/terms",
+      "type": "text"
+    },
+    {
+      "id": 32,
+      "key": "favicon",
+      "value": "",
+      "type": "file"
+    },
+    {
+      "id": 33,
+      "key": "footer_quick_links",
+      "value": "[{\"label\":\"Home\",\"url\":\"/\"},{\"label\":\"About Us\",\"url\":\"/about\"},{\"label\":\"Our Services\",\"url\":\"/services\"},{\"label\":\"Locations\",\"url\":\"/locations\"},{\"label\":\"Mobile Dentistry\",\"url\":\"/mobile-dentistry\"},{\"label\":\"Blog\",\"url\":\"/blog\"},{\"label\":\"Contact\",\"url\":\"/contact\"}]",
+      "type": "json"
+    },
+    {
+      "id": 34,
+      "key": "footer_location1_name",
+      "value": "Dentist on Seneca",
+      "type": "text"
+    },
+    {
+      "id": 35,
+      "key": "footer_location1_address",
+      "value": "2233 W Seneca St",
+      "type": "text"
+    },
+    {
+      "id": 36,
+      "key": "footer_location1_city",
+      "value": "Buffalo, NY 14210",
+      "type": "text"
+    },
+    {
+      "id": 37,
+      "key": "footer_location1_show_phone",
+      "value": "true",
+      "type": "boolean"
+    },
+    {
+      "id": 38,
+      "key": "footer_location2_name",
+      "value": "Brooklyn, NY",
+      "type": "text"
+    },
+    {
+      "id": 39,
+      "key": "footer_location2_text",
+      "value": "Coming Soon!",
+      "type": "text"
+    },
+    {
+      "id": 40,
+      "key": "footer_location2_link_text",
+      "value": "Reserve Your Spot",
+      "type": "text"
+    },
+    {
+      "id": 41,
+      "key": "footer_location2_link_url",
+      "value": "/contact?location=brooklyn",
+      "type": "text"
+    },
+    {
+      "id": 42,
+      "key": "footer_location3_name",
+      "value": "Mobile Dentistry",
+      "type": "text"
+    },
+    {
+      "id": 43,
+      "key": "footer_location3_text",
+      "value": "Serving all of NY State",
+      "type": "text"
+    },
+    {
+      "id": 44,
+      "key": "footer_location3_link_text",
+      "value": "Learn More",
+      "type": "text"
+    },
+    {
+      "id": 45,
+      "key": "footer_location3_link_url",
+      "value": "/mobile-dentistry",
+      "type": "text"
+    }
+  ],
+  "media": [],
+  "contacts": [],
+  "appointments": [],
+  "reviews": [],
+  "insurance_providers": [
+    {
+      "id": 1,
+      "name": "United Healthcare",
+      "logo": "/uploads/1764119205970-540103571.png",
+      "website_url": null,
+      "display_order": 0,
+      "status": "published",
+      "created_at": "2025-11-25 08:17:37",
+      "updated_at": "2025-11-26 01:06:45"
+    },
+    {
+      "id": 2,
+      "name": "Delta Dental",
+      "logo": null,
+      "website_url": null,
+      "display_order": 1,
+      "status": "published",
+      "created_at": "2025-11-25 08:17:54",
+      "updated_at": "2025-11-25 08:17:54"
+    },
+    {
+      "id": 3,
+      "name": "Guardian",
+      "logo": null,
+      "website_url": null,
+      "display_order": 2,
+      "status": "published",
+      "created_at": "2025-11-25 08:18:10",
+      "updated_at": "2025-11-25 08:18:10"
+    },
+    {
+      "id": 4,
+      "name": "Anthem",
+      "logo": null,
+      "website_url": null,
+      "display_order": 3,
+      "status": "published",
+      "created_at": "2025-11-25 08:18:26",
+      "updated_at": "2025-11-25 08:18:26"
+    },
+    {
+      "id": 5,
+      "name": "United Concordia",
+      "logo": null,
+      "website_url": null,
+      "display_order": 4,
+      "status": "published",
+      "created_at": "2025-11-25 08:18:48",
+      "updated_at": "2025-11-25 08:18:48"
+    }
+  ]
+}
