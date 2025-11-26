@@ -1847,8 +1847,8 @@ section {
 
 .ratings-grid {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
+  flex-direction: row;
+  gap: var(--space-md);
 }
 
 .rating-card {
