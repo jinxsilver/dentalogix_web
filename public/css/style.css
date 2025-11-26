@@ -2522,6 +2522,10 @@ section {
   padding-top: calc(80px + var(--space-4xl));
 }
 
+.services-page > .container {
+  padding-bottom: var(--space-3xl);
+}
+
 .services-page .services-grid {
   grid-template-columns: repeat(2, 1fr);
 }
