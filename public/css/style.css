@@ -2729,6 +2729,8 @@ section {
 
 .location-info .btn {
   margin-top: auto;
+  align-self: center;
+  width: auto;
 }
 
 .location-info h2 {
