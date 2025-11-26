@@ -1814,7 +1814,7 @@ section {
 }
 
 /* =============================================
-   TRUST & REVIEWS SECTION
+   TRUST & INSURANCE SECTION
    ============================================= */
 
 .trust-section {
@@ -1822,26 +1822,38 @@ section {
   padding: var(--space-3xl) 0;
 }
 
-.trust-section .section-header {
-  margin-bottom: var(--space-xl);
+.trust-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+.trust-reviews .section-header,
+.trust-insurance .section-header {
+  text-align: left;
+  margin-bottom: var(--space-lg);
+}
+
+.trust-insurance .section-header h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0;
 }
 
 .ratings-grid {
   display: flex;
-  gap: var(--space-xl);
-  justify-content: center;
-  flex-wrap: nowrap;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
 .rating-card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
-  box-shadow: var(--shadow-md);
-  flex-shrink: 0;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .rating-logo {
@@ -1917,43 +1929,19 @@ section {
   font-weight: 500;
 }
 
-/* =============================================
-   INSURANCE SECTION
-   ============================================= */
-
-.insurance-section {
-  background: var(--color-white);
-  padding: var(--space-3xl) 0;
-}
-
-.insurance-section .section-header {
-  margin-bottom: var(--space-lg);
-}
-
-.insurance-section .section-header h3 {
-  font-size: 1.5rem;
-  margin-bottom: 0;
-}
-
+/* Insurance in Trust Section */
 .insurance-grid {
   display: flex;
-  gap: var(--space-md);
-  justify-content: center;
+  gap: var(--space-sm);
   flex-wrap: wrap;
-  margin-bottom: var(--space-md);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: var(--space-sm);
 }
 
 /* Insurance Carousel */
 .insurance-carousel-wrapper {
   overflow: hidden;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
   position: relative;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .insurance-carousel-wrapper::before,
@@ -1962,35 +1950,34 @@ section {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 60px;
+  width: 30px;
   z-index: 2;
   pointer-events: none;
 }
 
 .insurance-carousel-wrapper::before {
   left: 0;
-  background: linear-gradient(to right, var(--color-white), transparent);
+  background: linear-gradient(to right, var(--color-cream), transparent);
 }
 
 .insurance-carousel-wrapper::after {
   right: 0;
-  background: linear-gradient(to left, var(--color-white), transparent);
+  background: linear-gradient(to left, var(--color-cream), transparent);
 }
 
 .insurance-carousel {
   display: flex;
-  gap: var(--space-lg);
-  padding: var(--space-md) 0;
+  gap: var(--space-md);
+  padding: var(--space-xs) 0;
   align-items: center;
 }
 
 .insurance-carousel:not(.auto-scroll) {
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .insurance-carousel.auto-scroll {
-  animation: scrollInsurance 40s linear infinite;
+  animation: scrollInsurance 35s linear infinite;
   width: max-content;
 }
 
@@ -2008,23 +1995,21 @@ section {
 }
 
 .insurance-logo {
-  background: var(--color-gray-50);
-  border-radius: var(--radius-md);
-  padding: var(--space-sm) var(--space-md);
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-gray-200);
   transition: var(--transition-base);
-  width: 140px;
-  height: 60px;
+  width: 100px;
+  height: 45px;
   flex-shrink: 0;
 }
 
 .insurance-logo:hover {
-  box-shadow: var(--shadow-md);
   border-color: var(--color-primary);
-  transform: translateY(-2px);
 }
 
 .insurance-logo a {
@@ -2036,13 +2021,13 @@ section {
 }
 
 .insurance-logo img {
-  max-width: 110px;
-  max-height: 40px;
+  max-width: 80px;
+  max-height: 32px;
   width: auto;
   height: auto;
   object-fit: contain;
-  filter: grayscale(20%);
-  opacity: 0.85;
+  filter: grayscale(30%);
+  opacity: 0.8;
   transition: var(--transition-base);
 }
 
@@ -2052,16 +2037,17 @@ section {
 }
 
 .insurance-logo span {
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--color-gray-700);
+  font-weight: 500;
+  font-size: 0.65rem;
+  color: var(--color-gray-600);
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .insurance-note {
-  font-size: 0.875rem;
-  color: var(--color-gray-600);
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin-top: var(--space-xs);
 }
 
 .insurance-note a {
@@ -2069,39 +2055,30 @@ section {
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
-  .ratings-grid {
-    flex-direction: column;
-    align-items: center;
+@media (max-width: 1024px) {
+  .trust-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
   }
 
-  .rating-card {
-    width: 100%;
-    max-width: 320px;
+  .trust-insurance {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 640px) {
+  .insurance-logo {
+    width: 85px;
+    height: 40px;
   }
 
-  .insurance-carousel-wrapper {
-    max-width: 100%;
+  .insurance-logo img {
+    max-width: 70px;
+    max-height: 28px;
   }
 
   .insurance-carousel.auto-scroll {
     animation-duration: 25s;
-  }
-}
-
-@media (max-width: 480px) {
-  .insurance-logo {
-    width: 120px;
-    height: 50px;
-  }
-
-  .insurance-logo img {
-    max-width: 90px;
-    max-height: 35px;
-  }
-
-  .insurance-carousel.auto-scroll {
-    animation-duration: 20s;
   }
 }
 
