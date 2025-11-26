@@ -1930,6 +1930,10 @@ section {
 }
 
 /* Insurance in Trust Section */
+.trust-insurance {
+  max-width: 380px;
+}
+
 .insurance-grid {
   display: flex;
   gap: var(--space-sm);
@@ -1942,6 +1946,7 @@ section {
   overflow: hidden;
   margin-bottom: var(--space-sm);
   position: relative;
+  max-width: 380px;
 }
 
 .insurance-carousel-wrapper::before,
@@ -1950,7 +1955,7 @@ section {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 30px;
+  width: 20px;
   z-index: 2;
   pointer-events: none;
 }
@@ -1967,7 +1972,7 @@ section {
 
 .insurance-carousel {
   display: flex;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   padding: var(--space-xs) 0;
   align-items: center;
 }
@@ -1977,7 +1982,7 @@ section {
 }
 
 .insurance-carousel.auto-scroll {
-  animation: scrollInsurance 35s linear infinite;
+  animation: scrollInsurance 30s linear infinite;
   width: max-content;
 }
 
@@ -1997,14 +2002,14 @@ section {
 .insurance-logo {
   background: var(--color-white);
   border-radius: var(--radius-sm);
-  padding: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-gray-200);
   transition: var(--transition-base);
-  width: 100px;
-  height: 45px;
+  width: 80px;
+  height: 38px;
   flex-shrink: 0;
 }
 
@@ -2021,8 +2026,8 @@ section {
 }
 
 .insurance-logo img {
-  max-width: 80px;
-  max-height: 32px;
+  max-width: 65px;
+  max-height: 28px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -2060,25 +2065,22 @@ section {
     grid-template-columns: 1fr;
     gap: var(--space-2xl);
   }
-
-  .trust-insurance {
-    max-width: 500px;
-  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
+  .trust-insurance,
+  .insurance-carousel-wrapper {
+    max-width: 300px;
+  }
+
   .insurance-logo {
-    width: 85px;
-    height: 40px;
+    width: 65px;
+    height: 32px;
   }
 
   .insurance-logo img {
-    max-width: 70px;
-    max-height: 28px;
-  }
-
-  .insurance-carousel.auto-scroll {
-    animation-duration: 25s;
+    max-width: 55px;
+    max-height: 24px;
   }
 }
 
