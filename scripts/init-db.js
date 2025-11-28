@@ -126,6 +126,146 @@ db.exec(`
     FOREIGN KEY (service_id) REFERENCES services(id)
   );
 
+  -- Google Reviews
+  CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reviewer_name TEXT NOT NULL,
+    reviewer_photo TEXT,
+    content TEXT NOT NULL,
+    rating INTEGER DEFAULT 5,
+    source TEXT DEFAULT 'google',
+    source_url TEXT,
+    review_date TEXT,
+    featured INTEGER DEFAULT 0,
+    status TEXT DEFAULT 'published',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- Insurance Providers
+  CREATE TABLE IF NOT EXISTS insurance_providers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    logo TEXT,
+    website_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    status TEXT DEFAULT 'published',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- BrandScripts for StoryBrand marketing
+  CREATE TABLE IF NOT EXISTS brandscripts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    brand_name TEXT NOT NULL,
+    is_active INTEGER DEFAULT 0,
+    character_name TEXT,
+    character_desire TEXT,
+    character_identity_from TEXT,
+    character_identity_to TEXT,
+    villain_name TEXT,
+    villain_description TEXT,
+    problem_external TEXT,
+    problem_internal TEXT,
+    problem_philosophical TEXT,
+    guide_empathy_statement TEXT,
+    guide_authority_stats TEXT,
+    guide_testimonials TEXT,
+    guide_awards TEXT,
+    guide_logos TEXT,
+    process_plan_name TEXT,
+    process_plan_steps TEXT,
+    agreement_plan_name TEXT,
+    agreement_plan_items TEXT,
+    direct_cta_text TEXT DEFAULT 'Schedule Your Visit',
+    direct_cta_url TEXT DEFAULT '/contact',
+    transitional_ctas TEXT,
+    failure_consequences TEXT,
+    success_outcomes TEXT,
+    transformation_from TEXT,
+    transformation_to TEXT,
+    one_liner TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  -- Marketing Offers / Landing Pages
+  CREATE TABLE IF NOT EXISTS offers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    headline TEXT,
+    subheadline TEXT,
+    description TEXT,
+    offer_details TEXT,
+    terms TEXT,
+    featured_image TEXT,
+    background_image TEXT,
+    cta_text TEXT DEFAULT 'Claim This Offer',
+    cta_color TEXT DEFAULT '#0077B6',
+    form_headline TEXT DEFAULT 'Get Started Today',
+    form_fields TEXT DEFAULT 'name,email,phone',
+    thank_you_message TEXT DEFAULT 'Thank you! We will contact you shortly.',
+    template TEXT DEFAULT 'standard',
+    category TEXT DEFAULT 'general',
+    start_date TEXT,
+    end_date TEXT,
+    meta_title TEXT,
+    meta_description TEXT,
+    meta_keywords TEXT,
+    og_image TEXT,
+    status TEXT DEFAULT 'draft',
+    brandscript_id INTEGER,
+    show_stakes_section INTEGER DEFAULT 0,
+    show_guide_section INTEGER DEFAULT 0,
+    show_plan_section INTEGER DEFAULT 0,
+    show_success_section INTEGER DEFAULT 0,
+    show_testimonials_section INTEGER DEFAULT 0,
+    views INTEGER DEFAULT 0,
+    conversions INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (brandscript_id) REFERENCES brandscripts(id)
+  );
+
+  -- Leads from marketing offers
+  CREATE TABLE IF NOT EXISTS leads (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    offer_id INTEGER,
+    name TEXT NOT NULL,
+    email TEXT,
+    phone TEXT,
+    message TEXT,
+    source TEXT DEFAULT 'landing_page',
+    utm_source TEXT,
+    utm_medium TEXT,
+    utm_campaign TEXT,
+    ip_address TEXT,
+    user_agent TEXT,
+    status TEXT DEFAULT 'new',
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (offer_id) REFERENCES offers(id)
+  );
+
+  -- Social Media Posts
+  CREATE TABLE IF NOT EXISTS social_posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    offer_id INTEGER,
+    platform TEXT NOT NULL,
+    post_type TEXT DEFAULT 'promotional',
+    content TEXT NOT NULL,
+    hashtags TEXT,
+    image_suggestion TEXT,
+    link_url TEXT,
+    status TEXT DEFAULT 'draft',
+    scheduled_for DATETIME,
+    posted_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (offer_id) REFERENCES offers(id)
+  );
+
   -- Site settings
   CREATE TABLE IF NOT EXISTS settings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
