@@ -1,0 +1,823 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/brandscript', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <h2>StoryBrand BrandScript</h2>
+    <p class="text-muted">Define your brand messaging using the StoryBrand framework</p>
+  </div>
+  <div class="header-actions">
+    <% if (brandscript && brandscript.id) { %>
+      <span class="badge badge-success" style="margin-right: 1rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Active
+      </span>
+    <% } %>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="generateOneLiner()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Generate One-Liner
+    </button>
+  </div>
+</div>
+
+<!-- StoryBrand Framework Overview -->
+<div class="info-card" style="margin-bottom: 2rem; background: linear-gradient(135deg, #EEF2FF, #E0E7FF); border: 1px solid #C7D2FE; border-radius: 12px; padding: 1.5rem;">
+  <div style="display: flex; gap: 1rem; align-items: flex-start;">
+    <div style="background: #6366F1; border-radius: 8px; padding: 0.75rem; flex-shrink: 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 24px; height: 24px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    </div>
+    <div>
+      <strong style="color: #4338CA;">StoryBrand SB7 Framework</strong>
+      <p style="margin: 0.5rem 0 0; color: #4338CA; opacity: 0.8; font-size: 0.9rem;">
+        A Character (your customer) has a Problem and meets a Guide (you) who gives them a Plan and Calls them to Action that helps them avoid Failure and ends in Success.
+      </p>
+    </div>
+  </div>
+</div>
+
+<form action="/admin/marketing/brandscript<%= brandscript && brandscript.id ? '/' + brandscript.id : '' %>" method="POST" class="admin-form" id="brandscriptForm">
+
+  <!-- Wizard Tabs -->
+  <div class="wizard-tabs">
+    <button type="button" class="wizard-tab active" data-step="1">
+      <span class="tab-number">1</span>
+      Character
+    </button>
+    <button type="button" class="wizard-tab" data-step="2">
+      <span class="tab-number">2</span>
+      Problem
+    </button>
+    <button type="button" class="wizard-tab" data-step="3">
+      <span class="tab-number">3</span>
+      Guide
+    </button>
+    <button type="button" class="wizard-tab" data-step="4">
+      <span class="tab-number">4</span>
+      Plan
+    </button>
+    <button type="button" class="wizard-tab" data-step="5">
+      <span class="tab-number">5</span>
+      Action
+    </button>
+    <button type="button" class="wizard-tab" data-step="6">
+      <span class="tab-number">6</span>
+      Stakes
+    </button>
+    <button type="button" class="wizard-tab" data-step="7">
+      <span class="tab-number">7</span>
+      One-Liner
+    </button>
+  </div>
+
+  <!-- Step 1: Character -->
+  <div class="wizard-step active" data-step="1">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        The Character (Your Customer)
+      </h3>
+      <p class="section-help">Your customer is the HERO of the story, not your brand. Define who they are and what they want.</p>
+
+      <div class="form-group">
+        <label for="brand_name">Brand Name *</label>
+        <input type="text" id="brand_name" name="brand_name" value="<%= brandscript ? brandscript.brand_name : 'Dentalogix' %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="character_name">Who are you helping? *</label>
+        <input type="text" id="character_name" name="character_name" value="<%= brandscript ? brandscript.character_name : '' %>" placeholder="e.g., Busy families and individuals">
+        <small>Be specific. Think about who buys from you most.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="character_desire">What do they want? *</label>
+        <textarea id="character_desire" name="character_desire" rows="2" placeholder="e.g., A dental practice that makes oral health easy and stress-free"><%= brandscript ? brandscript.character_desire : '' %></textarea>
+        <small>One clear desire. What would they search for?</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="character_identity_from">Current Identity (FROM)</label>
+          <input type="text" id="character_identity_from" name="character_identity_from" value="<%= brandscript ? brandscript.character_identity_from : '' %>" placeholder="e.g., Anxious and confused about dental care">
+          <small>Who are they now?</small>
+        </div>
+        <div class="form-group">
+          <label for="character_identity_to">Aspirational Identity (TO)</label>
+          <input type="text" id="character_identity_to" name="character_identity_to" value="<%= brandscript ? brandscript.character_identity_to : '' %>" placeholder="e.g., Confident and in control of their oral health">
+          <small>Who do they want to become?</small>
+        </div>
+      </div>
+
+      <div class="step-tips">
+        <strong>Tips:</strong>
+        <ul>
+          <li>Don't try to appeal to everyone</li>
+          <li>Focus on ONE primary desire</li>
+          <li>Ask: What's keeping them up at night?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Problem -->
+  <div class="wizard-step" data-step="2">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        The Problem (The Villain)
+      </h3>
+      <p class="section-help">Stories need conflict. Define the villain causing your customer's problems.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="villain_name">What's the Villain? *</label>
+          <input type="text" id="villain_name" name="villain_name" value="<%= brandscript ? brandscript.villain_name : '' %>" placeholder="e.g., Dental anxiety and confusion">
+          <small>The root cause of their frustration</small>
+        </div>
+        <div class="form-group">
+          <label for="villain_description">Villain Description</label>
+          <input type="text" id="villain_description" name="villain_description" value="<%= brandscript ? brandscript.villain_description : '' %>" placeholder="e.g., The fear and impersonal nature of traditional dental care">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="problem_external">External Problem (Tangible) *</label>
+        <textarea id="problem_external" name="problem_external" rows="2" placeholder="e.g., Finding a trustworthy dentist for the whole family"><%= brandscript ? brandscript.problem_external : '' %></textarea>
+        <small>The surface-level problem they'd tell a friend</small>
+      </div>
+
+      <div class="form-group">
+        <label for="problem_internal">Internal Problem (Emotional) *</label>
+        <textarea id="problem_internal" name="problem_internal" rows="2" placeholder="e.g., Feeling anxious, overwhelmed, or embarrassed about dental visits"><%= brandscript ? brandscript.problem_internal : '' %></textarea>
+        <small>How does the external problem make them FEEL? Use emotion words.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="problem_philosophical">Philosophical Problem (Why it's wrong) *</label>
+        <textarea id="problem_philosophical" name="problem_philosophical" rows="2" placeholder="e.g., Everyone deserves access to modern, compassionate dental care without fear"><%= brandscript ? brandscript.problem_philosophical : '' %></textarea>
+        <small>Why is this unjust? Use "should" or "deserves"</small>
+      </div>
+
+      <div class="step-tips">
+        <strong>Key Insight:</strong>
+        <ul>
+          <li>People buy solutions to INTERNAL problems</li>
+          <li>The philosophical problem adds meaning</li>
+          <li>Your villain should be relatable and real</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Guide -->
+  <div class="wizard-step" data-step="3">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
+        The Guide (Your Brand)
+      </h3>
+      <p class="section-help">You are the guide, not the hero. Show empathy and demonstrate authority.</p>
+
+      <div class="form-group">
+        <label for="guide_empathy_statement">Empathy Statement *</label>
+        <textarea id="guide_empathy_statement" name="guide_empathy_statement" rows="3" placeholder="We understand that visiting the dentist can feel stressful. That's why we've reimagined what dental care should be."><%= brandscript ? brandscript.guide_empathy_statement : '' %></textarea>
+        <small>Start with "We understand..." or "We know..."</small>
+      </div>
+
+      <div class="form-group">
+        <label>Authority: Statistics</label>
+        <div id="authority-stats-container">
+          <%
+            let stats = [];
+            try { stats = JSON.parse(brandscript?.guide_authority_stats || '[]'); } catch(e) {}
+            if (stats.length === 0) stats = [''];
+          %>
+          <% stats.forEach((stat, i) => { %>
+            <div class="multi-input-row">
+              <input type="text" name="guide_authority_stats[]" value="<%= stat %>" placeholder="e.g., Serving over 10,000 families">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('authority-stats-container', 'guide_authority_stats[]', 'e.g., 98% patient satisfaction rating')">+ Add Statistic</button>
+      </div>
+
+      <div class="form-group">
+        <label>Authority: Testimonials</label>
+        <div id="testimonials-container">
+          <%
+            let testimonials = [];
+            try { testimonials = JSON.parse(brandscript?.guide_testimonials || '[]'); } catch(e) {}
+            if (testimonials.length === 0) testimonials = [''];
+          %>
+          <% testimonials.forEach((t, i) => { %>
+            <div class="multi-input-row">
+              <textarea name="guide_testimonials[]" rows="2" placeholder="Customer quote..."><%= t %></textarea>
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addTextareaRow('testimonials-container', 'guide_testimonials[]', 'Customer testimonial...')">+ Add Testimonial</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Authority: Awards</label>
+          <div id="awards-container">
+            <%
+              let awards = [];
+              try { awards = JSON.parse(brandscript?.guide_awards || '[]'); } catch(e) {}
+              if (awards.length === 0) awards = [''];
+            %>
+            <% awards.forEach((award, i) => { %>
+              <div class="multi-input-row">
+                <input type="text" name="guide_awards[]" value="<%= award %>" placeholder="e.g., Best Family Dental 2024">
+                <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            <% }) %>
+          </div>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('awards-container', 'guide_awards[]', 'Award name...')">+ Add Award</button>
+        </div>
+        <div class="form-group">
+          <label>Authority: Logos/Affiliations</label>
+          <div id="logos-container">
+            <%
+              let logos = [];
+              try { logos = JSON.parse(brandscript?.guide_logos || '[]'); } catch(e) {}
+              if (logos.length === 0) logos = [''];
+            %>
+            <% logos.forEach((logo, i) => { %>
+              <div class="multi-input-row">
+                <input type="text" name="guide_logos[]" value="<%= logo %>" placeholder="e.g., ADA Member">
+                <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            <% }) %>
+          </div>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('logos-container', 'guide_logos[]', 'Affiliation...')">+ Add Logo/Affiliation</button>
+        </div>
+      </div>
+
+      <div class="step-tips">
+        <strong>Remember:</strong>
+        <ul>
+          <li>Empathy first, then authority</li>
+          <li>Don't brag - let testimonials speak</li>
+          <li>Think: "We understand your problem AND we can solve it"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Plan -->
+  <div class="wizard-step" data-step="4">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        The Plan
+      </h3>
+      <p class="section-help">Give customers a clear path. Reduce confusion and fear with simple steps.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="process_plan_name">Process Plan Name</label>
+          <input type="text" id="process_plan_name" name="process_plan_name" value="<%= brandscript ? brandscript.process_plan_name : '' %>" placeholder="e.g., The Dentalogix Experience">
+          <small>A memorable name increases perceived value</small>
+        </div>
+        <div class="form-group">
+          <label for="agreement_plan_name">Agreement/Promise Name</label>
+          <input type="text" id="agreement_plan_name" name="agreement_plan_name" value="<%= brandscript ? brandscript.agreement_plan_name : '' %>" placeholder="e.g., The Dentalogix Promise">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Process Steps (3-6 steps) *</label>
+        <div id="steps-container">
+          <%
+            let steps = [];
+            try { steps = JSON.parse(brandscript?.process_plan_steps || '[]'); } catch(e) {}
+            if (steps.length === 0) steps = ['', '', ''];
+          %>
+          <% steps.forEach((step, i) => { %>
+            <div class="multi-input-row numbered">
+              <span class="step-number"><%= i + 1 %></span>
+              <input type="text" name="process_plan_steps[]" value="<%= step %>" placeholder="Step <%= i + 1 %>...">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this); renumberSteps()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addStepRow()">+ Add Step</button>
+        <small style="display: block; margin-top: 0.5rem;">What do they need to do to work with you?</small>
+      </div>
+
+      <div class="form-group">
+        <label>Agreement Items (Promises that reduce fear)</label>
+        <div id="agreements-container">
+          <%
+            let agreements = [];
+            try { agreements = JSON.parse(brandscript?.agreement_plan_items || '[]'); } catch(e) {}
+            if (agreements.length === 0) agreements = [''];
+          %>
+          <% agreements.forEach((item, i) => { %>
+            <div class="multi-input-row">
+              <input type="text" name="agreement_plan_items[]" value="<%= item %>" placeholder="e.g., No surprise billing">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('agreements-container', 'agreement_plan_items[]', 'Promise that reduces fear...')">+ Add Promise</button>
+        <small style="display: block; margin-top: 0.5rem;">What fears can you address?</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Call to Action -->
+  <div class="wizard-step" data-step="5">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Call to Action
+      </h3>
+      <p class="section-help">Be direct. Tell them exactly what to do next.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="direct_cta_text">Primary CTA Text *</label>
+          <input type="text" id="direct_cta_text" name="direct_cta_text" value="<%= brandscript ? brandscript.direct_cta_text : 'Schedule Your Visit' %>" placeholder="e.g., Schedule Your Visit">
+          <small>Clear, action-oriented. This is your "Buy Now" button.</small>
+        </div>
+        <div class="form-group">
+          <label for="direct_cta_url">CTA Link *</label>
+          <input type="text" id="direct_cta_url" name="direct_cta_url" value="<%= brandscript ? brandscript.direct_cta_url : '/contact' %>" placeholder="/contact">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Transitional CTAs (Lead Magnets)</label>
+        <p class="section-help" style="margin-top: 0;">Lower commitment asks that build trust for those not ready to buy.</p>
+        <div id="transitional-ctas-container">
+          <%
+            let tctas = [];
+            try { tctas = JSON.parse(brandscript?.transitional_ctas || '[]'); } catch(e) {}
+            if (tctas.length === 0) tctas = [{ name: '', type: 'pdf', url: '' }];
+          %>
+          <% tctas.forEach((cta, i) => { %>
+            <div class="multi-input-row cta-row">
+              <input type="text" name="transitional_cta_name[]" value="<%= cta.name || '' %>" placeholder="e.g., 5 Tips for Stress-Free Dental Visits" style="flex: 2;">
+              <select name="transitional_cta_type[]" style="flex: 0.5;">
+                <option value="pdf" <%= cta.type === 'pdf' ? 'selected' : '' %>>PDF</option>
+                <option value="quiz" <%= cta.type === 'quiz' ? 'selected' : '' %>>Quiz</option>
+                <option value="video" <%= cta.type === 'video' ? 'selected' : '' %>>Video</option>
+                <option value="checklist" <%= cta.type === 'checklist' ? 'selected' : '' %>>Checklist</option>
+              </select>
+              <input type="text" name="transitional_cta_url[]" value="<%= cta.url || '' %>" placeholder="/download/guide" style="flex: 1;">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addCtaRow()">+ Add Transitional CTA</button>
+      </div>
+
+      <div class="step-tips">
+        <strong>Best Practices:</strong>
+        <ul>
+          <li>Repeat your direct CTA multiple times on pages</li>
+          <li>Make it obvious and prominent</li>
+          <li>Transitional CTAs capture leads not ready to buy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: Stakes -->
+  <div class="wizard-step" data-step="6">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Stakes (Failure & Success)
+      </h3>
+      <p class="section-help">What do they stand to lose or gain? Use failure sparingly, emphasize success.</p>
+
+      <div class="form-group">
+        <label>Failure Consequences (2-4 items max)</label>
+        <p class="section-help" style="margin-top: 0; color: #DC2626;">Use sparingly - like salt in a recipe. Don't fear-monger.</p>
+        <div id="failure-container">
+          <%
+            let failures = [];
+            try { failures = JSON.parse(brandscript?.failure_consequences || '[]'); } catch(e) {}
+            if (failures.length === 0) failures = [''];
+          %>
+          <% failures.forEach((item, i) => { %>
+            <div class="multi-input-row">
+              <input type="text" name="failure_consequences[]" value="<%= item %>" placeholder="e.g., Small problems becoming expensive emergencies">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('failure-container', 'failure_consequences[]', 'What happens if they don\'t act?')">+ Add Consequence</button>
+      </div>
+
+      <div class="form-group">
+        <label>Success Outcomes (4-6 items) *</label>
+        <p class="section-help" style="margin-top: 0; color: #10B981;">Paint a vivid picture of life after working with you!</p>
+        <div id="success-container">
+          <%
+            let successes = [];
+            try { successes = JSON.parse(brandscript?.success_outcomes || '[]'); } catch(e) {}
+            if (successes.length === 0) successes = [''];
+          %>
+          <% successes.forEach((item, i) => { %>
+            <div class="multi-input-row">
+              <input type="text" name="success_outcomes[]" value="<%= item %>" placeholder="e.g., A family that smiles with confidence">
+              <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          <% }) %>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="addRow('success-container', 'success_outcomes[]', 'What does success look like?')">+ Add Success Outcome</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="transformation_from">Transformation FROM</label>
+          <input type="text" id="transformation_from" name="transformation_from" value="<%= brandscript ? brandscript.transformation_from : '' %>" placeholder="e.g., Dental-anxious and reactive">
+          <small>Current identity</small>
+        </div>
+        <div class="form-group">
+          <label for="transformation_to">Transformation TO</label>
+          <input type="text" id="transformation_to" name="transformation_to" value="<%= brandscript ? brandscript.transformation_to : '' %>" placeholder="e.g., Proactive and confident about oral health">
+          <small>Aspirational identity</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 7: One-Liner -->
+  <div class="wizard-step" data-step="7">
+    <div class="form-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Your One-Liner
+      </h3>
+      <p class="section-help">A single statement that explains what you do. Memorize it. Use it everywhere.</p>
+
+      <div class="one-liner-formula">
+        <strong>Formula:</strong> [Character] + [Problem] + [Plan] + [Success]
+      </div>
+
+      <div class="form-group">
+        <label for="one_liner">Your One-Liner *</label>
+        <textarea id="one_liner" name="one_liner" rows="4" placeholder="Most [character] [problem], so we created [plan] — so you can [success]."><%= brandscript ? brandscript.one_liner : '' %></textarea>
+        <small>Example: "Most people dread the dentist, so we created a network of modern practices where families get personalized, stress-free care—so you can smile with confidence."</small>
+      </div>
+
+      <button type="button" class="btn btn-secondary" onclick="generateOneLiner()" style="margin-bottom: 1rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        Auto-Generate from BrandScript Data
+      </button>
+
+      <div class="step-tips">
+        <strong>Use Your One-Liner:</strong>
+        <ul>
+          <li>Website header/hero section</li>
+          <li>Email signatures</li>
+          <li>Social media bios</li>
+          <li>Elevator pitch</li>
+          <li>Marketing materials</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation & Submit -->
+  <div class="wizard-navigation">
+    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Previous
+    </button>
+    <div style="flex: 1;"></div>
+    <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+      Next
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save BrandScript
+    </button>
+  </div>
+
+</form>
+
+<style>
+.wizard-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.wizard-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #F3F4F6;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6B7280;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.wizard-tab:hover {
+  background: #E5E7EB;
+}
+
+.wizard-tab.active {
+  background: white;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.wizard-tab.completed {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.tab-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.wizard-tab.active .tab-number,
+.wizard-tab.completed .tab-number {
+  background: currentColor;
+}
+
+.wizard-step {
+  display: none;
+}
+
+.wizard-step.active {
+  display: block;
+}
+
+.section-help {
+  color: #6B7280;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.step-tips {
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.step-tips strong {
+  color: #92400E;
+}
+
+.step-tips ul {
+  margin: 0.5rem 0 0 1.25rem;
+  color: #92400E;
+}
+
+.step-tips li {
+  margin-bottom: 0.25rem;
+}
+
+.multi-input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-start;
+}
+
+.multi-input-row input,
+.multi-input-row textarea,
+.multi-input-row select {
+  flex: 1;
+}
+
+.multi-input-row.numbered {
+  align-items: center;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.cta-row {
+  flex-wrap: wrap;
+}
+
+.one-liner-formula {
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: #4338CA;
+}
+
+.wizard-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #E5E7EB;
+}
+
+@media (max-width: 768px) {
+  .wizard-tabs {
+    flex-wrap: nowrap;
+  }
+
+  .wizard-tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .wizard-tab span:not(.tab-number) {
+    display: none;
+  }
+}
+</style>
+
+<script>
+let currentStep = 1;
+const totalSteps = 7;
+
+function changeStep(delta) {
+  const newStep = currentStep + delta;
+  if (newStep < 1 || newStep > totalSteps) return;
+
+  // Update tabs
+  document.querySelectorAll('.wizard-tab').forEach(tab => {
+    const step = parseInt(tab.dataset.step);
+    tab.classList.remove('active');
+    if (step < newStep) tab.classList.add('completed');
+    if (step === newStep) tab.classList.add('active');
+  });
+
+  // Update steps
+  document.querySelectorAll('.wizard-step').forEach(step => {
+    step.classList.remove('active');
+  });
+  document.querySelector(`.wizard-step[data-step="${newStep}"]`).classList.add('active');
+
+  // Update buttons
+  document.getElementById('prevBtn').style.display = newStep === 1 ? 'none' : 'flex';
+  document.getElementById('nextBtn').style.display = newStep === totalSteps ? 'none' : 'flex';
+  document.getElementById('submitBtn').style.display = newStep === totalSteps ? 'flex' : 'none';
+
+  currentStep = newStep;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Tab click navigation
+document.querySelectorAll('.wizard-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const step = parseInt(tab.dataset.step);
+    const delta = step - currentStep;
+    if (delta !== 0) changeStep(delta);
+  });
+});
+
+function addRow(containerId, name, placeholder) {
+  const container = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'multi-input-row';
+  row.innerHTML = `
+    <input type="text" name="${name}" placeholder="${placeholder}">
+    <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+function addTextareaRow(containerId, name, placeholder) {
+  const container = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'multi-input-row';
+  row.innerHTML = `
+    <textarea name="${name}" rows="2" placeholder="${placeholder}"></textarea>
+    <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+function addStepRow() {
+  const container = document.getElementById('steps-container');
+  const count = container.querySelectorAll('.multi-input-row').length + 1;
+  const row = document.createElement('div');
+  row.className = 'multi-input-row numbered';
+  row.innerHTML = `
+    <span class="step-number">${count}</span>
+    <input type="text" name="process_plan_steps[]" placeholder="Step ${count}...">
+    <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this); renumberSteps()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+function addCtaRow() {
+  const container = document.getElementById('transitional-ctas-container');
+  const row = document.createElement('div');
+  row.className = 'multi-input-row cta-row';
+  row.innerHTML = `
+    <input type="text" name="transitional_cta_name[]" placeholder="Lead magnet name..." style="flex: 2;">
+    <select name="transitional_cta_type[]" style="flex: 0.5;">
+      <option value="pdf">PDF</option>
+      <option value="quiz">Quiz</option>
+      <option value="video">Video</option>
+      <option value="checklist">Checklist</option>
+    </select>
+    <input type="text" name="transitional_cta_url[]" placeholder="/download/guide" style="flex: 1;">
+    <button type="button" class="btn btn-sm btn-danger remove-row" onclick="removeRow(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+}
+
+function removeRow(btn) {
+  btn.closest('.multi-input-row').remove();
+}
+
+function renumberSteps() {
+  const container = document.getElementById('steps-container');
+  container.querySelectorAll('.step-number').forEach((num, i) => {
+    num.textContent = i + 1;
+  });
+}
+
+function generateOneLiner() {
+  const character = document.getElementById('character_name').value || 'people';
+  const problem = document.getElementById('problem_internal').value || 'struggle with finding the right solution';
+  const planName = document.getElementById('process_plan_name').value || 'our approach';
+
+  // Get first success outcome
+  const successInputs = document.querySelectorAll('input[name="success_outcomes[]"]');
+  let success = 'achieve their goals';
+  for (let input of successInputs) {
+    if (input.value.trim()) {
+      success = input.value.trim().toLowerCase();
+      break;
+    }
+  }
+
+  const oneLiner = `Most ${character.toLowerCase()} ${problem.toLowerCase()}, so we created ${planName.toLowerCase()} — so you can ${success}.`;
+  document.getElementById('one_liner').value = oneLiner;
+
+  // Jump to one-liner step
+  if (currentStep !== 7) {
+    changeStep(7 - currentStep);
+  }
+}
+</script>
+
+<%- include('../../partials/footer') %>

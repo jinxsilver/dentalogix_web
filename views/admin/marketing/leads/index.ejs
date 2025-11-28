@@ -1,0 +1,146 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/leads', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <h2>Lead Management</h2>
+    <p class="text-muted">Track and manage leads from your promotional offers</p>
+  </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid" style="margin-bottom: 2rem;">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #0077B6, #00B4D8);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.total || 0 %></div>
+      <div class="stat-label">Total Leads</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #EF4444, #F87171);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.new_leads || 0 %></div>
+      <div class="stat-label">New Leads</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.contacted || 0 %></div>
+      <div class="stat-label">Contacted</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.converted || 0 %></div>
+      <div class="stat-label">Converted</div>
+    </div>
+  </div>
+</div>
+
+<!-- Time Period Stats -->
+<div class="stats-row" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+  <div style="background: #F3F4F6; padding: 1rem 1.5rem; border-radius: 8px; flex: 1; text-align: center;">
+    <div style="font-size: 1.5rem; font-weight: 600; color: #0077B6;"><%= stats.this_week || 0 %></div>
+    <div style="font-size: 0.85rem; color: #6B7280;">This Week</div>
+  </div>
+  <div style="background: #F3F4F6; padding: 1rem 1.5rem; border-radius: 8px; flex: 1; text-align: center;">
+    <div style="font-size: 1.5rem; font-weight: 600; color: #0077B6;"><%= stats.this_month || 0 %></div>
+    <div style="font-size: 0.85rem; color: #6B7280;">This Month</div>
+  </div>
+</div>
+
+<% if (leads.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-state-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; color: #9CA3AF;">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+    </div>
+    <h3>No leads yet</h3>
+    <p>Leads will appear here when visitors submit forms on your offer pages.</p>
+    <a href="/admin/marketing/offers" class="btn btn-primary">Create an Offer</a>
+  </div>
+<% } else { %>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Lead</th>
+          <th>Offer</th>
+          <th>Source</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% leads.forEach(lead => { %>
+          <tr>
+            <td>
+              <div>
+                <strong><%= lead.name %></strong>
+                <div class="text-muted" style="font-size: 0.8rem;">
+                  <% if (lead.email) { %><%= lead.email %><br><% } %>
+                  <% if (lead.phone) { %><%= lead.phone %><% } %>
+                </div>
+              </div>
+            </td>
+            <td>
+              <% if (lead.offer_title) { %>
+                <span class="badge badge-outline"><%= lead.offer_title %></span>
+              <% } else { %>
+                <span class="text-muted">Direct</span>
+              <% } %>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 0.85rem;"><%= lead.source || 'landing_page' %></span>
+              <% if (lead.utm_campaign) { %>
+                <div style="font-size: 0.75rem; color: #9CA3AF;"><%= lead.utm_campaign %></div>
+              <% } %>
+            </td>
+            <td>
+              <% if (lead.status === 'new') { %>
+                <span class="badge badge-danger">New</span>
+              <% } else if (lead.status === 'contacted') { %>
+                <span class="badge badge-warning">Contacted</span>
+              <% } else if (lead.status === 'converted') { %>
+                <span class="badge badge-success">Converted</span>
+              <% } else { %>
+                <span class="badge badge-secondary"><%= lead.status %></span>
+              <% } %>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 0.85rem;">
+                <%= new Date(lead.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <a href="/admin/marketing/leads/<%= lead.id %>" class="btn btn-sm btn-secondary" title="View Details">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </a>
+                <form action="/admin/marketing/leads/<%= lead.id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Delete this lead?')">
+                  <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../../partials/footer') %>

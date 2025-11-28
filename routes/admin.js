@@ -16,7 +16,13 @@ const Contacts = require('../models/contacts');
 const Users = require('../models/users');
 const Reviews = require('../models/reviews');
 const Insurance = require('../models/insurance');
+const Offers = require('../models/offers');
+const Leads = require('../models/leads');
+const BrandScripts = require('../models/brandscripts');
+const SocialPosts = require('../models/socialposts');
+const Quiz = require('../models/quiz');
 const GoogleReviewsService = require('../services/googleReviews');
+const EmailService = require('../services/email');
 
 // File upload configuration
 const storage = multer.diskStorage({
@@ -45,7 +51,8 @@ const upload = multer({
 
 // Helper function
 const getAdminData = () => ({
-  settings: Settings.getSettings()
+  settings: Settings.getSettings(),
+  newLeadsCount: Leads.getNewCount()
 });
 
 // =====================
@@ -136,17 +143,40 @@ router.get('/pages/home', requireAuth, (req, res) => {
 
 const homeUpload = upload.fields([
   { name: 'about_image_main', maxCount: 1 },
-  { name: 'about_image_secondary', maxCount: 1 }
+  { name: 'about_image_secondary', maxCount: 1 },
+  { name: 'problem_villain_image', maxCount: 1 },
+  { name: 'problem_external_image', maxCount: 1 },
+  { name: 'problem_internal_image', maxCount: 1 },
+  { name: 'problem_philosophical_image', maxCount: 1 },
+  { name: 'stakes_section_image', maxCount: 1 }
 ]);
 
 router.post('/pages/home', requireAuth, homeUpload, (req, res) => {
   const settingsData = {};
   if (req.files) {
+    // Guide Section Images
     if (req.files.about_image_main && req.files.about_image_main[0]) {
       settingsData.about_image_main = '/uploads/' + req.files.about_image_main[0].filename;
     }
     if (req.files.about_image_secondary && req.files.about_image_secondary[0]) {
       settingsData.about_image_secondary = '/uploads/' + req.files.about_image_secondary[0].filename;
+    }
+    // Problem Section Images
+    if (req.files.problem_villain_image && req.files.problem_villain_image[0]) {
+      settingsData.problem_villain_image = '/uploads/' + req.files.problem_villain_image[0].filename;
+    }
+    if (req.files.problem_external_image && req.files.problem_external_image[0]) {
+      settingsData.problem_external_image = '/uploads/' + req.files.problem_external_image[0].filename;
+    }
+    if (req.files.problem_internal_image && req.files.problem_internal_image[0]) {
+      settingsData.problem_internal_image = '/uploads/' + req.files.problem_internal_image[0].filename;
+    }
+    if (req.files.problem_philosophical_image && req.files.problem_philosophical_image[0]) {
+      settingsData.problem_philosophical_image = '/uploads/' + req.files.problem_philosophical_image[0].filename;
+    }
+    // Stakes Section Image
+    if (req.files.stakes_section_image && req.files.stakes_section_image[0]) {
+      settingsData.stakes_section_image = '/uploads/' + req.files.stakes_section_image[0].filename;
     }
   }
   if (Object.keys(settingsData).length > 0) {
@@ -185,6 +215,7 @@ router.get('/pages/:id/edit', requireAuth, (req, res) => {
 
 router.post('/pages/:id', requireAuth, upload.fields([
   { name: 'hero_image', maxCount: 1 },
+  { name: 'mobile_dentistry_image', maxCount: 1 },
   { name: 'mobile_service_cleanings_image', maxCount: 1 },
   { name: 'mobile_service_xrays_image', maxCount: 1 },
   { name: 'mobile_service_whitening_image', maxCount: 1 },
@@ -200,6 +231,10 @@ router.post('/pages/:id', requireAuth, upload.fields([
     // Handle hero image for the page
     if (req.files.hero_image && req.files.hero_image[0]) {
       data.hero_image = '/uploads/' + req.files.hero_image[0].filename;
+    }
+    // Handle mobile dentistry images (saved to settings)
+    if (req.files.mobile_dentistry_image && req.files.mobile_dentistry_image[0]) {
+      settingsData.mobile_dentistry_image = '/uploads/' + req.files.mobile_dentistry_image[0].filename;
     }
     // Handle mobile dentistry service images (saved to settings)
     if (req.files.mobile_service_cleanings_image && req.files.mobile_service_cleanings_image[0]) {
@@ -366,9 +401,15 @@ router.get('/services/:id/edit', requireAuth, (req, res) => {
 });
 
 router.post('/services/:id', requireAuth, upload.single('image'), (req, res) => {
+  const existing = Services.getById(req.params.id);
+  if (!existing) return res.redirect('/admin/services');
+
   const data = { ...req.body };
   if (req.file) {
     data.image = '/uploads/' + req.file.filename;
+  } else if (existing.image) {
+    // Preserve existing image if no new one uploaded
+    data.image = existing.image;
   }
   Services.update(req.params.id, data);
   res.redirect('/admin/services');
@@ -659,7 +700,8 @@ router.get('/settings', requireAuth, (req, res) => {
 router.post('/settings', requireAuth, upload.fields([
   { name: 'site_logo', maxCount: 1 },
   { name: 'footer_logo', maxCount: 1 },
-  { name: 'favicon', maxCount: 1 }
+  { name: 'favicon', maxCount: 1 },
+  { name: 'contact_success_image', maxCount: 1 }
 ]), (req, res) => {
   // Handle checkbox fields - if not present in body, set to 'false'
   const settingsData = { ...req.body };
@@ -680,9 +722,22 @@ router.post('/settings', requireAuth, upload.fields([
     if (req.files.favicon && req.files.favicon[0]) {
       settingsData.favicon = '/uploads/' + req.files.favicon[0].filename;
     }
+    if (req.files.contact_success_image && req.files.contact_success_image[0]) {
+      settingsData.contact_success_image = '/uploads/' + req.files.contact_success_image[0].filename;
+    }
   }
   Settings.updateSettings(settingsData);
   res.redirect('/admin/settings?success=1');
+});
+
+// Test email configuration
+router.post('/test-email', requireAuth, async (req, res) => {
+  try {
+    const result = await EmailService.testEmailConfig();
+    res.json(result);
+  } catch (error) {
+    res.json({ success: false, error: error.message });
+  }
 });
 
 // =====================
@@ -837,6 +892,458 @@ router.post('/import', requireAuth, upload.single('backup_file'), (req, res) => 
     console.error('Import error:', error);
     res.redirect('/admin/settings?error=Import failed: ' + error.message);
   }
+});
+
+// =====================
+// Marketing - Offers/Promos
+// =====================
+
+router.get('/marketing/offers', requireAuth, (req, res) => {
+  const offers = Offers.getAll();
+  const stats = Offers.getStats();
+  res.render('admin/marketing/offers/index', {
+    ...getAdminData(),
+    title: 'Offers & Promos',
+    offers,
+    stats
+  });
+});
+
+router.get('/marketing/offers/new', requireAuth, (req, res) => {
+  res.render('admin/marketing/offers/edit', {
+    ...getAdminData(),
+    title: 'Create New Offer',
+    offer: null
+  });
+});
+
+const offerUpload = upload.fields([
+  { name: 'featured_image', maxCount: 1 },
+  { name: 'background_image', maxCount: 1 },
+  { name: 'og_image', maxCount: 1 }
+]);
+
+router.post('/marketing/offers', requireAuth, offerUpload, (req, res) => {
+  const data = { ...req.body };
+  if (req.files) {
+    if (req.files.featured_image && req.files.featured_image[0]) {
+      data.featured_image = '/uploads/' + req.files.featured_image[0].filename;
+    }
+    if (req.files.background_image && req.files.background_image[0]) {
+      data.background_image = '/uploads/' + req.files.background_image[0].filename;
+    }
+    if (req.files.og_image && req.files.og_image[0]) {
+      data.og_image = '/uploads/' + req.files.og_image[0].filename;
+    }
+  }
+  Offers.create(data);
+  res.redirect('/admin/marketing/offers');
+});
+
+router.get('/marketing/offers/:id/edit', requireAuth, (req, res) => {
+  const offer = Offers.getById(req.params.id);
+  if (!offer) return res.redirect('/admin/marketing/offers');
+
+  res.render('admin/marketing/offers/edit', {
+    ...getAdminData(),
+    title: 'Edit Offer',
+    offer
+  });
+});
+
+router.post('/marketing/offers/:id', requireAuth, offerUpload, (req, res) => {
+  const existing = Offers.getById(req.params.id);
+  if (!existing) return res.redirect('/admin/marketing/offers');
+
+  const data = { ...req.body };
+  if (req.files) {
+    if (req.files.featured_image && req.files.featured_image[0]) {
+      data.featured_image = '/uploads/' + req.files.featured_image[0].filename;
+    } else {
+      data.featured_image = existing.featured_image;
+    }
+    if (req.files.background_image && req.files.background_image[0]) {
+      data.background_image = '/uploads/' + req.files.background_image[0].filename;
+    } else {
+      data.background_image = existing.background_image;
+    }
+    if (req.files.og_image && req.files.og_image[0]) {
+      data.og_image = '/uploads/' + req.files.og_image[0].filename;
+    } else {
+      data.og_image = existing.og_image;
+    }
+  }
+  Offers.update(req.params.id, data);
+  res.redirect('/admin/marketing/offers');
+});
+
+router.post('/marketing/offers/:id/delete', requireAuth, (req, res) => {
+  Offers.delete(req.params.id);
+  res.redirect('/admin/marketing/offers');
+});
+
+// =====================
+// Marketing - Leads
+// =====================
+
+router.get('/marketing/leads', requireAuth, (req, res) => {
+  const leads = Leads.getAll();
+  const stats = Leads.getStats();
+  res.render('admin/marketing/leads/index', {
+    ...getAdminData(),
+    title: 'Lead Management',
+    leads,
+    stats
+  });
+});
+
+router.get('/marketing/leads/:id', requireAuth, (req, res) => {
+  const lead = Leads.getById(req.params.id);
+  if (!lead) return res.redirect('/admin/marketing/leads');
+
+  res.render('admin/marketing/leads/view', {
+    ...getAdminData(),
+    title: 'Lead Details',
+    lead
+  });
+});
+
+router.post('/marketing/leads/:id/status', requireAuth, (req, res) => {
+  const { status, notes } = req.body;
+  Leads.updateStatus(req.params.id, status, notes);
+  res.redirect('/admin/marketing/leads/' + req.params.id);
+});
+
+router.post('/marketing/leads/:id/delete', requireAuth, (req, res) => {
+  Leads.delete(req.params.id);
+  res.redirect('/admin/marketing/leads');
+});
+
+// =====================
+// Marketing - Social Media
+// =====================
+
+router.get('/marketing/social', requireAuth, (req, res) => {
+  const offers = Offers.getAll().filter(o => o.status === 'published');
+  const brandscript = BrandScripts.getDefault();
+  const posts = SocialPosts.getAll();
+  const stats = SocialPosts.getStats();
+
+  res.render('admin/marketing/social/index', {
+    ...getAdminData(),
+    title: 'Social Media Posts',
+    offers,
+    brandscript: brandscript ? BrandScripts.parseJsonFields(brandscript) : null,
+    posts,
+    stats
+  });
+});
+
+router.post('/marketing/social/generate', requireAuth, (req, res) => {
+  const { offer_id } = req.body;
+  let platforms = req.body['platforms[]'];
+
+  if (!platforms) platforms = ['facebook', 'instagram', 'twitter'];
+  if (!Array.isArray(platforms)) platforms = [platforms];
+
+  const offer = Offers.getById(offer_id);
+  const brandscript = BrandScripts.getDefault();
+
+  if (!offer || !brandscript) {
+    return res.redirect('/admin/marketing/social');
+  }
+
+  // Generate posts
+  const generatedPosts = SocialPosts.generatePosts(offer, brandscript, platforms);
+
+  // Save each post
+  generatedPosts.forEach(post => {
+    SocialPosts.create(post);
+  });
+
+  res.redirect('/admin/marketing/social');
+});
+
+router.post('/marketing/social/:id/posted', requireAuth, (req, res) => {
+  SocialPosts.markPosted(req.params.id);
+  res.redirect('/admin/marketing/social');
+});
+
+router.post('/marketing/social/:id/delete', requireAuth, (req, res) => {
+  SocialPosts.delete(req.params.id);
+  res.redirect('/admin/marketing/social');
+});
+
+// =====================
+// Marketing - BrandScript (StoryBrand)
+// =====================
+
+router.get('/marketing/brandscript', requireAuth, (req, res) => {
+  // Get or create default brandscript
+  let brandscript = BrandScripts.getDefault();
+  if (brandscript) {
+    brandscript = BrandScripts.parseJsonFields(brandscript);
+  }
+
+  res.render('admin/marketing/brandscript/edit', {
+    ...getAdminData(),
+    title: 'StoryBrand BrandScript',
+    brandscript
+  });
+});
+
+router.post('/marketing/brandscript', requireAuth, (req, res) => {
+  const data = processBrandScriptForm(req.body);
+  data.is_active = true;
+
+  const id = BrandScripts.create(data);
+  res.redirect('/admin/marketing/brandscript');
+});
+
+router.post('/marketing/brandscript/:id', requireAuth, (req, res) => {
+  const existing = BrandScripts.getById(req.params.id);
+  if (!existing) return res.redirect('/admin/marketing/brandscript');
+
+  const data = processBrandScriptForm(req.body);
+  data.is_active = existing.is_active;
+
+  BrandScripts.update(req.params.id, data);
+  res.redirect('/admin/marketing/brandscript');
+});
+
+// Helper function to process form arrays into JSON
+function processBrandScriptForm(body) {
+  const data = { ...body };
+
+  // Process array fields
+  const arrayFields = [
+    'guide_authority_stats',
+    'guide_testimonials',
+    'guide_awards',
+    'guide_logos',
+    'process_plan_steps',
+    'agreement_plan_items',
+    'failure_consequences',
+    'success_outcomes'
+  ];
+
+  arrayFields.forEach(field => {
+    const values = body[field + '[]'];
+    if (values) {
+      const arr = Array.isArray(values) ? values : [values];
+      data[field] = arr.filter(v => v && v.trim());
+    } else {
+      data[field] = [];
+    }
+    delete data[field + '[]'];
+  });
+
+  // Process transitional CTAs (multiple fields)
+  const ctaNames = body['transitional_cta_name[]'];
+  const ctaTypes = body['transitional_cta_type[]'];
+  const ctaUrls = body['transitional_cta_url[]'];
+
+  if (ctaNames) {
+    const names = Array.isArray(ctaNames) ? ctaNames : [ctaNames];
+    const types = Array.isArray(ctaTypes) ? ctaTypes : [ctaTypes];
+    const urls = Array.isArray(ctaUrls) ? ctaUrls : [ctaUrls];
+
+    data.transitional_ctas = names
+      .map((name, i) => ({
+        name: name,
+        type: types[i] || 'pdf',
+        url: urls[i] || ''
+      }))
+      .filter(cta => cta.name && cta.name.trim());
+  } else {
+    data.transitional_ctas = [];
+  }
+
+  delete data['transitional_cta_name[]'];
+  delete data['transitional_cta_type[]'];
+  delete data['transitional_cta_url[]'];
+
+  return data;
+}
+
+// =====================
+// Marketing - Quiz Management
+// =====================
+
+router.get('/marketing/quiz', requireAuth, (req, res) => {
+  const submissions = Quiz.getSubmissions(50, 0);
+  const stats = Quiz.getQuizStats();
+
+  res.render('admin/marketing/quiz/index', {
+    ...getAdminData(),
+    title: 'Quiz Submissions',
+    submissions,
+    stats
+  });
+});
+
+router.get('/marketing/quiz/questions', requireAuth, (req, res) => {
+  const questions = Quiz.getQuestionsWithOptions();
+  const procedures = Quiz.getAllProcedures();
+
+  res.render('admin/marketing/quiz/questions', {
+    ...getAdminData(),
+    title: 'Quiz Questions',
+    questions,
+    procedures
+  });
+});
+
+router.get('/marketing/quiz/questions/new', requireAuth, (req, res) => {
+  const procedures = Quiz.getAllProcedures();
+
+  res.render('admin/marketing/quiz/question-edit', {
+    ...getAdminData(),
+    title: 'Add Question',
+    question: null,
+    procedures
+  });
+});
+
+router.post('/marketing/quiz/questions', requireAuth, (req, res) => {
+  const { question, subtitle, category, icon, fun_fact, is_multi_select, sort_order } = req.body;
+
+  const questionId = Quiz.createQuestion({
+    question,
+    subtitle,
+    category,
+    icon: icon || '⭐',
+    fun_fact,
+    is_multi_select: is_multi_select ? 1 : 0,
+    sort_order: parseInt(sort_order) || 0
+  });
+
+  // Process options
+  const optionLabels = req.body['option_label[]'];
+  const optionEmojis = req.body['option_emoji[]'];
+  const optionPoints = req.body['option_points[]'];
+
+  if (optionLabels) {
+    const labels = Array.isArray(optionLabels) ? optionLabels : [optionLabels];
+    const emojis = Array.isArray(optionEmojis) ? optionEmojis : [optionEmojis];
+    const pointsArr = Array.isArray(optionPoints) ? optionPoints : [optionPoints];
+
+    labels.forEach((label, i) => {
+      if (label && label.trim()) {
+        let points = {};
+        try {
+          points = JSON.parse(pointsArr[i] || '{}');
+        } catch (e) {
+          points = {};
+        }
+
+        Quiz.createOption({
+          question_id: questionId,
+          label: label.trim(),
+          emoji: emojis[i] || '✓',
+          points,
+          sort_order: i
+        });
+      }
+    });
+  }
+
+  res.redirect('/admin/marketing/quiz/questions');
+});
+
+router.get('/marketing/quiz/questions/:id/edit', requireAuth, (req, res) => {
+  const question = Quiz.getQuestionById(req.params.id);
+  if (!question) return res.redirect('/admin/marketing/quiz/questions');
+
+  const options = Quiz.getOptionsByQuestionId(req.params.id);
+  const procedures = Quiz.getAllProcedures();
+
+  res.render('admin/marketing/quiz/question-edit', {
+    ...getAdminData(),
+    title: 'Edit Question',
+    question: { ...question, options },
+    procedures
+  });
+});
+
+router.post('/marketing/quiz/questions/:id', requireAuth, (req, res) => {
+  const { question, subtitle, category, icon, fun_fact, is_multi_select, sort_order } = req.body;
+
+  Quiz.updateQuestion(req.params.id, {
+    question,
+    subtitle,
+    category,
+    icon: icon || '⭐',
+    fun_fact,
+    is_multi_select: is_multi_select ? 1 : 0,
+    sort_order: parseInt(sort_order) || 0
+  });
+
+  // Delete existing options and re-create
+  Quiz.deleteOptionsByQuestionId(req.params.id);
+
+  const optionLabels = req.body['option_label[]'];
+  const optionEmojis = req.body['option_emoji[]'];
+  const optionPoints = req.body['option_points[]'];
+
+  if (optionLabels) {
+    const labels = Array.isArray(optionLabels) ? optionLabels : [optionLabels];
+    const emojis = Array.isArray(optionEmojis) ? optionEmojis : [optionEmojis];
+    const pointsArr = Array.isArray(optionPoints) ? optionPoints : [optionPoints];
+
+    labels.forEach((label, i) => {
+      if (label && label.trim()) {
+        let points = {};
+        try {
+          points = JSON.parse(pointsArr[i] || '{}');
+        } catch (e) {
+          points = {};
+        }
+
+        Quiz.createOption({
+          question_id: req.params.id,
+          label: label.trim(),
+          emoji: emojis[i] || '✓',
+          points,
+          sort_order: i
+        });
+      }
+    });
+  }
+
+  res.redirect('/admin/marketing/quiz/questions');
+});
+
+router.post('/marketing/quiz/questions/:id/delete', requireAuth, (req, res) => {
+  Quiz.deleteQuestion(req.params.id);
+  res.redirect('/admin/marketing/quiz/questions');
+});
+
+router.get('/marketing/quiz/:id', requireAuth, (req, res) => {
+  const submission = Quiz.getSubmissionById(req.params.id);
+  if (!submission) return res.redirect('/admin/marketing/quiz');
+
+  const answers = Quiz.getSubmissionAnswers(req.params.id);
+  const procedures = Quiz.getAllProcedures();
+
+  // Parse recommendations if stored as JSON string
+  let recommendations = [];
+  if (submission.recommendations) {
+    try {
+      recommendations = JSON.parse(submission.recommendations);
+    } catch (e) {
+      recommendations = [];
+    }
+  }
+
+  res.render('admin/marketing/quiz/view', {
+    ...getAdminData(),
+    title: 'Quiz Submission',
+    submission,
+    answers,
+    recommendations,
+    procedures
+  });
 });
 
 // =====================

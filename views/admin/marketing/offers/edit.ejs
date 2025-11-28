@@ -1,0 +1,290 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/offers', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <a href="/admin/marketing/offers" class="btn btn-secondary btn-sm" style="margin-bottom: 0.5rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Offers
+    </a>
+    <h2><%= offer ? 'Edit Offer' : 'Create New Offer' %></h2>
+  </div>
+</div>
+
+<form action="<%= offer ? '/admin/marketing/offers/' + offer.id : '/admin/marketing/offers' %>" method="POST" enctype="multipart/form-data" class="admin-form">
+
+  <!-- Basic Information -->
+  <div class="form-section">
+    <h3>Basic Information</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="title">Offer Title *</label>
+        <input type="text" id="title" name="title" value="<%= offer ? offer.title : '' %>" required placeholder="e.g., Free Teeth Whitening">
+      </div>
+      <div class="form-group">
+        <label for="slug">URL Slug *</label>
+        <input type="text" id="slug" name="slug" value="<%= offer ? offer.slug : '' %>" required placeholder="e.g., free-whitening">
+        <small>This will be used in the URL: /offers/your-slug</small>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="general" <%= offer && offer.category === 'general' ? 'selected' : '' %>>General</option>
+          <option value="cosmetic" <%= offer && offer.category === 'cosmetic' ? 'selected' : '' %>>Cosmetic</option>
+          <option value="preventive" <%= offer && offer.category === 'preventive' ? 'selected' : '' %>>Preventive</option>
+          <option value="restorative" <%= offer && offer.category === 'restorative' ? 'selected' : '' %>>Restorative</option>
+          <option value="new-patient" <%= offer && offer.category === 'new-patient' ? 'selected' : '' %>>New Patient</option>
+          <option value="seasonal" <%= offer && offer.category === 'seasonal' ? 'selected' : '' %>>Seasonal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="template">Landing Page Template</label>
+        <select id="template" name="template">
+          <option value="standard" <%= offer && offer.template === 'standard' ? 'selected' : '' %>>Standard</option>
+          <option value="minimal" <%= offer && offer.template === 'minimal' ? 'selected' : '' %>>Minimal</option>
+          <option value="bold" <%= offer && offer.template === 'bold' ? 'selected' : '' %>>Bold</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Landing Page Content -->
+  <div class="form-section">
+    <h3>Landing Page Content</h3>
+
+    <div class="form-group">
+      <label for="headline">Main Headline</label>
+      <input type="text" id="headline" name="headline" value="<%= offer ? offer.headline : '' %>" placeholder="e.g., Get a Brighter Smile Today!">
+    </div>
+
+    <div class="form-group">
+      <label for="subheadline">Subheadline</label>
+      <input type="text" id="subheadline" name="subheadline" value="<%= offer ? offer.subheadline : '' %>" placeholder="e.g., Limited time offer for new patients">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Describe the offer and its benefits..."><%= offer ? offer.description : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="offer_details">Offer Details (HTML supported)</label>
+      <textarea id="offer_details" name="offer_details" rows="6" placeholder="<ul><li>Professional whitening treatment</li><li>Take-home kit included</li></ul>"><%= offer ? offer.offer_details : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="terms">Terms & Conditions</label>
+      <textarea id="terms" name="terms" rows="3" placeholder="e.g., Valid for new patients only. Cannot be combined with other offers."><%= offer ? offer.terms : '' %></textarea>
+    </div>
+  </div>
+
+  <!-- Images -->
+  <div class="form-section">
+    <h3>Images</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="featured_image">Featured Image</label>
+        <% if (offer && offer.featured_image) { %>
+          <div class="current-image">
+            <img src="<%= offer.featured_image %>" alt="Current featured image" style="max-width: 200px; border-radius: 8px; margin-bottom: 0.5rem;">
+          </div>
+        <% } %>
+        <input type="file" id="featured_image" name="featured_image" accept="image/*">
+      </div>
+      <div class="form-group">
+        <label for="background_image">Background Image</label>
+        <% if (offer && offer.background_image) { %>
+          <div class="current-image">
+            <img src="<%= offer.background_image %>" alt="Current background image" style="max-width: 200px; border-radius: 8px; margin-bottom: 0.5rem;">
+          </div>
+        <% } %>
+        <input type="file" id="background_image" name="background_image" accept="image/*">
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="form-section">
+    <h3>Call to Action</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="cta_text">Button Text</label>
+        <input type="text" id="cta_text" name="cta_text" value="<%= offer ? offer.cta_text : 'Claim This Offer' %>" placeholder="e.g., Claim This Offer">
+      </div>
+      <div class="form-group">
+        <label for="cta_color">Button Color</label>
+        <input type="color" id="cta_color" name="cta_color" value="<%= offer ? offer.cta_color : '#0077B6' %>" style="width: 80px; height: 40px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Capture Form -->
+  <div class="form-section">
+    <h3>Lead Capture Form</h3>
+
+    <div class="form-group">
+      <label for="form_headline">Form Headline</label>
+      <input type="text" id="form_headline" name="form_headline" value="<%= offer ? offer.form_headline : 'Get Started Today' %>" placeholder="e.g., Get Started Today">
+    </div>
+
+    <div class="form-group">
+      <label for="form_fields">Form Fields (comma-separated)</label>
+      <input type="text" id="form_fields" name="form_fields" value="<%= offer ? offer.form_fields : 'name,email,phone' %>" placeholder="name,email,phone,message">
+      <small>Available fields: name, email, phone, message</small>
+    </div>
+
+    <div class="form-group">
+      <label for="thank_you_message">Thank You Message</label>
+      <textarea id="thank_you_message" name="thank_you_message" rows="2" placeholder="Thank you! We will contact you shortly."><%= offer ? offer.thank_you_message : 'Thank you! We will contact you shortly.' %></textarea>
+    </div>
+  </div>
+
+  <!-- Schedule -->
+  <div class="form-section">
+    <h3>Schedule</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="start_date">Start Date (optional)</label>
+        <input type="date" id="start_date" name="start_date" value="<%= offer && offer.start_date ? offer.start_date.split('T')[0] : '' %>">
+      </div>
+      <div class="form-group">
+        <label for="end_date">End Date (optional)</label>
+        <input type="date" id="end_date" name="end_date" value="<%= offer && offer.end_date ? offer.end_date.split('T')[0] : '' %>">
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO -->
+  <div class="form-section">
+    <h3>SEO Settings</h3>
+
+    <div class="form-group">
+      <label for="meta_title">Meta Title</label>
+      <input type="text" id="meta_title" name="meta_title" value="<%= offer ? offer.meta_title : '' %>" placeholder="Page title for search engines">
+    </div>
+
+    <div class="form-group">
+      <label for="meta_description">Meta Description</label>
+      <textarea id="meta_description" name="meta_description" rows="2" placeholder="Brief description for search engines (150-160 characters recommended)"><%= offer ? offer.meta_description : '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="meta_keywords">Meta Keywords</label>
+      <input type="text" id="meta_keywords" name="meta_keywords" value="<%= offer ? offer.meta_keywords : '' %>" placeholder="keyword1, keyword2, keyword3">
+    </div>
+
+    <div class="form-group">
+      <label for="og_image">Social Share Image</label>
+      <% if (offer && offer.og_image) { %>
+        <div class="current-image">
+          <img src="<%= offer.og_image %>" alt="Current OG image" style="max-width: 200px; border-radius: 8px; margin-bottom: 0.5rem;">
+        </div>
+      <% } %>
+      <input type="file" id="og_image" name="og_image" accept="image/*">
+      <small>Recommended size: 1200x630 pixels</small>
+    </div>
+  </div>
+
+  <!-- StoryBrand Sections -->
+  <div class="form-section">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 6px;"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
+      StoryBrand Sections
+    </h3>
+    <p class="text-muted" style="margin-bottom: 1rem;">Enable sections that pull content from your <a href="/admin/marketing/brandscript">BrandScript</a>.</p>
+
+    <div class="checkbox-grid">
+      <label class="checkbox-card">
+        <input type="checkbox" name="show_stakes_section" value="1" <%= offer && offer.show_stakes_section ? 'checked' : '' %>>
+        <div class="checkbox-card-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <strong>Stakes</strong>
+          <span>Show failure consequences</span>
+        </div>
+      </label>
+
+      <label class="checkbox-card">
+        <input type="checkbox" name="show_guide_section" value="1" <%= offer && offer.show_guide_section ? 'checked' : '' %>>
+        <div class="checkbox-card-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <strong>Guide</strong>
+          <span>Empathy & authority</span>
+        </div>
+      </label>
+
+      <label class="checkbox-card">
+        <input type="checkbox" name="show_plan_section" value="1" <%= offer && offer.show_plan_section ? 'checked' : '' %>>
+        <div class="checkbox-card-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <strong>Plan</strong>
+          <span>Steps & promises</span>
+        </div>
+      </label>
+
+      <label class="checkbox-card">
+        <input type="checkbox" name="show_success_section" value="1" <%= offer && offer.show_success_section ? 'checked' : '' %>>
+        <div class="checkbox-card-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <strong>Success</strong>
+          <span>Outcomes & transformation</span>
+        </div>
+      </label>
+
+      <label class="checkbox-card">
+        <input type="checkbox" name="show_testimonials_section" value="1" <%= offer && offer.show_testimonials_section ? 'checked' : '' %>>
+        <div class="checkbox-card-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <strong>Testimonials</strong>
+          <span>Customer reviews</span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="form-section">
+    <h3>Status</h3>
+
+    <div class="form-group">
+      <label for="status">Publication Status</label>
+      <select id="status" name="status">
+        <option value="draft" <%= !offer || offer.status === 'draft' ? 'selected' : '' %>>Draft</option>
+        <option value="published" <%= offer && offer.status === 'published' ? 'selected' : '' %>>Published</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <%= offer ? 'Update Offer' : 'Create Offer' %>
+    </button>
+    <a href="/admin/marketing/offers" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<script>
+// Auto-generate slug from title
+document.getElementById('title').addEventListener('input', function() {
+  const slug = document.getElementById('slug');
+  if (!slug.value || slug.dataset.autoGenerated === 'true') {
+    slug.value = this.value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    slug.dataset.autoGenerated = 'true';
+  }
+});
+
+document.getElementById('slug').addEventListener('input', function() {
+  this.dataset.autoGenerated = 'false';
+});
+</script>
+
+<%- include('../../partials/footer') %>

@@ -15,15 +15,109 @@
 </div>
 
 <form action="/admin/pages/home" method="POST" enctype="multipart/form-data">
+  <!-- Problem Section Images - Full Width -->
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+      <h2>Problem Section Images</h2>
+    </div>
+    <div class="card-body">
+      <p style="color: #64748B; font-size: 0.875rem; margin-bottom: 1.5rem;">These images appear in the "The Problem" section on the homepage. Upload custom illustrations to match your brand.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+        <!-- Villain Image -->
+        <div class="form-group">
+          <label for="problem_villain_image">Villain Card</label>
+          <div style="margin-bottom: 0.5rem; padding: 0.75rem; background: #FEF3C7; border-radius: 0.5rem; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+            <% if (settings.problem_villain_image) { %>
+              <img src="<%= settings.problem_villain_image %>" alt="Villain" style="max-height: 80px; max-width: 100%; object-fit: contain; border-radius: 0.375rem;">
+            <% } else { %>
+              <span style="color: #92400E; font-size: 0.75rem;">No image</span>
+            <% } %>
+          </div>
+          <input type="file" id="problem_villain_image" name="problem_villain_image" accept="image/png,image/jpeg,image/webp,image/gif" style="width: 100%; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 0.8rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.25rem; font-size: 0.75rem;">Main card (anxious person)</small>
+        </div>
+
+        <!-- External Problem Image -->
+        <div class="form-group">
+          <label for="problem_external_image">External Problem</label>
+          <div style="margin-bottom: 0.5rem; padding: 0.75rem; background: #FFF8F0; border-radius: 0.5rem; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+            <% if (settings.problem_external_image) { %>
+              <img src="<%= settings.problem_external_image %>" alt="External Problem" style="max-height: 80px; max-width: 100%; object-fit: contain; border-radius: 0.375rem;">
+            <% } else { %>
+              <span style="color: #9A7B4F; font-size: 0.75rem;">No image</span>
+            <% } %>
+          </div>
+          <input type="file" id="problem_external_image" name="problem_external_image" accept="image/png,image/jpeg,image/webp,image/gif" style="width: 100%; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 0.8rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.25rem; font-size: 0.75rem;">Family/group icon</small>
+        </div>
+
+        <!-- Internal Problem Image -->
+        <div class="form-group">
+          <label for="problem_internal_image">How It Feels</label>
+          <div style="margin-bottom: 0.5rem; padding: 0.75rem; background: #FFF8F0; border-radius: 0.5rem; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+            <% if (settings.problem_internal_image) { %>
+              <img src="<%= settings.problem_internal_image %>" alt="Internal Problem" style="max-height: 80px; max-width: 100%; object-fit: contain; border-radius: 0.375rem;">
+            <% } else { %>
+              <span style="color: #9A7B4F; font-size: 0.75rem;">No image</span>
+            <% } %>
+          </div>
+          <input type="file" id="problem_internal_image" name="problem_internal_image" accept="image/png,image/jpeg,image/webp,image/gif" style="width: 100%; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 0.8rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.25rem; font-size: 0.75rem;">Worried face emoji</small>
+        </div>
+
+        <!-- Philosophical Problem Image -->
+        <div class="form-group">
+          <label for="problem_philosophical_image">Why It's Wrong</label>
+          <div style="margin-bottom: 0.5rem; padding: 0.75rem; background: #FEF3C7; border-radius: 0.5rem; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+            <% if (settings.problem_philosophical_image) { %>
+              <img src="<%= settings.problem_philosophical_image %>" alt="Philosophical Problem" style="max-height: 80px; max-width: 100%; object-fit: contain; border-radius: 0.375rem;">
+            <% } else { %>
+              <span style="color: #92400E; font-size: 0.75rem;">No image</span>
+            <% } %>
+          </div>
+          <input type="file" id="problem_philosophical_image" name="problem_philosophical_image" accept="image/png,image/jpeg,image/webp,image/gif" style="width: 100%; padding: 0.4rem; border: 1px solid #E2E8F0; border-radius: 0.5rem; font-size: 0.8rem;">
+          <small style="color: #64748B; display: block; margin-top: 0.25rem; font-size: 0.75rem;">Hand/care icon</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stakes Section Image - Full Width -->
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header">
+      <h2>Stakes Section Image</h2>
+    </div>
+    <div class="card-body">
+      <p style="color: #64748B; font-size: 0.875rem; margin-bottom: 1.5rem;">Upload a custom image for the Stakes section. This image displays full-width between the Plan and Services sections. If no image is uploaded, the section will be hidden.</p>
+
+      <div class="form-group">
+        <label for="stakes_section_image">Section Image</label>
+        <% if (settings.stakes_section_image) { %>
+          <div style="margin-bottom: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
+            <p style="font-size: 0.875rem; color: #64748B; margin-bottom: 0.5rem;">Current image:</p>
+            <img src="<%= settings.stakes_section_image %>" alt="Stakes Section" style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 0.375rem;">
+          </div>
+        <% } else { %>
+          <div style="margin-bottom: 1rem; padding: 2rem; background: #F8FAFC; border-radius: 0.5rem; text-align: center; border: 2px dashed #E2E8F0;">
+            <span style="color: #94A3B8; font-size: 0.875rem;">No image uploaded - section will be hidden</span>
+          </div>
+        <% } %>
+        <input type="file" id="stakes_section_image" name="stakes_section_image" accept="image/png,image/jpeg,image/webp,image/gif" style="width: 100%; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.5rem;">
+        <small style="color: #64748B; display: block; margin-top: 0.5rem;">This image displays full-width on the homepage. Use a wide banner-style image for best results.</small>
+      </div>
+    </div>
+  </div>
+
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
 
-    <!-- About Section Images -->
+    <!-- Guide Section Images (renamed from About) -->
     <div class="card">
       <div class="card-header">
-        <h2>About Section Images</h2>
+        <h2>Guide Section Images</h2>
       </div>
       <div class="card-body">
-        <p style="color: #64748B; font-size: 0.875rem; margin-bottom: 1.5rem;">These images appear in the "About Us" section on the homepage, to the left of the text.</p>
+        <p style="color: #64748B; font-size: 0.875rem; margin-bottom: 1.5rem;">These images appear in the "Guide" section on the homepage, showing your practice as the trusted guide.</p>
 
         <div class="form-group">
           <label for="about_image_main">Main Image (Large)</label>

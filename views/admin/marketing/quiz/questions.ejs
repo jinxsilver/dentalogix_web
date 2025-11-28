@@ -1,0 +1,113 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/quiz', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <a href="/admin/marketing/quiz" class="btn btn-secondary btn-sm" style="margin-bottom: 0.5rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Submissions
+    </a>
+    <h2>Quiz Questions</h2>
+    <p class="text-muted">Manage questions and options for the smile assessment quiz</p>
+  </div>
+  <a href="/admin/marketing/quiz/questions/new" class="btn btn-primary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add Question
+  </a>
+</div>
+
+<!-- Available Procedures Reference -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="card-header">
+    <h3>Available Procedures (for scoring)</h3>
+  </div>
+  <div class="card-body">
+    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      <% procedures.forEach(proc => { %>
+        <span class="badge badge-outline" title="<%= proc.description || '' %>">
+          <strong><%= proc.key %></strong>: <%= proc.name %>
+        </span>
+      <% }) %>
+    </div>
+    <p class="text-muted" style="margin-top: 0.75rem; font-size: 0.85rem;">
+      Use these keys when setting point values for options (e.g., {"whitening": 3, "veneers": 1})
+    </p>
+  </div>
+</div>
+
+<% if (questions.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-state-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; color: #9CA3AF;">
+        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <h3>No questions yet</h3>
+    <p>Add quiz questions to get started with the smile assessment.</p>
+    <a href="/admin/marketing/quiz/questions/new" class="btn btn-primary">Add First Question</a>
+  </div>
+<% } else { %>
+  <div class="questions-list">
+    <% questions.forEach((q, index) => { %>
+      <div class="card" style="margin-bottom: 1rem;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 1.2rem; margin-right: 0.5rem;"><%= q.icon %></span>
+            <strong>Q<%= index + 1 %>:</strong> <%= q.question %>
+            <% if (q.is_multi_select) { %>
+              <span class="badge badge-info" style="margin-left: 0.5rem;">Multi-select</span>
+            <% } %>
+          </div>
+          <div class="action-buttons">
+            <a href="/admin/marketing/quiz/questions/<%= q.id %>/edit" class="btn btn-sm btn-secondary" title="Edit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </a>
+            <form action="/admin/marketing/quiz/questions/<%= q.id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Delete this question and all its options?')">
+              <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="card-body">
+          <% if (q.subtitle) { %>
+            <p class="text-muted" style="margin-bottom: 1rem;"><%= q.subtitle %></p>
+          <% } %>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <span class="badge badge-secondary">Category: <%= q.category %></span>
+            <span class="badge badge-secondary">Order: <%= q.sort_order %></span>
+          </div>
+
+          <% if (q.options && q.options.length > 0) { %>
+            <div style="background: #F9FAFB; padding: 1rem; border-radius: 8px;">
+              <strong style="font-size: 0.85rem; color: #6B7280;">Options (<%= q.options.length %>):</strong>
+              <div style="display: grid; gap: 0.5rem; margin-top: 0.5rem;">
+                <% q.options.forEach(opt => { %>
+                  <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 0.5rem 0.75rem; border-radius: 4px; border: 1px solid #E5E7EB;">
+                    <span>
+                      <span style="margin-right: 0.5rem;"><%= opt.emoji %></span>
+                      <%= opt.label %>
+                    </span>
+                    <span class="text-muted" style="font-size: 0.75rem; font-family: monospace;">
+                      <%= opt.points %>
+                    </span>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          <% } else { %>
+            <p class="text-muted">No options defined</p>
+          <% } %>
+
+          <% if (q.fun_fact) { %>
+            <div style="margin-top: 1rem; padding: 0.75rem; background: #FEF3C7; border-radius: 8px; font-size: 0.85rem;">
+              <strong>Fun Fact:</strong> <%= q.fun_fact %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../../partials/footer') %>

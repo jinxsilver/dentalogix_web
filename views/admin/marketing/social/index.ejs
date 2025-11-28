@@ -1,0 +1,353 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/social', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <h2>Social Media Posts</h2>
+    <p class="text-muted">Generate on-brand social posts for your offers using your BrandScript</p>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid" style="margin-bottom: 2rem;">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #6366F1, #8B5CF6);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.total || 0 %></div>
+      <div class="stat-label">Total Posts</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.drafts || 0 %></div>
+      <div class="stat-label">Drafts</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.posted || 0 %></div>
+      <div class="stat-label">Posted</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #0077B6, #00B4D8);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= offers.length %></div>
+      <div class="stat-label">Active Offers</div>
+    </div>
+  </div>
+</div>
+
+<!-- Post Generator -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <h3 style="margin: 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; margin-right: 8px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Generate Posts
+    </h3>
+  </div>
+  <div class="card-body">
+    <% if (!brandscript) { %>
+      <div class="empty-state" style="padding: 2rem;">
+        <p>You need to create a <a href="/admin/marketing/brandscript">BrandScript</a> first to generate on-brand posts.</p>
+        <a href="/admin/marketing/brandscript" class="btn btn-primary">Create BrandScript</a>
+      </div>
+    <% } else if (offers.length === 0) { %>
+      <div class="empty-state" style="padding: 2rem;">
+        <p>Create an offer/landing page first to generate social posts for it.</p>
+        <a href="/admin/marketing/offers/new" class="btn btn-primary">Create Offer</a>
+      </div>
+    <% } else { %>
+      <form action="/admin/marketing/social/generate" method="POST" id="generateForm">
+        <div class="form-row">
+          <div class="form-group" style="flex: 2;">
+            <label for="offer_id">Select Offer to Promote</label>
+            <select id="offer_id" name="offer_id" required>
+              <option value="">Choose an offer...</option>
+              <% offers.forEach(offer => { %>
+                <option value="<%= offer.id %>" data-slug="<%= offer.slug %>" data-headline="<%= offer.headline || offer.title %>">
+                  <%= offer.title %> <% if (offer.status === 'draft') { %>(Draft)<% } %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Platforms</label>
+          <div class="checkbox-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <label class="checkbox-card">
+              <input type="checkbox" name="platforms[]" value="facebook" checked>
+              <div class="checkbox-card-content" style="padding: 1rem;">
+                <svg viewBox="0 0 24 24" fill="#1877F2" style="width: 24px; height: 24px;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                <strong>Facebook</strong>
+              </div>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="platforms[]" value="instagram" checked>
+              <div class="checkbox-card-content" style="padding: 1rem;">
+                <svg viewBox="0 0 24 24" fill="url(#insta-gradient)" style="width: 24px; height: 24px;">
+                  <defs><linearGradient id="insta-gradient" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#f09433"/><stop offset="50%" style="stop-color:#dc2743"/><stop offset="100%" style="stop-color:#bc1888"/></linearGradient></defs>
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="white"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/>
+                </svg>
+                <strong>Instagram</strong>
+              </div>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="platforms[]" value="twitter" checked>
+              <div class="checkbox-card-content" style="padding: 1rem;">
+                <svg viewBox="0 0 24 24" fill="#000000" style="width: 24px; height: 24px;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <strong>X/Twitter</strong>
+              </div>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="platforms[]" value="linkedin">
+              <div class="checkbox-card-content" style="padding: 1rem;">
+                <svg viewBox="0 0 24 24" fill="#0A66C2" style="width: 24px; height: 24px;"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                <strong>LinkedIn</strong>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          Generate Posts
+        </button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<!-- Generated Posts -->
+<% if (posts && posts.length > 0) { %>
+<div class="card">
+  <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <h3 style="margin: 0;">Your Posts</h3>
+    <span class="badge badge-secondary"><%= posts.length %> posts</span>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div class="posts-list">
+      <% posts.forEach(post => { %>
+        <div class="post-item" data-id="<%= post.id %>">
+          <div class="post-platform">
+            <% if (post.platform === 'facebook') { %>
+              <div class="platform-icon" style="background: #1877F2;">
+                <svg viewBox="0 0 24 24" fill="white" style="width: 16px; height: 16px;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </div>
+            <% } else if (post.platform === 'instagram') { %>
+              <div class="platform-icon" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);">
+                <svg viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" style="width: 16px; height: 16px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none"/><circle cx="12" cy="12" r="4" fill="none"/></svg>
+              </div>
+            <% } else if (post.platform === 'twitter') { %>
+              <div class="platform-icon" style="background: #000;">
+                <svg viewBox="0 0 24 24" fill="white" style="width: 14px; height: 14px;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </div>
+            <% } else if (post.platform === 'linkedin') { %>
+              <div class="platform-icon" style="background: #0A66C2;">
+                <svg viewBox="0 0 24 24" fill="white" style="width: 14px; height: 14px;"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </div>
+            <% } %>
+          </div>
+          <div class="post-content">
+            <div class="post-meta">
+              <span class="badge badge-outline"><%= post.post_type %></span>
+              <% if (post.offer_title) { %>
+                <a href="/offers/<%= post.offer_slug %>" target="_blank" class="post-offer-link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px;"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  <%= post.offer_title %>
+                </a>
+              <% } %>
+              <span class="post-status <%= post.status %>"><%= post.status %></span>
+            </div>
+            <div class="post-text"><%= post.content %></div>
+            <% if (post.hashtags) { %>
+              <div class="post-hashtags"><%= post.hashtags %></div>
+            <% } %>
+            <% if (post.image_suggestion) { %>
+              <div class="post-image-tip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Image idea: <%= post.image_suggestion %>
+              </div>
+            <% } %>
+          </div>
+          <div class="post-actions">
+            <button type="button" class="btn btn-sm btn-secondary copy-btn" onclick="copyPost(this, '<%= post.id %>')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+            <% if (post.status !== 'posted') { %>
+              <form action="/admin/marketing/social/<%= post.id %>/posted" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-sm btn-success" title="Mark as Posted">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </button>
+              </form>
+            <% } %>
+            <form action="/admin/marketing/social/<%= post.id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Delete this post?')">
+              <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+<% } else { %>
+<div class="empty-state" style="background: white; border-radius: 12px; padding: 3rem; text-align: center;">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" style="width: 64px; height: 64px; margin-bottom: 1rem;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+  <h3>No Posts Yet</h3>
+  <p class="text-muted">Generate your first social media posts by selecting an offer above.</p>
+</div>
+<% } %>
+
+<style>
+.posts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+}
+
+.post-platform {
+  flex-shrink: 0;
+}
+
+.platform-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.post-offer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--admin-primary);
+}
+
+.post-status {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.post-status.draft {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.post-status.posted {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.post-text {
+  white-space: pre-wrap;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.post-hashtags {
+  font-size: 0.85rem;
+  color: var(--admin-primary);
+  margin-bottom: 0.5rem;
+}
+
+.post-image-tip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #6B7280;
+  background: #F9FAFB;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.post-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.copy-btn.copied {
+  background: var(--admin-success) !important;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .post-item {
+    flex-direction: column;
+  }
+
+  .post-actions {
+    flex-direction: row;
+  }
+}
+</style>
+
+<script>
+// Store post content for copying
+const postContents = {
+  <% posts.forEach(post => { %>
+  '<%= post.id %>': `<%= post.content.replace(/`/g, '\\`').replace(/\n/g, '\\n') %><%= post.hashtags ? '\\n\\n' + post.hashtags : '' %>`,
+  <% }) %>
+};
+
+function copyPost(btn, postId) {
+  const content = postContents[postId];
+  navigator.clipboard.writeText(content).then(() => {
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+
+<%- include('../../partials/footer') %>

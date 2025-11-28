@@ -85,9 +85,23 @@
       </div>
 
       <% if (page && page.slug === 'mobile-dentistry') { %>
-      <!-- Mobile Dentistry Service Images -->
+      <!-- Mobile Dentistry Page Images -->
       <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #E2E8F0;">
-        <h3 style="margin-bottom: 1rem; color: #334155;">Service Images</h3>
+        <h3 style="margin-bottom: 1rem; color: #334155;">Mobile Dentistry Images</h3>
+
+        <!-- Locations Page Image -->
+        <div style="margin-bottom: 2rem; padding: 1rem; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 0.5rem;">
+          <label style="font-size: 0.875rem; font-weight: 600; color: #1E40AF; display: block; margin-bottom: 0.75rem;">Locations Page Image</label>
+          <p style="font-size: 0.8125rem; color: #3B82F6; margin-bottom: 1rem;">This image appears on the Locations page next to "Serving all of New York State".</p>
+          <% if (settings.mobile_dentistry_image) { %>
+            <div style="margin-bottom: 0.75rem;">
+              <img src="<%= settings.mobile_dentistry_image %>" alt="Mobile Dentistry" style="max-width: 200px; height: auto; object-fit: cover; border-radius: 0.375rem;">
+            </div>
+          <% } %>
+          <input type="file" name="mobile_dentistry_image" accept="image/*" style="width: 100%; font-size: 0.875rem;">
+        </div>
+
+        <h4 style="margin-bottom: 1rem; color: #334155;">Service Images</h4>
         <p style="color: #64748B; margin-bottom: 1.5rem;">Upload images for the "Comprehensive Dental Services On-Site" section.</p>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">

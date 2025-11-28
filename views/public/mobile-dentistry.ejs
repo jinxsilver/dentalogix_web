@@ -302,10 +302,14 @@
           <p><em>Don't see your area? Contact us—we're expanding our coverage regularly.</em></p>
         </div>
         <div class="service-area-map">
-          <div class="map-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Serving New York State</span>
-          </div>
+          <% if (settings.mobile_dentistry_image) { %>
+            <img src="<%= settings.mobile_dentistry_image %>" alt="Serving New York State" style="width: 100%; height: auto; border-radius: 1rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+          <% } else { %>
+            <div class="map-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Serving New York State</span>
+            </div>
+          <% } %>
         </div>
       </div>
     </div>

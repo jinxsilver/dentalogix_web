@@ -1,5 +1,34 @@
 <%- include('../partials/header') %>
 
+<!-- BlogPosting Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "<%= post.title %>",
+  "description": "<%= post.excerpt || post.title %>",
+  "image": "<%= post.featured_image || '' %>",
+  "datePublished": "<%= post.published_at %>",
+  "dateModified": "<%= post.updated_at || post.published_at %>",
+  "author": {
+    "@type": "Person",
+    "name": "<%= post.author_name || settings.site_name || 'Dentalogix' %>"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "<%= settings.site_name || 'Dentalogix' %>",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "<%= settings.site_logo || '' %>"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "<%= settings.site_url || 'https://dentalogix.us' %>/blog/<%= post.slug %>"
+  }
+}
+</script>
+
 <main class="single-post">
   <div class="container">
     <div class="post-header">

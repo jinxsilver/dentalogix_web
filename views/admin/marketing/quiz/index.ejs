@@ -1,0 +1,182 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/quiz', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <h2>Smile Assessment Quiz</h2>
+    <p class="text-muted">View quiz submissions and track engagement</p>
+  </div>
+  <a href="/admin/marketing/quiz/questions" class="btn btn-secondary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Manage Questions
+  </a>
+</div>
+
+<!-- Stats Cards -->
+<div class="stats-grid" style="margin-bottom: 2rem;">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.totalSubmissions || 0 %></div>
+      <div class="stat-label">Total Submissions</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.submissionsWithEmail || 0 %></div>
+      <div class="stat-label">With Email</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.submissionsToday || 0 %></div>
+      <div class="stat-label">Today</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: linear-gradient(135deg, #0077B6, #00B4D8);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </div>
+    <div class="stat-content">
+      <div class="stat-value"><%= stats.conversionRate || 0 %>%</div>
+      <div class="stat-label">Conversion Rate</div>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics Breakdown -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+  <!-- Top Interests -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Top Interests</h3>
+    </div>
+    <div class="card-body">
+      <% if (stats.topInterests && stats.topInterests.length > 0) { %>
+        <% stats.topInterests.forEach(interest => { %>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #E5E7EB;">
+            <span><%= interest.primary_interest || 'Not specified' %></span>
+            <span class="badge badge-secondary"><%= interest.count %></span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-muted">No data yet</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Timeline Breakdown -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Timeline Preferences</h3>
+    </div>
+    <div class="card-body">
+      <% if (stats.timelineBreakdown && stats.timelineBreakdown.length > 0) { %>
+        <% stats.timelineBreakdown.forEach(timeline => { %>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #E5E7EB;">
+            <span><%= timeline.timeline || 'Not specified' %></span>
+            <span class="badge badge-secondary"><%= timeline.count %></span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-muted">No data yet</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Smile Types -->
+  <div class="card">
+    <div class="card-header">
+      <h3>Smile Types</h3>
+    </div>
+    <div class="card-body">
+      <% if (stats.smileTypes && stats.smileTypes.length > 0) { %>
+        <% stats.smileTypes.forEach(type => { %>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #E5E7EB;">
+            <span><%= type.smile_type_name || 'Unknown' %></span>
+            <span class="badge badge-secondary"><%= type.count %></span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-muted">No data yet</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<% if (submissions.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-state-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; color: #9CA3AF;">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+    </div>
+    <h3>No quiz submissions yet</h3>
+    <p>Submissions will appear here when visitors complete the smile assessment quiz.</p>
+    <a href="/quiz" target="_blank" class="btn btn-primary">View Quiz Page</a>
+  </div>
+<% } else { %>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Contact</th>
+          <th>Smile Type</th>
+          <th>Primary Interest</th>
+          <th>Timeline</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% submissions.forEach(sub => { %>
+          <tr>
+            <td>
+              <div>
+                <strong><%= sub.first_name || 'Anonymous' %></strong>
+                <div class="text-muted" style="font-size: 0.8rem;">
+                  <% if (sub.email) { %><%= sub.email %><br><% } %>
+                  <% if (sub.phone) { %><%= sub.phone %><% } %>
+                </div>
+              </div>
+            </td>
+            <td>
+              <% if (sub.smile_type_name) { %>
+                <span class="badge badge-primary"><%= sub.smile_type_name %></span>
+              <% } else { %>
+                <span class="text-muted">-</span>
+              <% } %>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 0.85rem;"><%= sub.primary_interest || '-' %></span>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 0.85rem;"><%= sub.timeline || '-' %></span>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 0.85rem;">
+                <%= new Date(sub.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <a href="/admin/marketing/quiz/<%= sub.id %>" class="btn btn-sm btn-secondary" title="View Details">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../../partials/footer') %>

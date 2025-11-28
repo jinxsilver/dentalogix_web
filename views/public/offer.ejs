@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= settings.site_name || 'Dentalogix' %></title>
+
+  <!-- SEO Meta Tags -->
+  <% if (offer.meta_description) { %>
+  <meta name="description" content="<%= offer.meta_description %>">
+  <% } %>
+  <% if (offer.meta_keywords) { %>
+  <meta name="keywords" content="<%= offer.meta_keywords %>">
+  <% } %>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="<%= offer.meta_title || offer.title %>">
+  <% if (offer.meta_description) { %>
+  <meta property="og:description" content="<%= offer.meta_description %>">
+  <% } %>
+  <% if (offer.og_image) { %>
+  <meta property="og:image" content="<%= offer.og_image %>">
+  <% } else if (offer.featured_image) { %>
+  <meta property="og:image" content="<%= offer.featured_image %>">
+  <% } %>
+  <meta property="og:type" content="website">
+
+  <% if (settings.favicon) { %>
+  <link rel="icon" type="image/x-icon" href="<%= settings.favicon %>">
+  <% } %>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    .offer-page {
+      min-height: 100vh;
+    }
+
+    .offer-hero {
+      position: relative;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .offer-hero.has-bg {
+      background-size: cover;
+      background-position: center;
+    }
+
+    .offer-hero.has-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 119, 182, 0.9), rgba(0, 180, 216, 0.85));
+    }
+
+    .offer-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .offer-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .offer-hero .subheadline {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      opacity: 0.95;
+      margin-bottom: 2rem;
+    }
+
+    .offer-main {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .offer-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .offer-content h2 {
+      color: var(--color-primary);
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .offer-content .description {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #4B5563;
+      margin-bottom: 2rem;
+    }
+
+    .offer-details {
+      background: #F9FAFB;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .offer-details h3 {
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .offer-details ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .offer-details li {
+      padding: 0.75rem 0;
+      padding-left: 2rem;
+      position: relative;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .offer-details li:last-child {
+      border-bottom: none;
+    }
+
+    .offer-details li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+      background-size: 12px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .offer-terms {
+      font-size: 0.85rem;
+      color: #6B7280;
+      padding: 1rem;
+      background: #F3F4F6;
+      border-radius: 8px;
+    }
+
+    .offer-terms strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #374151;
+    }
+
+    .offer-form-container {
+      position: sticky;
+      top: 2rem;
+    }
+
+    .offer-form {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      border: 1px solid #E5E7EB;
+    }
+
+    .offer-form h3 {
+      text-align: center;
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .offer-form .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .offer-form label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #374151;
+    }
+
+    .offer-form input,
+    .offer-form textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .offer-form input:focus,
+    .offer-form textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+    }
+
+    .offer-form .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .offer-form .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 119, 182, 0.3);
+    }
+
+    .success-message {
+      background: linear-gradient(135deg, #10B981, #34D399);
+      color: white;
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .success-message svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+    }
+
+    .success-message h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .error-message {
+      background: #FEE2E2;
+      color: #DC2626;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .offer-featured-image {
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .offer-featured-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Template: Bold */
+    .template-bold .offer-hero {
+      padding: 6rem 2rem;
+    }
+
+    .template-bold .offer-hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+    }
+
+    /* Template: Minimal */
+    .template-minimal .offer-hero {
+      background: white;
+      color: #1F2937;
+      padding: 3rem 2rem;
+    }
+
+    .template-minimal .offer-hero::before {
+      display: none;
+    }
+
+    .template-minimal .offer-hero h1 {
+      color: var(--color-primary);
+    }
+
+    .template-minimal .offer-hero .subheadline {
+      color: #6B7280;
+    }
+
+    .offer-footer {
+      background: #1F2937;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .offer-footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .offer-footer .logo {
+      max-height: 40px;
+      margin-bottom: 1rem;
+    }
+
+    /* Hero CTA Button */
+    .hero-cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .hero-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* StoryBrand Sections */
+    .storybrand-section {
+      padding: 4rem 2rem;
+    }
+
+    .section-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .storybrand-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #6B7280;
+      margin-bottom: 2rem;
+    }
+
+    .section-cta {
+      display: inline-block;
+      padding: 1rem 2rem;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-top: 2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .section-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Stakes Section */
+    .stakes-section {
+      background: #FEF3C7;
+    }
+
+    .stakes-consequences {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .consequence-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .consequence-item svg {
+      width: 24px;
+      height: 24px;
+      color: #D97706;
+      flex-shrink: 0;
+    }
+
+    /* Guide Section */
+    .guide-section {
+      background: #F9FAFB;
+    }
+
+    .empathy-statement {
+      font-size: 1.25rem;
+      font-style: italic;
+      color: #374151;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    .authority-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: white;
+      border: 2px solid var(--color-primary);
+      border-radius: 50px;
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+
+    .stat-badge svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .authority-awards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .award-badge {
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #FCD34D, #F59E0B);
+      color: #78350F;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* Plan Section */
+    .plan-section {
+      background: white;
+    }
+
+    .plan-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .plan-step {
+      flex: 1;
+      min-width: 200px;
+      max-width: 280px;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 1rem;
+    }
+
+    .plan-step p {
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .agreement-section {
+      background: #F0FDF4;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .agreement-section h3 {
+      color: #166534;
+      margin-bottom: 1.5rem;
+    }
+
+    .agreement-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .agreement-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: white;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .agreement-item svg {
+      width: 20px;
+      height: 20px;
+      color: #16A34A;
+    }
+
+    /* Success Section */
+    .success-section {
+      background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+    }
+
+    .success-outcomes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .outcome-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .outcome-item svg {
+      width: 24px;
+      height: 24px;
+      color: #16A34A;
+    }
+
+    .transformation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .transform-from, .transform-to {
+      flex: 1;
+      min-width: 200px;
+      max-width: 300px;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .transform-from {
+      background: #FEE2E2;
+    }
+
+    .transform-to {
+      background: #D1FAE5;
+    }
+
+    .transform-label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #6B7280;
+    }
+
+    .transform-arrow {
+      flex-shrink: 0;
+    }
+
+    .transform-arrow svg {
+      width: 32px;
+      height: 32px;
+      color: var(--color-primary);
+    }
+
+    /* Testimonials Section */
+    .testimonials-section {
+      background: #F9FAFB;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-stars svg {
+      width: 20px;
+      height: 20px;
+      color: #FBBF24;
+    }
+
+    .testimonial-content {
+      font-style: italic;
+      color: #374151;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      color: #1F2937;
+    }
+
+    .testimonial-author img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+      .storybrand-section {
+        padding: 3rem 1rem;
+      }
+
+      .transformation {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .transform-arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body class="offer-page template-<%= offer.template || 'standard' %>">
+
+  <!-- Hero Section -->
+  <section class="offer-hero <%= offer.background_image ? 'has-bg' : '' %>" <% if (offer.background_image) { %>style="background-image: url('<%= offer.background_image %>')"<% } %>>
+    <div class="offer-hero-content">
+      <h1><%= offer.headline || offer.title %></h1>
+      <% if (offer.subheadline) { %>
+        <p class="subheadline"><%= offer.subheadline %></p>
+      <% } %>
+      <% if (storyBrandContent && storyBrandContent.hero) { %>
+        <a href="#offer-form" class="hero-cta-btn" style="background-color: <%= offer.cta_color || '#0077B6' %>">
+          <%= offer.cta_text || storyBrandContent.hero.cta_text || 'Get Started' %>
+        </a>
+      <% } %>
+    </div>
+  </section>
+
+  <% if (offer.show_stakes_section && storyBrandContent && storyBrandContent.stakes) { %>
+  <!-- Stakes Section (StoryBrand) -->
+  <section class="storybrand-section stakes-section">
+    <div class="section-container">
+      <h2><%= storyBrandContent.stakes.headline %></h2>
+      <% if (storyBrandContent.stakes.subheadline) { %>
+        <p class="section-subtitle"><%= storyBrandContent.stakes.subheadline %></p>
+      <% } %>
+      <% if (storyBrandContent.stakes.consequences && storyBrandContent.stakes.consequences.length > 0) { %>
+        <div class="stakes-consequences">
+          <% storyBrandContent.stakes.consequences.slice(0, 3).forEach(consequence => { %>
+            <div class="consequence-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span><%= consequence %></span>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (offer.show_guide_section && storyBrandContent && storyBrandContent.guide) { %>
+  <!-- Guide Section (StoryBrand) -->
+  <section class="storybrand-section guide-section">
+    <div class="section-container">
+      <h2><%= storyBrandContent.guide.headline %></h2>
+      <% if (storyBrandContent.guide.empathy) { %>
+        <p class="empathy-statement">"<%= storyBrandContent.guide.empathy %>"</p>
+      <% } %>
+      <% if (storyBrandContent.guide.stats && storyBrandContent.guide.stats.length > 0) { %>
+        <div class="authority-stats">
+          <% storyBrandContent.guide.stats.forEach(stat => { %>
+            <div class="stat-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <%= stat %>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (storyBrandContent.guide.awards && storyBrandContent.guide.awards.length > 0) { %>
+        <div class="authority-awards">
+          <% storyBrandContent.guide.awards.forEach(award => { %>
+            <span class="award-badge"><%= award %></span>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (offer.show_plan_section && storyBrandContent && storyBrandContent.plan) { %>
+  <!-- Plan Section (StoryBrand) -->
+  <section class="storybrand-section plan-section">
+    <div class="section-container">
+      <h2><%= storyBrandContent.plan.plan_name || 'How It Works' %></h2>
+      <p class="section-subtitle">Getting started is easy</p>
+      <% if (storyBrandContent.plan.steps && storyBrandContent.plan.steps.length > 0) { %>
+        <div class="plan-steps">
+          <% storyBrandContent.plan.steps.forEach((step, index) => { %>
+            <div class="plan-step">
+              <div class="step-number"><%= index + 1 %></div>
+              <p><%= step %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (storyBrandContent.plan.agreements && storyBrandContent.plan.agreements.length > 0) { %>
+        <div class="agreement-section">
+          <h3><%= storyBrandContent.plan.agreement_name || 'Our Promise' %></h3>
+          <div class="agreement-items">
+            <% storyBrandContent.plan.agreements.forEach(item => { %>
+              <div class="agreement-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span><%= item %></span>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+      <a href="#offer-form" class="section-cta" style="background-color: <%= offer.cta_color || '#0077B6' %>">
+        <%= offer.cta_text || 'Get Started' %>
+      </a>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (offer.show_success_section && storyBrandContent && storyBrandContent.success) { %>
+  <!-- Success Section (StoryBrand) -->
+  <section class="storybrand-section success-section">
+    <div class="section-container">
+      <h2><%= storyBrandContent.success.headline %></h2>
+      <% if (storyBrandContent.success.outcomes && storyBrandContent.success.outcomes.length > 0) { %>
+        <div class="success-outcomes">
+          <% storyBrandContent.success.outcomes.forEach(outcome => { %>
+            <div class="outcome-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span><%= outcome %></span>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (storyBrandContent.success.transformation_from && storyBrandContent.success.transformation_to) { %>
+        <div class="transformation">
+          <div class="transform-from">
+            <span class="transform-label">From</span>
+            <p><%= storyBrandContent.success.transformation_from %></p>
+          </div>
+          <div class="transform-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="transform-to">
+            <span class="transform-label">To</span>
+            <p><%= storyBrandContent.success.transformation_to %></p>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </section>
+  <% } %>
+
+  <% if (offer.show_testimonials_section && testimonials && testimonials.length > 0) { %>
+  <!-- Testimonials Section -->
+  <section class="storybrand-section testimonials-section">
+    <div class="section-container">
+      <h2>What Our Patients Say</h2>
+      <div class="testimonials-grid">
+        <% testimonials.slice(0, 3).forEach(testimonial => { %>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <% for (let i = 0; i < (testimonial.rating || 5); i++) { %>
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <% } %>
+            </div>
+            <p class="testimonial-content">"<%= testimonial.content %>"</p>
+            <div class="testimonial-author">
+              <% if (testimonial.patient_photo) { %>
+                <img src="<%= testimonial.patient_photo %>" alt="<%= testimonial.patient_name %>">
+              <% } %>
+              <span><%= testimonial.patient_name %></span>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- Main Content -->
+  <main class="offer-main" id="offer-form">
+    <div class="offer-content">
+      <% if (offer.featured_image) { %>
+        <div class="offer-featured-image">
+          <img src="<%= offer.featured_image %>" alt="<%= offer.title %>">
+        </div>
+      <% } %>
+
+      <% if (offer.description) { %>
+        <div class="description">
+          <%= offer.description %>
+        </div>
+      <% } %>
+
+      <% if (offer.offer_details) { %>
+        <div class="offer-details">
+          <h3>What's Included</h3>
+          <%- offer.offer_details %>
+        </div>
+      <% } %>
+
+      <% if (offer.terms) { %>
+        <div class="offer-terms">
+          <strong>Terms & Conditions</strong>
+          <%= offer.terms %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="offer-form-container">
+      <% if (success) { %>
+        <div class="success-message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <h3>Thank You!</h3>
+          <p><%= offer.thank_you_message || 'We will contact you shortly.' %></p>
+        </div>
+      <% } else { %>
+        <form class="offer-form" method="POST" action="/offers/<%= offer.slug %>">
+          <h3><%= offer.form_headline || 'Get Started Today' %></h3>
+
+          <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message"><%= error %></div>
+          <% } %>
+
+          <% if (formFields.includes('name')) { %>
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required placeholder="Your name">
+            </div>
+          <% } %>
+
+          <% if (formFields.includes('email')) { %>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+          <% } %>
+
+          <% if (formFields.includes('phone')) { %>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+            </div>
+          <% } %>
+
+          <% if (formFields.includes('message')) { %>
+            <div class="form-group">
+              <label for="message">Message (Optional)</label>
+              <textarea id="message" name="message" rows="3" placeholder="Any questions or comments?"></textarea>
+            </div>
+          <% } %>
+
+          <!-- Hidden UTM fields for tracking -->
+          <input type="hidden" name="utm_source" value="<%= utmParams.utm_source || '' %>">
+          <input type="hidden" name="utm_medium" value="<%= utmParams.utm_medium || '' %>">
+          <input type="hidden" name="utm_campaign" value="<%= utmParams.utm_campaign || '' %>">
+
+          <button type="submit" class="submit-btn" style="background-color: <%= offer.cta_color || '#0077B6' %>">
+            <%= offer.cta_text || 'Claim This Offer' %>
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="offer-footer">
+    <% if (settings.site_logo) { %>
+      <a href="/">
+        <img src="<%= settings.site_logo %>" alt="<%= settings.site_name %>" class="logo">
+      </a>
+    <% } else { %>
+      <a href="/" style="font-size: 1.25rem; font-weight: 600;"><%= settings.site_name || 'Dentalogix' %></a>
+    <% } %>
+    <p style="opacity: 0.7; margin: 0.5rem 0 0;">&copy; <%= new Date().getFullYear() %> <%= settings.site_name || 'Dentalogix' %>. All rights reserved.</p>
+    <% if (settings.phone) { %>
+      <p style="margin-top: 0.5rem;">
+        <a href="tel:<%= settings.phone %>" style="opacity: 0.9;"><%= settings.phone %></a>
+      </p>
+    <% } %>
+  </footer>
+
+</body>
+</html>

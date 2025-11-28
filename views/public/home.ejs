@@ -1,10 +1,9 @@
 <%- include('../partials/header') %>
 
 <main>
-  <!-- Hero Section -->
+  <!-- Hero Section - Customer as Hero -->
   <section class="hero">
     <% if (settings.show_falling_leaves === 'true') { %>
-    <!-- Falling leaves animation -->
     <div class="falling-leaves">
       <span class="leaf">🍂</span>
       <span class="leaf">🍁</span>
@@ -19,42 +18,296 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
+          <% if (brandscript && brandscript.one_liner) { %>
           <div class="hero-badge">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            🍂 Fall Into a Beautiful Smile
+            <%= brandscript.one_liner %>
           </div>
-          <h1>Your Smile Deserves the <span>Best Care</span></h1>
-          <p class="hero-description">Experience modern dentistry with cutting-edge technology and compassionate care at our Buffalo dental office. This season, harvest the confidence of a healthy, radiant smile.</p>
+          <% } %>
+          <h1><%= brandscript && brandscript.character_desire ? brandscript.character_desire : 'A Dental Practice That Makes Oral Health Easy and Stress-Free' %></h1>
+          <p class="hero-description"><%= brandscript && brandscript.guide_empathy_statement ? brandscript.guide_empathy_statement : 'We understand that visiting the dentist can feel stressful. That\'s why we\'ve reimagined what dental care should be—modern, compassionate, and centered around you.' %></p>
           <div class="hero-buttons">
-            <a href="/contact" class="btn btn-primary btn-lg">Book Appointment</a>
-            <a href="/services" class="btn btn-secondary btn-lg">Our Services</a>
+            <a href="<%= brandscript && brandscript.direct_cta_url ? brandscript.direct_cta_url : '/contact' %>" class="btn btn-primary btn-lg"><%= brandscript && brandscript.direct_cta_text ? brandscript.direct_cta_text : 'Schedule Your Visit' %></a>
+            <a href="/quiz" class="btn btn-secondary btn-lg">Take Smile Quiz</a>
           </div>
+          <% if (brandscript && brandscript.guide_authority_stats && brandscript.guide_authority_stats.length > 0) { %>
+          <div class="hero-stats">
+            <% brandscript.guide_authority_stats.slice(0, 3).forEach(function(stat) { %>
+            <div class="stat-item">
+              <div class="stat-label"><%= stat %></div>
+            </div>
+            <% }); %>
+          </div>
+          <% } else { %>
           <div class="hero-stats">
             <div class="stat-item">
-              <div class="stat-number">5+</div>
-              <div class="stat-label">Years Experience</div>
+              <div class="stat-number">10k+</div>
+              <div class="stat-label">Families Served</div>
             </div>
             <div class="stat-item">
-              <div class="stat-number">2k+</div>
-              <div class="stat-label">Happy Patients</div>
+              <div class="stat-number">98%</div>
+              <div class="stat-label">Patient Satisfaction</div>
             </div>
             <div class="stat-item">
               <div class="stat-number">5.0</div>
               <div class="stat-label">Star Rating</div>
             </div>
           </div>
+          <% } %>
         </div>
         <div class="hero-visual">
           <div class="hero-image-wrapper">
-            <img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Caring dentist helping a patient with a warm smile" class="hero-image">
+            <img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="<%= brandscript && brandscript.character_name ? brandscript.character_name : 'Happy patient' %> smiling with confidence" class="hero-image">
+            <% if (brandscript && brandscript.transformation_to) { %>
+            <div class="hero-image-overlay">
+              <span class="hero-tagline">From <%= brandscript.transformation_from || 'anxious' %><br>To <%= brandscript.transformation_to %></span>
+            </div>
+            <% } else { %>
             <div class="hero-image-overlay">
               <span class="hero-tagline">The Service You Expect<br>Results You'll Love</span>
             </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Problem Section - The Villain -->
+  <% if (brandscript && (brandscript.villain_name || brandscript.problem_external)) { %>
+  <section class="problem-section">
+    <div class="problem-bg-decor">
+      <svg class="decor-tooth" viewBox="0 0 100 120" fill="none"><path d="M50 5C35 5 25 20 25 35c0 10 5 18 5 30 0 15 5 45 20 45s20-30 20-45c0-12 5-20 5-30C75 20 65 5 50 5z" stroke="currentColor" stroke-width="2" opacity="0.1"/></svg>
+      <svg class="decor-tooth decor-tooth-2" viewBox="0 0 100 120" fill="none"><path d="M50 5C35 5 25 20 25 35c0 10 5 18 5 30 0 15 5 45 20 45s20-30 20-45c0-12 5-20 5-30C75 20 65 5 50 5z" stroke="currentColor" stroke-width="2" opacity="0.08"/></svg>
+      <svg class="decor-tooth decor-tooth-3" viewBox="0 0 100 120" fill="none"><path d="M50 5C35 5 25 20 25 35c0 10 5 18 5 30 0 15 5 45 20 45s20-30 20-45c0-12 5-20 5-30C75 20 65 5 50 5z" stroke="currentColor" stroke-width="2" opacity="0.06"/></svg>
+    </div>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The Problem</span>
+        <h2>We Know What You're Facing</h2>
+        <p>Understanding your concerns about dental care is our first step.</p>
+      </div>
+      <div class="problem-content">
+        <div class="problem-villain">
+          <div class="villain-image">
+            <% if (settings.problem_villain_image) { %>
+              <img src="<%= settings.problem_villain_image %>" alt="<%= brandscript.villain_name || 'Dental anxiety' %>">
+            <% } else { %>
+              <img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Person experiencing dental anxiety">
+            <% } %>
+          </div>
+          <div class="villain-text">
+            <h3><%= brandscript.villain_name || 'Dental anxiety and confusion' %></h3>
+            <p><%= brandscript.villain_description || 'The fear, complexity, and impersonal nature of traditional dental care' %></p>
+          </div>
+        </div>
+        <div class="problems-grid">
+          <% if (brandscript.problem_external) { %>
+          <div class="problem-card">
+            <div class="problem-card-icon<%= settings.problem_external_image ? ' has-image' : '' %>">
+              <% if (settings.problem_external_image) { %>
+                <img src="<%= settings.problem_external_image %>" alt="External Problem">
+              <% } else { %>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <% } %>
+            </div>
+            <div class="problem-type">External Problem</div>
+            <p><%= brandscript.problem_external %></p>
+          </div>
+          <% } %>
+          <% if (brandscript.problem_internal) { %>
+          <div class="problem-card">
+            <div class="problem-card-icon<%= settings.problem_internal_image ? ' has-image' : ' worried' %>">
+              <% if (settings.problem_internal_image) { %>
+                <img src="<%= settings.problem_internal_image %>" alt="How It Feels">
+              <% } else { %>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="3"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="3"/></svg>
+              <% } %>
+            </div>
+            <div class="problem-type">How It Feels</div>
+            <p><%= brandscript.problem_internal %></p>
+          </div>
+          <% } %>
+          <% if (brandscript.problem_philosophical) { %>
+          <div class="problem-card highlight">
+            <div class="problem-card-icon<%= settings.problem_philosophical_image ? ' has-image' : '' %>">
+              <% if (settings.problem_philosophical_image) { %>
+                <img src="<%= settings.problem_philosophical_image %>" alt="Why It's Wrong">
+              <% } else { %>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              <% } %>
+            </div>
+            <div class="problem-type">Why It's Wrong</div>
+            <p><%= brandscript.problem_philosophical %></p>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- Guide Section - Empathy + Authority -->
+  <section class="guide-section">
+    <div class="container">
+      <div class="guide-content">
+        <div class="guide-images">
+          <div class="guide-image-main">
+            <% if (settings.about_image_main) { %>
+              <img src="<%= settings.about_image_main %>" alt="Your Guide to Better Dental Health">
+            <% } else { %>
+              <div class="image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+            <% } %>
+          </div>
+          <div class="guide-image-secondary">
+            <% if (settings.about_image_secondary) { %>
+              <img src="<%= settings.about_image_secondary %>" alt="Our Practice">
+            <% } else { %>
+              <div class="image-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        <div class="guide-text">
+          <span class="section-label">Your Guide</span>
+          <h2>We Get It — And We're Here to Help</h2>
+
+          <!-- Empathy Statement -->
+          <p class="lead empathy-statement">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="quote-icon"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+            <%= brandscript && brandscript.guide_empathy_statement ? brandscript.guide_empathy_statement : 'We understand that visiting the dentist can feel stressful. That\'s why we\'ve reimagined what dental care should be.' %>
+          </p>
+
+          <!-- Authority Indicators -->
+          <div class="authority-grid">
+            <% if (brandscript && brandscript.guide_authority_stats && brandscript.guide_authority_stats.length > 0) { %>
+              <% brandscript.guide_authority_stats.forEach(function(stat) { %>
+              <div class="authority-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span><%= stat %></span>
+              </div>
+              <% }); %>
+            <% } else { %>
+              <div class="authority-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>Serving 10,000+ families</span>
+              </div>
+              <div class="authority-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>98% patient satisfaction</span>
+              </div>
+              <div class="authority-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>Modern, state-of-the-art facilities</span>
+              </div>
+            <% } %>
+          </div>
+
+          <% if (brandscript && brandscript.guide_awards && brandscript.guide_awards.length > 0) { %>
+          <div class="awards-badges">
+            <% brandscript.guide_awards.forEach(function(award) { %>
+            <span class="award-badge"><%= award %></span>
+            <% }); %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan Section - Simple Steps -->
+  <section class="plan-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">The Plan</span>
+        <h2><%= brandscript && brandscript.process_plan_name ? brandscript.process_plan_name : 'How It Works' %></h2>
+        <p>Getting started is easy. Here's your path to a healthier smile.</p>
+      </div>
+
+      <div class="plan-steps">
+        <% if (brandscript && brandscript.process_plan_steps && brandscript.process_plan_steps.length > 0) { %>
+          <% brandscript.process_plan_steps.forEach(function(step, index) { %>
+          <div class="plan-step">
+            <div class="step-number"><%= index + 1 %></div>
+            <div class="step-content">
+              <p><%= step %></p>
+            </div>
+          </div>
+          <% }); %>
+        <% } else { %>
+          <div class="plan-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Schedule Your Visit</h3>
+              <p>Book online or call us—it takes less than a minute.</p>
+            </div>
+          </div>
+          <div class="plan-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Meet Your Care Team</h3>
+              <p>We'll create a personalized plan just for you.</p>
+            </div>
+          </div>
+          <div class="plan-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Smile with Confidence</h3>
+              <p>Enjoy stress-free dental care and a healthier smile.</p>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <% if (brandscript && brandscript.agreement_plan_items && brandscript.agreement_plan_items.length > 0) { %>
+      <div class="promises-section">
+        <h3><%= brandscript.agreement_plan_name || 'Our Promise to You' %></h3>
+        <div class="promises-grid">
+          <% brandscript.agreement_plan_items.forEach(function(promise) { %>
+          <div class="promise-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span><%= promise %></span>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="plan-cta">
+        <a href="<%= brandscript && brandscript.direct_cta_url ? brandscript.direct_cta_url : '/contact' %>" class="btn btn-primary btn-lg"><%= brandscript && brandscript.direct_cta_text ? brandscript.direct_cta_text : 'Schedule Your Visit' %></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quiz CTA Banner -->
+  <section class="quiz-cta-banner">
+    <div class="container">
+      <div class="quiz-banner-content">
+        <div class="quiz-banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="quiz-banner-text">
+          <h3>Not sure where to start?</h3>
+          <p>Take our free 2-minute Smile Assessment Quiz and get personalized recommendations for your smile transformation.</p>
+        </div>
+        <a href="/quiz" class="btn btn-primary btn-lg quiz-banner-btn">Take the Quiz</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stakes Section - Failure vs Success -->
+  <% if (settings.stakes_section_image) { %>
+  <section class="stakes-section stakes-image-only">
+    <div class="container">
+      <div class="stakes-image-wrapper">
+        <img src="<%= settings.stakes_section_image %>" alt="The stakes of your dental health">
+      </div>
+    </div>
+  </section>
+  <% } %>
 
   <!-- Services Section -->
   <section class="services-section">
@@ -64,7 +317,7 @@
         <h2>Comprehensive Dental Services</h2>
         <p>From routine checkups to advanced cosmetic procedures, we provide a full range of dental services tailored to your needs.</p>
       </div>
-      
+
       <div class="services-grid">
         <% services.forEach(function(service) { %>
         <div class="service-card<%= service.image ? ' has-image' : '' %>">
@@ -75,37 +328,18 @@
           <% } else { %>
           <div class="service-icon">
             <% if (service.icon === 'sparkles') { %>
-              <!-- Cosmetic/Sparkles -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 19l.5 1.5L7 21l-1.5.5L5 23l-.5-1.5L3 21l1.5-.5L5 19z"/><path d="M19 5l.5 1.5L21 7l-1.5.5L19 9l-.5-1.5L17 7l1.5-.5L19 5z"/></svg>
             <% } else if (service.icon === 'tooth') { %>
-              <!-- Tooth/General -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 1.5.5 2.8 1.5 3.8L7 22l5-3 5 3-2-11.7c1-1 1.5-2.3 1.5-3.8C16.5 4 14.5 2 12 2z"/></svg>
             <% } else if (service.icon === 'repair') { %>
-              <!-- Restorative/Repair -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
             <% } else if (service.icon === 'child') { %>
-              <!-- Pediatric/Child -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 10-16 0"/><path d="M12 13v2"/></svg>
             <% } else if (service.icon === 'aligners') { %>
-              <!-- Orthodontics/Aligners -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v8"/><path d="M12 8v8"/><path d="M17 8v8"/></svg>
             <% } else if (service.icon === 'relax') { %>
-              <!-- Sedation/Relax -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/><path d="M12 2v2"/></svg>
-            <% } else if (service.icon === 'gums') { %>
-              <!-- Periodontal/Gums -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 12.5A2.5 2.5 0 016.5 10H20"/><path d="M4 5.5A2.5 2.5 0 016.5 3H20"/></svg>
-            <% } else if (service.icon === 'surgery') { %>
-              <!-- Oral Surgery -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>
-            <% } else if (service.icon === 'crown') { %>
-              <!-- Crowns & Bridges -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M5 20h14"/></svg>
-            <% } else if (service.icon === 'dentures') { %>
-              <!-- Dentures -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12c0-4 4-8 8-8s8 4 8 8"/><path d="M4 12c0 4 4 8 8 8s8-4 8-8"/><path d="M8 12v-2"/><path d="M12 12v-3"/><path d="M16 12v-2"/><path d="M8 12v2"/><path d="M12 12v3"/><path d="M16 12v2"/></svg>
             <% } else { %>
-              <!-- Default star -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             <% } %>
           </div>
@@ -124,79 +358,6 @@
     </div>
   </section>
 
-  <!-- About Section -->
-  <section class="about-section">
-    <div class="container">
-      <div class="about-content">
-        <div class="about-images">
-          <div class="about-image-main">
-            <% if (settings.about_image_main) { %>
-              <img src="<%= settings.about_image_main %>" alt="About Dentalogix">
-            <% } else { %>
-              <div class="image-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-              </div>
-            <% } %>
-          </div>
-          <div class="about-image-secondary">
-            <% if (settings.about_image_secondary) { %>
-              <img src="<%= settings.about_image_secondary %>" alt="Our Practice">
-            <% } else { %>
-              <div class="image-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-              </div>
-            <% } %>
-          </div>
-        </div>
-        <div class="about-text">
-          <span class="section-label">About Us</span>
-          <h2>Dedicated to Your Dental Health Since 2020</h2>
-          <p class="lead"><%= settings.about_text %></p>
-          <p>We believe everyone deserves access to quality dental care. Our team combines years of expertise with the latest technology to deliver treatments that are effective, comfortable, and tailored to your unique needs.</p>
-          
-          <div class="about-features">
-            <div class="about-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </div>
-              <div class="feature-text">
-                <h4>Modern Technology</h4>
-                <p>State-of-the-art equipment for precise diagnostics</p>
-              </div>
-            </div>
-            <div class="about-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-              </div>
-              <div class="feature-text">
-                <h4>Gentle Care</h4>
-                <p>Compassionate approach for anxious patients</p>
-              </div>
-            </div>
-            <div class="about-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              <div class="feature-text">
-                <h4>Flexible Hours</h4>
-                <p>Early morning and weekend appointments</p>
-              </div>
-            </div>
-            <div class="about-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-              </div>
-              <div class="feature-text">
-                <h4>Expert Team</h4>
-                <p>Board-certified specialists in all fields</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Team Section -->
   <% if (team.length > 0) { %>
   <section class="team-section">
@@ -206,7 +367,7 @@
         <h2>Expert Dentists You Can Trust</h2>
         <p>Our experienced team of dental professionals is committed to providing you with the highest quality care.</p>
       </div>
-      
+
       <div class="team-grid">
         <% team.forEach(function(member) { %>
         <div class="team-card">
@@ -229,32 +390,37 @@
   </section>
   <% } %>
 
-  <!-- Testimonials Section -->
-  <% if (testimonials.length > 0) { %>
-  <section class="testimonials-section">
+  <!-- Transitional CTA Section - Lead Magnets -->
+  <% if (brandscript && brandscript.transitional_ctas && brandscript.transitional_ctas.length > 0) { %>
+  <section class="transitional-cta-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-label">Testimonials</span>
-        <h2>What Our Patients Say</h2>
-        <p>Don't just take our word for it - hear from our satisfied patients about their experience.</p>
+        <span class="section-label">Free Resources</span>
+        <h2>Not Ready to Schedule? Start Here.</h2>
+        <p>Download our free resources to learn more about achieving your best smile.</p>
       </div>
-      
-      <div class="testimonials-grid">
-        <% testimonials.forEach(function(testimonial) { %>
-        <div class="testimonial-card">
-          <div class="testimonial-rating">
-            <% for(let i = 0; i < testimonial.rating; i++) { %>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+
+      <div class="lead-magnets-grid">
+        <% brandscript.transitional_ctas.forEach(function(cta) { %>
+        <div class="lead-magnet-card">
+          <div class="lead-magnet-icon">
+            <% if (cta.type === 'pdf' || cta.type === 'guide') { %>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <% } else if (cta.type === 'quiz') { %>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <% } else if (cta.type === 'video') { %>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            <% } else { %>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <% } %>
           </div>
-          <p class="testimonial-content">"<%= testimonial.content %>"</p>
-          <div class="testimonial-author">
-            <div class="author-avatar"><%= testimonial.patient_name.charAt(0) %></div>
-            <div class="author-info">
-              <strong><%= testimonial.patient_name %></strong>
-              <span>Patient</span>
-            </div>
-          </div>
+          <h3><%= cta.name %></h3>
+          <% if (cta.description) { %>
+          <p><%= cta.description %></p>
+          <% } %>
+          <a href="<%= cta.url || '/contact' %>" class="btn btn-secondary">
+            <% if (cta.type === 'pdf' || cta.type === 'guide') { %>Download Free<% } else if (cta.type === 'quiz') { %>Take the Quiz<% } else if (cta.type === 'video') { %>Watch Now<% } else { %>Get It Free<% } %>
+          </a>
         </div>
         <% }); %>
       </div>
@@ -262,44 +428,7 @@
   </section>
   <% } %>
 
-  <!-- Blog Section -->
-  <% if (recentPosts.length > 0) { %>
-  <section class="blog-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">Latest News</span>
-        <h2>From Our Blog</h2>
-        <p>Stay informed with the latest dental health tips, news, and updates from our practice.</p>
-      </div>
-      
-      <div class="blog-grid">
-        <% recentPosts.forEach(function(post) { %>
-        <a href="/blog/<%= post.slug %>" class="blog-card">
-          <div class="blog-image">
-            <% if (post.featured_image) { %>
-              <img src="<%= post.featured_image %>" alt="<%= post.title %>">
-            <% } else { %>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <% } %>
-          </div>
-          <div class="blog-content">
-            <div class="blog-meta">
-              <% if (post.category_name) { %>
-              <span class="blog-category"><%= post.category_name %></span>
-              <% } %>
-              <span class="blog-date"><%= new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
-            </div>
-            <h3><%= post.title %></h3>
-            <p class="blog-excerpt"><%= post.excerpt %></p>
-          </div>
-        </a>
-        <% }); %>
-      </div>
-    </div>
-  </section>
-  <% } %>
-
-  <!-- Reviews Section -->
+  <!-- Reviews Carousel Section -->
   <% if (reviews && reviews.length > 0) { %>
   <section class="reviews-section">
     <div class="container">
@@ -321,60 +450,133 @@
         <% } %>
       </div>
 
-      <div class="reviews-grid">
-        <% reviews.forEach(function(review) { %>
-        <div class="review-card<%= review.featured ? ' featured' : '' %>">
-          <% if (review.featured) { %>
-          <div class="featured-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            Featured
-          </div>
-          <% } %>
-          <div class="review-header">
-            <% if (review.reviewer_photo) { %>
-              <img src="<%= review.reviewer_photo %>" alt="<%= review.reviewer_name %>" class="reviewer-photo">
-            <% } else { %>
-              <div class="reviewer-avatar"><%= review.reviewer_name.charAt(0).toUpperCase() %></div>
-            <% } %>
-            <div class="reviewer-info">
-              <strong><%= review.reviewer_name %></strong>
-              <div class="review-meta">
-                <span class="review-source <%= review.source %>">
-                  <% if (review.source === 'google') { %>
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="source-icon"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                  <% } else if (review.source === 'yelp') { %>
-                    <span style="font-weight: bold; color: #D32323;">Y</span>
-                  <% } else if (review.source === 'facebook') { %>
-                    <span style="font-weight: bold; color: #1877F2;">f</span>
+      <!-- Reviews Carousel -->
+      <div class="reviews-carousel-wrapper">
+        <div class="reviews-carousel" id="reviewsCarousel">
+          <div class="reviews-track">
+            <% reviews.forEach(function(review, index) { %>
+            <div class="review-slide" data-index="<%= index %>">
+              <div class="review-card<%= review.featured ? ' featured' : '' %>">
+                <% if (review.featured) { %>
+                <div class="featured-badge">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  Featured
+                </div>
+                <% } %>
+                <div class="review-header">
+                  <% if (review.reviewer_photo) { %>
+                    <img src="<%= review.reviewer_photo %>" alt="<%= review.reviewer_name %>" class="reviewer-photo">
+                  <% } else { %>
+                    <div class="reviewer-avatar"><%= review.reviewer_name.charAt(0).toUpperCase() %></div>
                   <% } %>
-                </span>
-                <% if (review.review_date) { %>
-                  <span class="review-date"><%= new Date(review.review_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+                  <div class="reviewer-info">
+                    <strong><%= review.reviewer_name %></strong>
+                    <div class="review-meta">
+                      <span class="review-source <%= review.source %>">
+                        <% if (review.source === 'google') { %>
+                          <svg viewBox="0 0 24 24" fill="currentColor" class="source-icon"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        <% } else if (review.source === 'yelp') { %>
+                          <span style="font-weight: bold; color: #D32323;">Y</span>
+                        <% } else if (review.source === 'facebook') { %>
+                          <span style="font-weight: bold; color: #1877F2;">f</span>
+                        <% } %>
+                      </span>
+                      <% if (review.review_date) { %>
+                        <span class="review-date"><%= new Date(review.review_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></span>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="review-rating">
+                  <% for(let i = 0; i < review.rating; i++) { %>
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <% } %>
+                </div>
+                <p class="review-content">"<%= review.content %>"</p>
+                <% if (review.source_url) { %>
+                <a href="<%= review.source_url %>" target="_blank" rel="noopener" class="review-link">View on <%= review.source.charAt(0).toUpperCase() + review.source.slice(1) %></a>
                 <% } %>
               </div>
             </div>
+            <% }); %>
           </div>
-          <div class="review-rating">
-            <% for(let i = 0; i < review.rating; i++) { %>
-              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <% } %>
-          </div>
-          <p class="review-content">"<%= review.content %>"</p>
-          <% if (review.source_url) { %>
-          <a href="<%= review.source_url %>" target="_blank" rel="noopener" class="review-link">View on <%= review.source.charAt(0).toUpperCase() + review.source.slice(1) %></a>
-          <% } %>
         </div>
-        <% }); %>
+
+        <!-- Navigation Arrows -->
+        <button class="carousel-arrow carousel-prev" aria-label="Previous review">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="carousel-arrow carousel-next" aria-label="Next review">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+        <!-- Dots Navigation -->
+        <div class="carousel-dots">
+          <% reviews.forEach(function(review, index) { %>
+            <button class="carousel-dot<%= index === 0 ? ' active' : '' %>" data-index="<%= index %>" aria-label="Go to review <%= index + 1 %>"></button>
+          <% }); %>
+        </div>
       </div>
     </div>
   </section>
+
+  <style>
+    .reviews-carousel-wrapper { position: relative; max-width: 100%; margin: 0 auto; padding: 0 50px; }
+    .reviews-carousel { overflow: hidden; border-radius: 16px; }
+    .reviews-track { display: flex; transition: transform 0.5s ease-in-out; }
+    .review-slide { flex: 0 0 100%; padding: 0 10px; box-sizing: border-box; }
+    @media (min-width: 768px) { .review-slide { flex: 0 0 50%; } }
+    @media (min-width: 1024px) { .review-slide { flex: 0 0 33.333%; } }
+    .review-slide .review-card { height: 100%; margin: 0; display: flex; flex-direction: column; }
+    .review-slide .review-content { flex: 1; }
+    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: white; border: 1px solid #E5E7EB; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10; }
+    .carousel-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: white; }
+    .carousel-arrow svg { width: 24px; height: 24px; }
+    .carousel-prev { left: 0; }
+    .carousel-next { right: 0; }
+    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 1.5rem; }
+    .carousel-dot { width: 10px; height: 10px; border-radius: 50%; border: none; background: #D1D5DB; cursor: pointer; transition: all 0.3s; padding: 0; }
+    .carousel-dot:hover { background: #9CA3AF; }
+    .carousel-dot.active { background: var(--color-primary); width: 24px; border-radius: 5px; }
+    @media (max-width: 767px) { .reviews-carousel-wrapper { padding: 0 10px; } .carousel-arrow { width: 36px; height: 36px; } .carousel-prev { left: -5px; } .carousel-next { right: -5px; } }
+  </style>
+
+  <script>
+  (function() {
+    const wrapper = document.querySelector('.reviews-carousel-wrapper');
+    const track = document.querySelector('.reviews-track');
+    const slides = document.querySelectorAll('.review-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    if (!track || slides.length === 0) return;
+    let currentIndex = 0, slidesPerView = 1, autoPlayInterval, isPaused = false;
+    const autoPlayDelay = 5000;
+    function updateSlidesPerView() { slidesPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1; }
+    function updateCarousel() { const slideWidth = 100 / slidesPerView; const maxIndex = Math.max(0, slides.length - slidesPerView); currentIndex = Math.min(currentIndex, maxIndex); track.style.transform = `translateX(-${currentIndex * slideWidth}%)`; dots.forEach((dot, i) => { dot.classList.toggle('active', i === currentIndex); }); }
+    function goToSlide(index) { currentIndex = Math.max(0, Math.min(index, Math.max(0, slides.length - slidesPerView))); updateCarousel(); }
+    function nextSlide() { const maxIndex = Math.max(0, slides.length - slidesPerView); currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1; updateCarousel(); }
+    function prevSlide() { const maxIndex = Math.max(0, slides.length - slidesPerView); currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1; updateCarousel(); }
+    function startAutoPlay() { stopAutoPlay(); if (!isPaused) autoPlayInterval = setInterval(nextSlide, autoPlayDelay); }
+    function stopAutoPlay() { if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; } }
+    prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
+    nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
+    dots.forEach((dot, i) => { dot.addEventListener('click', () => { goToSlide(i); startAutoPlay(); }); });
+    wrapper.addEventListener('mouseenter', () => { isPaused = true; stopAutoPlay(); });
+    wrapper.addEventListener('mouseleave', () => { isPaused = false; startAutoPlay(); });
+    let touchStartX = 0, touchEndX = 0;
+    wrapper.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; isPaused = true; stopAutoPlay(); }, { passive: true });
+    wrapper.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; const diff = touchStartX - touchEndX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } isPaused = false; startAutoPlay(); }, { passive: true });
+    window.addEventListener('resize', () => { updateSlidesPerView(); updateCarousel(); });
+    updateSlidesPerView(); updateCarousel(); startAutoPlay();
+  })();
+  </script>
   <% } %>
 
   <!-- Trust & Insurance Section -->
   <section class="trust-section">
     <div class="container">
       <div class="trust-content">
-        <!-- Reviews Column -->
         <div class="trust-reviews">
           <div class="section-header">
             <span class="section-label">Trusted by Thousands</span>
@@ -412,8 +614,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Insurance Column -->
         <div class="trust-insurance">
           <div class="section-header">
             <span class="section-label">Insurance</span>
@@ -441,28 +641,11 @@
                 <% } %>
               </div>
               <% }); %>
-              <% if (insuranceProviders.length > 3) { %>
-              <!-- Duplicate for seamless loop -->
-              <% insuranceProviders.forEach(function(provider) { %>
+              <% if (insuranceProviders.length > 3) { insuranceProviders.forEach(function(provider) { %>
               <div class="insurance-logo">
-                <% if (provider.logo) { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener" title="<%= provider.name %>">
-                      <img src="<%= provider.logo %>" alt="<%= provider.name %>">
-                    </a>
-                  <% } else { %>
-                    <img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>">
-                  <% } %>
-                <% } else { %>
-                  <% if (provider.website_url) { %>
-                    <a href="<%= provider.website_url %>" target="_blank" rel="noopener"><span><%= provider.name %></span></a>
-                  <% } else { %>
-                    <span><%= provider.name %></span>
-                  <% } %>
-                <% } %>
+                <% if (provider.logo) { %><img src="<%= provider.logo %>" alt="<%= provider.name %>" title="<%= provider.name %>"><% } else { %><span><%= provider.name %></span><% } %>
               </div>
-              <% }); %>
-              <% } %>
+              <% }); } %>
             </div>
           </div>
           <% } else { %>
@@ -478,13 +661,13 @@
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- Final CTA Section -->
   <section class="cta-section">
     <div class="container">
-      <h2>Ready for a Healthier Smile?</h2>
-      <p>Schedule your appointment today and take the first step toward optimal dental health.</p>
+      <h2><%= brandscript && brandscript.success_outcomes && brandscript.success_outcomes[0] ? 'Ready to ' + brandscript.success_outcomes[0] + '?' : 'Ready for a Healthier Smile?' %></h2>
+      <p><%= brandscript && brandscript.direct_cta_text ? 'Click below to ' + brandscript.direct_cta_text.toLowerCase() + ' and take the first step.' : 'Schedule your appointment today and take the first step toward optimal dental health.' %></p>
       <div class="cta-buttons">
-        <a href="/contact" class="btn btn-primary btn-lg">Book Appointment</a>
+        <a href="<%= brandscript && brandscript.direct_cta_url ? brandscript.direct_cta_url : '/contact' %>" class="btn btn-primary btn-lg"><%= brandscript && brandscript.direct_cta_text ? brandscript.direct_cta_text : 'Schedule Your Visit' %></a>
         <a href="tel:<%= settings.phone %>" class="btn btn-outline btn-lg">Call <%= settings.phone %></a>
       </div>
     </div>

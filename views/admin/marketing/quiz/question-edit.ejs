@@ -1,0 +1,209 @@
+<%- include('../../partials/header', { title, settings, user, currentPath: '/admin/marketing/quiz', unreadCount: 0, newLeadsCount }) %>
+
+<div class="page-header">
+  <div>
+    <a href="/admin/marketing/quiz/questions" class="btn btn-secondary btn-sm" style="margin-bottom: 0.5rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Questions
+    </a>
+    <h2><%= question ? 'Edit Question' : 'Add Question' %></h2>
+  </div>
+</div>
+
+<form action="<%= question ? '/admin/marketing/quiz/questions/' + question.id : '/admin/marketing/quiz/questions' %>" method="POST">
+  <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <!-- Main Form -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h3>Question Details</h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="question">Question *</label>
+            <input type="text" id="question" name="question" required value="<%= question ? question.question : '' %>" placeholder="What's your #1 smile goal right now?">
+          </div>
+
+          <div class="form-group">
+            <label for="subtitle">Subtitle (helper text)</label>
+            <input type="text" id="subtitle" name="subtitle" value="<%= question ? question.subtitle : '' %>" placeholder="Everyone's smile journey is unique - let's find yours!">
+          </div>
+
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select id="category" name="category" required>
+                <option value="">Select category</option>
+                <option value="goals" <%= question && question.category === 'goals' ? 'selected' : '' %>>Goals</option>
+                <option value="current" <%= question && question.category === 'current' ? 'selected' : '' %>>Current State</option>
+                <option value="color" <%= question && question.category === 'color' ? 'selected' : '' %>>Color</option>
+                <option value="alignment" <%= question && question.category === 'alignment' ? 'selected' : '' %>>Alignment</option>
+                <option value="concerns" <%= question && question.category === 'concerns' ? 'selected' : '' %>>Concerns</option>
+                <option value="health" <%= question && question.category === 'health' ? 'selected' : '' %>>Health</option>
+                <option value="timeline" <%= question && question.category === 'timeline' ? 'selected' : '' %>>Timeline</option>
+                <option value="experience" <%= question && question.category === 'experience' ? 'selected' : '' %>>Experience</option>
+                <option value="other" <%= question && question.category === 'other' ? 'selected' : '' %>>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="icon">Icon (emoji)</label>
+              <input type="text" id="icon" name="icon" value="<%= question ? question.icon : '' %>" placeholder="⭐" maxlength="4">
+            </div>
+
+            <div class="form-group">
+              <label for="sort_order">Sort Order</label>
+              <input type="number" id="sort_order" name="sort_order" value="<%= question ? question.sort_order : 0 %>" min="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fun_fact">Fun Fact (shown after answering)</label>
+            <textarea id="fun_fact" name="fun_fact" rows="2" placeholder="Did you know? 48% of adults say a smile is the most memorable feature!"><%= question ? question.fun_fact : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" name="is_multi_select" <%= question && question.is_multi_select ? 'checked' : '' %>>
+              Allow multiple selections
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Options Section -->
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Answer Options</h3>
+          <button type="button" class="btn btn-sm btn-secondary" onclick="addOption()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Option
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="options-container">
+            <% if (question && question.options && question.options.length > 0) { %>
+              <% question.options.forEach((opt, index) => { %>
+                <div class="option-item" style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 0.75rem; align-items: start; padding: 1rem; background: #F9FAFB; border-radius: 8px; margin-bottom: 0.75rem;">
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.75rem;">Emoji</label>
+                    <input type="text" name="option_emoji[]" value="<%= opt.emoji %>" placeholder="✨" maxlength="4" style="width: 60px;">
+                  </div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.75rem;">Label *</label>
+                    <input type="text" name="option_label[]" value="<%= opt.label %>" placeholder="A brighter, whiter smile" required>
+                  </div>
+                  <div style="width: 30px;"></div>
+                  <div class="form-group" style="margin: 0;">
+                    <label style="font-size: 0.75rem;">Points (JSON)</label>
+                    <input type="text" name="option_points[]" value='<%= opt.points %>' placeholder='{"whitening": 3, "veneers": 1}'>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="removeOption(this)" style="margin-top: 1.5rem;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="option-item" style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 0.75rem; align-items: start; padding: 1rem; background: #F9FAFB; border-radius: 8px; margin-bottom: 0.75rem;">
+                <div class="form-group" style="margin: 0;">
+                  <label style="font-size: 0.75rem;">Emoji</label>
+                  <input type="text" name="option_emoji[]" placeholder="✨" maxlength="4" style="width: 60px;">
+                </div>
+                <div class="form-group" style="margin: 0;">
+                  <label style="font-size: 0.75rem;">Label *</label>
+                  <input type="text" name="option_label[]" placeholder="Option text" required>
+                </div>
+                <div style="width: 30px;"></div>
+                <div class="form-group" style="margin: 0;">
+                  <label style="font-size: 0.75rem;">Points (JSON)</label>
+                  <input type="text" name="option_points[]" placeholder='{"procedure": 3}'>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger" onclick="removeOption(this)" style="margin-top: 1.5rem;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <h3>Publish</h3>
+        </div>
+        <div class="card-body">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <%= question ? 'Update Question' : 'Create Question' %>
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1rem;">
+        <div class="card-header">
+          <h3>Procedure Keys</h3>
+        </div>
+        <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+          <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.75rem;">Use these keys in the Points JSON:</p>
+          <% procedures.forEach(proc => { %>
+            <div style="padding: 0.5rem 0; border-bottom: 1px solid #E5E7EB;">
+              <code style="background: #F3F4F6; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.8rem;"><%= proc.key %></code>
+              <div style="font-size: 0.75rem; color: #6B7280; margin-top: 0.25rem;"><%= proc.name %></div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1rem;">
+        <div class="card-header">
+          <h3>Points Format</h3>
+        </div>
+        <div class="card-body">
+          <p class="text-muted" style="font-size: 0.8rem; margin-bottom: 0.5rem;">JSON format example:</p>
+          <pre style="background: #F3F4F6; padding: 0.75rem; border-radius: 4px; font-size: 0.75rem; overflow-x: auto;">{"whitening": 3, "veneers": 1}</pre>
+          <p class="text-muted" style="font-size: 0.8rem; margin-top: 0.75rem;">Higher values = stronger recommendation for that procedure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+function addOption() {
+  const container = document.getElementById('options-container');
+  const optionHtml = `
+    <div class="option-item" style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 0.75rem; align-items: start; padding: 1rem; background: #F9FAFB; border-radius: 8px; margin-bottom: 0.75rem;">
+      <div class="form-group" style="margin: 0;">
+        <label style="font-size: 0.75rem;">Emoji</label>
+        <input type="text" name="option_emoji[]" placeholder="✨" maxlength="4" style="width: 60px;">
+      </div>
+      <div class="form-group" style="margin: 0;">
+        <label style="font-size: 0.75rem;">Label *</label>
+        <input type="text" name="option_label[]" placeholder="Option text" required>
+      </div>
+      <div style="width: 30px;"></div>
+      <div class="form-group" style="margin: 0;">
+        <label style="font-size: 0.75rem;">Points (JSON)</label>
+        <input type="text" name="option_points[]" placeholder='{"procedure": 3}'>
+      </div>
+      <button type="button" class="btn btn-sm btn-danger" onclick="removeOption(this)" style="margin-top: 1.5rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `;
+  container.insertAdjacentHTML('beforeend', optionHtml);
+}
+
+function removeOption(btn) {
+  const items = document.querySelectorAll('.option-item');
+  if (items.length > 1) {
+    btn.closest('.option-item').remove();
+  } else {
+    alert('At least one option is required');
+  }
+}
+</script>
+
+<%- include('../../partials/footer') %>

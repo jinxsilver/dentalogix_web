@@ -1,0 +1,1030 @@
+<%- include('../partials/header') %>
+
+<style>
+  .quiz-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #f0f9ff 100%);
+    padding: 10rem 1rem 2rem;
+  }
+  body.theme-fall .quiz-page {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 50%, #FDE68A 100%);
+  }
+  body.theme-winter .quiz-page {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #BAE6FD 100%);
+  }
+  .quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .quiz-card {
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+    z-index: 5;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .quiz-intro-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2.5rem;
+  }
+  .quiz-intro h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+  .quiz-intro p {
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-benefits {
+    background: rgba(var(--color-primary-rgb, 13, 148, 136), 0.1);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .quiz-benefits span {
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .quiz-start-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(var(--color-primary-rgb, 13, 148, 136), 0.3);
+    position: relative;
+    z-index: 10;
+  }
+  .quiz-start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(var(--color-primary-rgb, 13, 148, 136), 0.4);
+  }
+  .quiz-disclaimer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+  }
+
+  /* Progress bar */
+  .quiz-progress {
+    margin-bottom: 2rem;
+  }
+  .quiz-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    border-radius: 9999px;
+    transition: width 0.5s ease;
+  }
+
+  /* Question */
+  .quiz-question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-question-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .quiz-question-text h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+  }
+  .quiz-question-text p {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  /* Options */
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+  }
+  .quiz-option:hover {
+    border-color: var(--color-primary-light, #99f6e4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .quiz-option.selected {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb, 13, 148, 136), 0.05);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb, 13, 148, 136), 0.15);
+  }
+  .quiz-option-emoji {
+    font-size: 1.5rem;
+  }
+  .quiz-option-label {
+    flex: 1;
+    font-weight: 500;
+    color: #334155;
+  }
+  .quiz-option.selected .quiz-option-label {
+    color: var(--color-primary-dark, #0f766e);
+  }
+  .quiz-option-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+  }
+  .quiz-option.selected .quiz-option-check {
+    display: flex;
+  }
+  .quiz-multi-hint {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+  }
+
+  /* Fun fact */
+  .quiz-fun-fact {
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
+    border: 1px solid #fcd34d;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-fun-fact-icon {
+    font-size: 1.25rem;
+  }
+  .quiz-fun-fact-text {
+    font-size: 0.875rem;
+    color: #92400e;
+  }
+
+  /* Navigation */
+  .quiz-nav {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .quiz-nav-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-nav-back {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+  }
+  .quiz-nav-back:hover {
+    background: #f8fafc;
+  }
+  .quiz-nav-next {
+    flex: 1;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(var(--color-primary-rgb, 13, 148, 136), 0.3);
+  }
+  .quiz-nav-next:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(var(--color-primary-rgb, 13, 148, 136), 0.4);
+  }
+  .quiz-nav-next:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Email capture */
+  .quiz-email-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .quiz-email h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-email > p {
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-form-group {
+    margin-bottom: 1rem;
+  }
+  .quiz-form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.25rem;
+  }
+  .quiz-form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  .quiz-form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 13, 148, 136), 0.1);
+  }
+  .quiz-skip-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  .quiz-skip-btn:hover {
+    color: #334155;
+  }
+  .quiz-privacy {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+  }
+
+  /* Loading */
+  .quiz-loading {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+  .quiz-spinner {
+    width: 64px;
+    height: 64px;
+    border: 4px solid #e2e8f0;
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1.5rem;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .quiz-loading h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-loading p {
+    color: #64748b;
+  }
+
+  /* Results */
+  .quiz-results-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-results-emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .quiz-results-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-results-header p {
+    color: #64748b;
+  }
+  .quiz-recommendations {
+    margin-bottom: 1.5rem;
+  }
+  .quiz-recommendations h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-recommendations > p {
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+  .quiz-rec-card {
+    padding: 1.25rem;
+    border-radius: 1rem;
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .quiz-rec-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-rec-icon {
+    font-size: 2rem;
+  }
+  .quiz-rec-match {
+    background: rgba(255,255,255,0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .quiz-rec-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .quiz-rec-desc {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-rec-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+  .quiz-cta {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light, #38bdf8) 100%);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    margin-top: 1.5rem;
+  }
+  .quiz-cta h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-cta p {
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  @media (min-width: 480px) {
+    .quiz-cta-buttons {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+  .quiz-cta-primary {
+    background: white;
+    color: var(--color-primary);
+    border: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .quiz-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .quiz-cta-secondary {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-cta-secondary:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  .quiz-cta-phone {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+  .quiz-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+  .quiz-powered {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+  .quiz-powered span {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+</style>
+
+<main class="quiz-page">
+  <div class="quiz-container" id="quizApp">
+    <!-- Content loaded by JavaScript -->
+  </div>
+</main>
+
+<script>
+// Quiz Data from Server
+const quizQuestions = <%- JSON.stringify(questions) %>;
+const dentalProcedures = <%- JSON.stringify(procedures) %>;
+const settings = {
+  phone: '<%= settings.phone %>',
+  scheduleUrl: '<%= brandscript && brandscript.direct_cta_url ? brandscript.direct_cta_url : "/contact" %>',
+  siteName: '<%= settings.site_name || "Dentalogix" %>'
+};
+
+const smileTypes = {
+  whiter: { key: 'brightness_seeker', name: 'The Brightness Seeker', emoji: '✨', description: "A little sparkle goes a long way. You're ready to glow up!" },
+  straighter: { key: 'alignment_artist', name: 'The Alignment Artist', emoji: '📐', description: 'Straight to success! Your smile transformation awaits.' },
+  healthier: { key: 'wellness_warrior', name: 'The Wellness Warrior', emoji: '💪', description: 'Smart thinking! Health first, beauty follows.' },
+  complete: { key: 'restoration_hero', name: 'The Restoration Hero', emoji: '🦷', description: "Every smile deserves to be complete. We've got you!" },
+  confident: { key: 'confidence_builder', name: 'The Confidence Builder', emoji: '🚀', description: 'Your confidence boost is just around the corner!' }
+};
+const defaultSmileType = { key: 'smile_explorer', name: 'The Smile Explorer', emoji: '🗺️', description: "You're on the path to discovering your best smile!" };
+
+// Quiz State
+let stage = 'intro';
+let currentQuestionIndex = 0;
+let answers = [];
+let currentSelection = null;
+let contactInfo = { firstName: '', email: '', phone: '' };
+let results = null;
+let submitError = null;
+
+// Capture UTM parameters from URL
+const urlParams = new URLSearchParams(window.location.search);
+const utmParams = {
+  utm_source: urlParams.get('utm_source') || null,
+  utm_medium: urlParams.get('utm_medium') || null,
+  utm_campaign: urlParams.get('utm_campaign') || null
+};
+
+// Color gradients mapping
+const colorGradients = {
+  'from-yellow-400 to-amber-500': 'linear-gradient(135deg, #facc15, #f59e0b)',
+  'from-blue-400 to-cyan-500': 'linear-gradient(135deg, #60a5fa, #06b6d4)',
+  'from-purple-400 to-pink-500': 'linear-gradient(135deg, #c084fc, #ec4899)',
+  'from-green-400 to-emerald-500': 'linear-gradient(135deg, #4ade80, #10b981)',
+  'from-teal-400 to-cyan-500': 'linear-gradient(135deg, #2dd4bf, #06b6d4)',
+  'from-indigo-400 to-blue-500': 'linear-gradient(135deg, #818cf8, #3b82f6)',
+  'from-slate-400 to-zinc-500': 'linear-gradient(135deg, #94a3b8, #71717a)',
+  'from-amber-400 to-orange-500': 'linear-gradient(135deg, #fbbf24, #f97316)',
+  'from-rose-400 to-pink-500': 'linear-gradient(135deg, #fb7185, #ec4899)',
+  'from-violet-400 to-purple-500': 'linear-gradient(135deg, #a78bfa, #a855f7)',
+  'from-sky-400 to-blue-500': 'linear-gradient(135deg, #38bdf8, #3b82f6)',
+  'from-pink-400 to-rose-500': 'linear-gradient(135deg, #f472b6, #f43f5e)'
+};
+
+function render() {
+  const app = document.getElementById('quizApp');
+
+  if (stage === 'intro') {
+    app.innerHTML = renderIntro();
+  } else if (stage === 'quiz') {
+    app.innerHTML = renderQuestion();
+  } else if (stage === 'email') {
+    app.innerHTML = renderEmailCapture();
+  } else if (stage === 'loading') {
+    app.innerHTML = renderLoading();
+  } else if (stage === 'error') {
+    app.innerHTML = renderError();
+  } else if (stage === 'results') {
+    app.innerHTML = renderResults();
+  }
+
+  attachEventListeners();
+}
+
+function renderError() {
+  return `
+    <div class="quiz-card" style="text-align: center; padding: 3rem 2rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">😕</div>
+      <h2 style="color: #1e293b; margin-bottom: 0.5rem;">Oops! Something went wrong</h2>
+      <p style="color: #64748b; margin-bottom: 1.5rem;">${submitError || 'We had trouble saving your results. Your recommendations are still available below.'}</p>
+      <button class="quiz-start-btn" id="showResultsBtn">View My Results Anyway</button>
+      <button class="quiz-skip-btn" id="retrySubmitBtn">Try Again</button>
+    </div>
+  `;
+}
+
+function showResultsAnyway() {
+  stage = 'results';
+  render();
+}
+
+function retrySubmit() {
+  submitError = null;
+  submitQuiz(contactInfo.firstName === '' && contactInfo.email === '');
+}
+
+function renderIntro() {
+  return `
+    <div class="quiz-card quiz-intro">
+      <div class="quiz-intro-icon">✨</div>
+      <h1>Discover Your Perfect Smile</h1>
+      <p>Take our 2-minute quiz and get personalized recommendations for your smile transformation!</p>
+      <div class="quiz-benefits">
+        <span>⏱️ 2 minutes</span>
+        <span>📋 ${quizQuestions.length} questions</span>
+        <span>🎁 Free results</span>
+      </div>
+      <button class="quiz-start-btn" id="startQuizBtn">Start My Assessment →</button>
+      <p class="quiz-disclaimer">Your answers help us personalize your experience. No spam, ever!</p>
+    </div>
+  `;
+}
+
+function renderQuestion() {
+  const question = quizQuestions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+  const isMulti = question.is_multi_select === 1;
+
+  let optionsHtml = question.options.map(opt => {
+    const isSelected = isMulti
+      ? (currentSelection || []).includes(opt.id.toString())
+      : currentSelection === opt.id.toString();
+    return `
+      <div class="quiz-option ${isSelected ? 'selected' : ''}" data-option-id="${opt.id}">
+        <span class="quiz-option-emoji">${opt.emoji}</span>
+        <span class="quiz-option-label">${opt.label}</span>
+        <span class="quiz-option-check">✓</span>
+      </div>
+    `;
+  }).join('');
+
+  const hasSelection = isMulti
+    ? (currentSelection && currentSelection.length > 0)
+    : currentSelection !== null;
+
+  return `
+    <div class="quiz-progress">
+      <div class="quiz-progress-info">
+        <span>Question ${currentQuestionIndex + 1} of ${quizQuestions.length}</span>
+        <span>${Math.round(progress)}% complete</span>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" style="width: ${progress}%"></div>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-question-header">
+        <div class="quiz-question-icon">${question.icon}</div>
+        <div class="quiz-question-text">
+          <h2>${question.question}</h2>
+          <p>${question.subtitle || ''}</p>
+        </div>
+      </div>
+      <div class="quiz-options">
+        ${optionsHtml}
+      </div>
+      ${isMulti ? '<p class="quiz-multi-hint">Select all that apply</p>' : ''}
+      ${question.fun_fact ? `
+        <div class="quiz-fun-fact">
+          <span class="quiz-fun-fact-icon">💡</span>
+          <span class="quiz-fun-fact-text">${question.fun_fact}</span>
+        </div>
+      ` : ''}
+      <div class="quiz-nav">
+        ${currentQuestionIndex > 0 ? '<button class="quiz-nav-btn quiz-nav-back" id="quizBackBtn">← Back</button>' : ''}
+        <button class="quiz-nav-btn quiz-nav-next" id="quizNextBtn" ${!hasSelection ? 'disabled' : ''}>
+          ${currentQuestionIndex === quizQuestions.length - 1 ? 'Get My Results' : 'Continue'} →
+        </button>
+      </div>
+    </div>
+    <div class="quiz-powered">Powered by <span>${settings.siteName}</span></div>
+  `;
+}
+
+function renderEmailCapture() {
+  return `
+    <div class="quiz-card quiz-email">
+      <div class="quiz-email-icon">🎉</div>
+      <h2>You're almost there!</h2>
+      <p>Enter your info to get your personalized recommendations</p>
+      <div class="quiz-form-group">
+        <label>First Name</label>
+        <input type="text" id="quizFirstName" placeholder="Your first name" value="${contactInfo.firstName}">
+      </div>
+      <div class="quiz-form-group">
+        <label>Email Address</label>
+        <input type="email" id="quizEmail" placeholder="your@email.com" value="${contactInfo.email}">
+      </div>
+      <div class="quiz-form-group">
+        <label>Phone (optional)</label>
+        <input type="tel" id="quizPhone" placeholder="(555) 123-4567" value="${contactInfo.phone}">
+      </div>
+      <button class="quiz-start-btn" id="quizSubmitBtn">See My Results ✨</button>
+      <button class="quiz-skip-btn" id="quizSkipBtn">Skip and see results anyway</button>
+      <p class="quiz-privacy">🔒 We'll send you a copy of your results. No spam, unsubscribe anytime.</p>
+    </div>
+  `;
+}
+
+function renderLoading() {
+  return `
+    <div class="quiz-card quiz-loading">
+      <div class="quiz-spinner"></div>
+      <h2>Analyzing your smile profile...</h2>
+      <p>Creating your personalized recommendations</p>
+    </div>
+  `;
+}
+
+function renderResults() {
+  const recsHtml = results.recommendations.map(rec => {
+    const gradient = colorGradients[rec.color_gradient] || 'linear-gradient(135deg, #14b8a6, #06b6d4)';
+    return `
+      <div class="quiz-rec-card" style="background: ${gradient}">
+        <div class="quiz-rec-top">
+          <span class="quiz-rec-icon">${rec.icon}</span>
+          <span class="quiz-rec-match">${rec.matchPercentage}% match</span>
+        </div>
+        <div class="quiz-rec-name">${rec.name}</div>
+        <div class="quiz-rec-desc">${rec.description}</div>
+        <div class="quiz-rec-time">⏱️ ${rec.timeframe}</div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="quiz-card">
+      <div class="quiz-results-header">
+        <div class="quiz-results-emoji">${results.smileType.emoji}</div>
+        <h1>You're ${results.smileType.name}!</h1>
+        <p>${results.smileType.description}</p>
+      </div>
+      <div class="quiz-recommendations">
+        <h2>Your Personalized Recommendations</h2>
+        <p>Based on your answers, here's what could help you achieve your dream smile:</p>
+        ${recsHtml}
+      </div>
+    </div>
+    <div class="quiz-cta">
+      <h2>Ready to Start Your Smile Journey?</h2>
+      <p>Schedule a free consultation and let's create your personalized smile plan!</p>
+      <div class="quiz-cta-buttons">
+        <a href="${settings.scheduleUrl}" class="quiz-cta-primary">Schedule Free Consultation</a>
+        <button class="quiz-cta-secondary" id="restartQuizBtn">Retake Quiz</button>
+      </div>
+      <div class="quiz-cta-phone">💬 Questions? Call us at <strong>${settings.phone}</strong></div>
+    </div>
+    <div class="quiz-footer">✓ No pressure · ✓ Transparent pricing · ✓ Anxiety-free options available</div>
+  `;
+}
+
+function attachEventListeners() {
+  // Start quiz button
+  const startBtn = document.getElementById('startQuizBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', startQuiz);
+  }
+
+  // Quiz options (question answers)
+  const options = document.querySelectorAll('.quiz-option[data-option-id]');
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      selectOption(opt.dataset.optionId);
+    });
+  });
+
+  // Navigation buttons
+  const backBtn = document.getElementById('quizBackBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', goBack);
+  }
+
+  const nextBtn = document.getElementById('quizNextBtn');
+  if (nextBtn) {
+    nextBtn.addEventListener('click', goNext);
+  }
+
+  // Email capture form inputs
+  const firstNameInput = document.getElementById('quizFirstName');
+  const emailInput = document.getElementById('quizEmail');
+  const phoneInput = document.getElementById('quizPhone');
+
+  if (firstNameInput) {
+    firstNameInput.addEventListener('input', (e) => { contactInfo.firstName = e.target.value; });
+  }
+  if (emailInput) {
+    emailInput.addEventListener('input', (e) => { contactInfo.email = e.target.value; });
+  }
+  if (phoneInput) {
+    phoneInput.addEventListener('input', (e) => { contactInfo.phone = e.target.value; });
+  }
+
+  // Submit and skip buttons
+  const submitBtn = document.getElementById('quizSubmitBtn');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => submitQuiz(false));
+  }
+
+  const skipBtn = document.getElementById('quizSkipBtn');
+  if (skipBtn) {
+    skipBtn.addEventListener('click', () => submitQuiz(true));
+  }
+
+  // Error state buttons
+  const showResultsBtn = document.getElementById('showResultsBtn');
+  if (showResultsBtn) {
+    showResultsBtn.addEventListener('click', showResultsAnyway);
+  }
+
+  const retryBtn = document.getElementById('retrySubmitBtn');
+  if (retryBtn) {
+    retryBtn.addEventListener('click', retrySubmit);
+  }
+
+  // Results page restart button
+  const restartBtn = document.getElementById('restartQuizBtn');
+  if (restartBtn) {
+    restartBtn.addEventListener('click', restartQuiz);
+  }
+}
+
+function startQuiz() {
+  stage = 'quiz';
+  render();
+}
+
+function selectOption(optionId) {
+  const question = quizQuestions[currentQuestionIndex];
+  const isMulti = question.is_multi_select === 1;
+
+  if (isMulti) {
+    currentSelection = currentSelection || [];
+    const optStr = optionId.toString();
+    // Handle "none" option
+    if (optStr === 'none' || question.options.find(o => o.id.toString() === optStr)?.label?.toLowerCase().includes('none')) {
+      currentSelection = [optStr];
+    } else {
+      // Remove "none" if selecting other options
+      currentSelection = currentSelection.filter(id => {
+        const opt = question.options.find(o => o.id.toString() === id);
+        return !opt?.label?.toLowerCase().includes('none');
+      });
+      if (currentSelection.includes(optStr)) {
+        currentSelection = currentSelection.filter(id => id !== optStr);
+      } else {
+        currentSelection.push(optStr);
+      }
+    }
+  } else {
+    currentSelection = optionId.toString();
+  }
+  render();
+}
+
+function goBack() {
+  if (currentQuestionIndex > 0) {
+    const prevAnswer = answers[currentQuestionIndex - 1];
+    currentSelection = prevAnswer ? prevAnswer.selected : null;
+    answers = answers.slice(0, -1);
+    currentQuestionIndex--;
+    render();
+  }
+}
+
+function goNext() {
+  if (!currentSelection || (Array.isArray(currentSelection) && currentSelection.length === 0)) return;
+
+  const question = quizQuestions[currentQuestionIndex];
+  answers.push({
+    questionId: question.id,
+    category: question.category,
+    selected: currentSelection
+  });
+
+  currentSelection = null;
+
+  if (currentQuestionIndex < quizQuestions.length - 1) {
+    currentQuestionIndex++;
+    render();
+  } else {
+    stage = 'email';
+    render();
+  }
+}
+
+function submitQuiz(skip) {
+  if (!skip) {
+    contactInfo.firstName = document.getElementById('quizFirstName')?.value || '';
+    contactInfo.email = document.getElementById('quizEmail')?.value || '';
+    contactInfo.phone = document.getElementById('quizPhone')?.value || '';
+  }
+
+  stage = 'loading';
+  render();
+
+  // Calculate results
+  results = calculateResults();
+
+  // Get timeline and primary interest from answers
+  const timelineAnswer = answers.find(a => a.category === 'timeline');
+  const goalsAnswer = answers.find(a => a.category === 'goals');
+
+  // Submit to server with UTM params
+  fetch('/api/quiz/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: skip ? null : contactInfo.firstName,
+      email: skip ? null : contactInfo.email,
+      phone: skip ? null : contactInfo.phone,
+      answers: answers,
+      smileType: results.smileType.key,
+      smileTypeName: results.smileType.name,
+      recommendations: results.recommendations.map(r => ({ key: r.key, score: r.score })),
+      timeline: timelineAnswer ? timelineAnswer.selected : null,
+      primaryInterest: goalsAnswer ? goalsAnswer.selected : null,
+      // Include UTM parameters for tracking
+      utm_source: utmParams.utm_source,
+      utm_medium: utmParams.utm_medium,
+      utm_campaign: utmParams.utm_campaign
+    })
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(data => {
+        throw new Error(data.message || 'Submission failed');
+      });
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      stage = 'results';
+    } else {
+      submitError = data.message || 'Failed to save your results';
+      stage = 'error';
+    }
+    render();
+  })
+  .catch(error => {
+    console.error('Quiz submission error:', error);
+    submitError = error.message || 'Network error. Please check your connection.';
+    stage = 'error';
+    render();
+  });
+}
+
+function calculateResults() {
+  // Calculate procedure scores
+  const scores = {};
+
+  for (const answer of answers) {
+    const question = quizQuestions.find(q => q.id === answer.questionId);
+    if (!question) continue;
+
+    const selectedIds = Array.isArray(answer.selected) ? answer.selected : [answer.selected];
+
+    for (const selectedId of selectedIds) {
+      const option = question.options.find(o => o.id.toString() === selectedId.toString());
+      if (option && option.points) {
+        const points = typeof option.points === 'string' ? JSON.parse(option.points) : option.points;
+        for (const [procedure, pts] of Object.entries(points)) {
+          scores[procedure] = (scores[procedure] || 0) + pts;
+        }
+      }
+    }
+  }
+
+  // Get top recommendations
+  const sortedScores = Object.entries(scores)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 4);
+
+  const maxScore = sortedScores[0]?.[1] || 1;
+
+  const recommendations = sortedScores.map(([key, score]) => {
+    const proc = dentalProcedures.find(p => p.key === key) || {
+      key, name: key, description: '', timeframe: '', icon: '🦷', color_gradient: 'from-teal-400 to-cyan-500'
+    };
+    return {
+      ...proc,
+      score,
+      matchPercentage: Math.min(100, Math.round((score / maxScore) * 100))
+    };
+  });
+
+  // Determine smile type from goals answer
+  const goalAnswer = answers.find(a => a.category === 'goals');
+  let smileType = defaultSmileType;
+
+  if (goalAnswer && typeof goalAnswer.selected === 'string') {
+    const goalOption = quizQuestions.find(q => q.category === 'goals')?.options.find(o => o.id.toString() === goalAnswer.selected.toString());
+    if (goalOption) {
+      // Map option labels to smile types
+      const label = goalOption.label.toLowerCase();
+      if (label.includes('whiter') || label.includes('bright')) smileType = smileTypes.whiter;
+      else if (label.includes('straight')) smileType = smileTypes.straighter;
+      else if (label.includes('health')) smileType = smileTypes.healthier;
+      else if (label.includes('missing') || label.includes('replace')) smileType = smileTypes.complete;
+      else if (label.includes('confident')) smileType = smileTypes.confident;
+    }
+  }
+
+  return { smileType, recommendations };
+}
+
+function restartQuiz() {
+  stage = 'intro';
+  currentQuestionIndex = 0;
+  answers = [];
+  currentSelection = null;
+  contactInfo = { firstName: '', email: '', phone: '' };
+  results = null;
+  render();
+}
+
+// Initialize
+render();
+</script>
+
+<%- include('../partials/footer') %>

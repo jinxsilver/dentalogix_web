@@ -1,0 +1,18 @@
+# Robots.txt for Dentalogix Dental Practice
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+
+# Disallow uploads directory listing (but allow individual files)
+Disallow: /uploads/$
+
+# Sitemap location
+Sitemap: https://dentalogix.us/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
