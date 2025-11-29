@@ -86,6 +86,6 @@ app.listen(PORT, () => {
   console.log(`📊 Admin panel: http://localhost:${PORT}/admin`);
 
   // Start background schedulers
-  const Scheduler = require('./services/scheduler');
+  const Scheduler = require('./lib/scheduler');
   Scheduler.startGoogleReviewsSync(24); // Sync Google reviews every 24 hours
 });

@@ -21,8 +21,8 @@ const Leads = require('../models/leads');
 const BrandScripts = require('../models/brandscripts');
 const SocialPosts = require('../models/socialposts');
 const Quiz = require('../models/quiz');
-const GoogleReviewsService = require('../services/googleReviews');
-const EmailService = require('../services/email');
+const GoogleReviewsService = require('../lib/googleReviews');
+const EmailService = require('../lib/email');
 
 // File upload configuration
 const storage = multer.diskStorage({

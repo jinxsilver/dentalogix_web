@@ -10,7 +10,7 @@ const Posts = require('../models/posts');
 const Services = require('../models/services');
 const Contacts = require('../models/contacts');
 const Quiz = require('../models/quiz');
-const EmailService = require('../services/email');
+const EmailService = require('../lib/email');
 
 // ======================
 // Zod Validation Schemas

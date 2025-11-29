@@ -18,7 +18,7 @@ const Offers = require('../models/offers');
 const Leads = require('../models/leads');
 const BrandScripts = require('../models/brandscripts');
 const Quiz = require('../models/quiz');
-const EmailService = require('../services/email');
+const EmailService = require('../lib/email');
 
 // Helper to get common data
 const getCommonData = () => ({
