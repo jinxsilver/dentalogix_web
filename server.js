@@ -8,6 +8,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy (required for IIS/reverse proxy to handle sessions correctly)
+app.set('trust proxy', 1);
+
 // Security & Performance
 app.use(helmet({
   contentSecurityPolicy: {
@@ -31,8 +34,9 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'dentalogix-secret-key-change-in-production',
   resave: false,
   saveUninitialized: false,
-  cookie: { 
+  cookie: {
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
