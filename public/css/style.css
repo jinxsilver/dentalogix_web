@@ -3448,6 +3448,128 @@ section {
 .animate-delay-3 { animation-delay: 0.3s; }
 
 /* =============================================
+   TRUST CREDENTIALS BAR
+   ============================================= */
+
+.trust-credentials-bar {
+  background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-white) 100%);
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+  padding: var(--space-lg) 0;
+}
+
+.credentials-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.credentials-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gray-500);
+  white-space: nowrap;
+}
+
+.credentials-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.credential-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.credential-item img {
+  max-height: 40px;
+  max-width: 120px;
+  object-fit: contain;
+  filter: grayscale(30%);
+  opacity: 0.8;
+  transition: all var(--transition-base);
+}
+
+.credential-item:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.credential-fallback {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.credential-fallback:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.credential-icon {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  background: var(--color-gray-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.credential-text {
+  font-size: 0.75rem;
+  color: var(--color-gray-600);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .trust-credentials-bar {
+    padding: var(--space-md) 0;
+  }
+
+  .credentials-content {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .credentials-logos {
+    gap: var(--space-md);
+  }
+
+  .credential-item img {
+    max-height: 32px;
+    max-width: 100px;
+  }
+
+  .credential-fallback {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .credential-icon {
+    font-size: 0.75rem;
+  }
+
+  .credential-text {
+    font-size: 0.65rem;
+  }
+}
+
+/* =============================================
    STORYBRAND SECTIONS
    ============================================= */
 
