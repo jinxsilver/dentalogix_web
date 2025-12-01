@@ -5115,7 +5115,7 @@ body.theme-winter .section-label {
 }
 
 body.theme-winter .footer-bottom {
-  background: #1E3A5F;
+  border-top: none;
 }
 
 body.theme-winter .site-footer {
