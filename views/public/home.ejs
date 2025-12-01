@@ -3,7 +3,7 @@
 <main>
   <!-- Hero Section - Customer as Hero -->
   <section class="hero">
-    <% if (settings.show_falling_leaves === 'true') { %>
+    <% if (settings.show_falling_leaves === 'true' && settings.site_theme === 'fall') { %>
     <div class="falling-leaves">
       <span class="leaf">🍂</span>
       <span class="leaf">🍁</span>
@@ -13,6 +13,20 @@
       <span class="leaf">🍁</span>
       <span class="leaf">🍂</span>
       <span class="leaf">🍁</span>
+    </div>
+    <% } %>
+    <% if (settings.show_falling_snow === 'true' && settings.site_theme === 'winter') { %>
+    <div class="falling-snow">
+      <span class="snowflake">❄</span>
+      <span class="snowflake">❅</span>
+      <span class="snowflake">❆</span>
+      <span class="snowflake">❄</span>
+      <span class="snowflake">❅</span>
+      <span class="snowflake">❆</span>
+      <span class="snowflake">❄</span>
+      <span class="snowflake">❅</span>
+      <span class="snowflake">❆</span>
+      <span class="snowflake">❄</span>
     </div>
     <% } %>
     <div class="container">

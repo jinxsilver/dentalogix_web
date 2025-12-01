@@ -289,27 +289,30 @@
 
         <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 0.5rem;">
           <strong style="font-size: 0.875rem; color: #334155;">Theme Preview:</strong>
-          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;" id="theme-preview">
-            <%
-              let previewColors = { primary: '#0077B6', accent: '#84CC16', secondary: '#1A365D' };
-              if (settings.site_theme === 'fall') {
-                previewColors = { primary: '#B45309', accent: '#DC2626', secondary: '#78350F' };
-              } else if (settings.site_theme === 'winter') {
-                previewColors = { primary: '#0EA5E9', accent: '#06B6D4', secondary: '#1E3A5F' };
-              }
-            %>
-            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.primary %>;" title="Primary"></div>
-            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.accent %>;" title="Accent"></div>
-            <div style="width: 40px; height: 40px; border-radius: 0.375rem; background: <%= previewColors.secondary %>;" title="Secondary"></div>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; align-items: center;" id="theme-preview">
+            <div id="preview-primary" style="width: 40px; height: 40px; border-radius: 0.375rem; transition: background 0.3s;" title="Primary"></div>
+            <div id="preview-accent" style="width: 40px; height: 40px; border-radius: 0.375rem; transition: background 0.3s;" title="Accent"></div>
+            <div id="preview-secondary" style="width: 40px; height: 40px; border-radius: 0.375rem; transition: background 0.3s;" title="Secondary"></div>
+            <span id="preview-labels" style="margin-left: 1rem; font-size: 0.8125rem; color: #64748B;"></span>
           </div>
         </div>
 
-        <div class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+        <!-- Fall Theme Animation -->
+        <div id="fall-animation-option" class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0; display: <%= settings.site_theme === 'fall' ? 'block' : 'none' %>;">
           <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-            <input type="checkbox" name="show_falling_leaves" value="true" <%= settings.show_falling_leaves === 'true' ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: #0077B6;">
+            <input type="checkbox" name="show_falling_leaves" value="true" <%= settings.show_falling_leaves === 'true' ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: #B45309;">
             <span style="font-weight: 600;">Enable Falling Leaves Animation</span>
           </label>
           <small style="color: #64748B; display: block; margin-top: 0.5rem; margin-left: 2rem;">Adds animated falling leaves to the hero section. Great for fall/autumn seasonal feel!</small>
+        </div>
+
+        <!-- Winter Theme Animation -->
+        <div id="winter-animation-option" class="form-group" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0; display: <%= settings.site_theme === 'winter' ? 'block' : 'none' %>;">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" name="show_falling_snow" value="true" <%= settings.show_falling_snow === 'true' ? 'checked' : '' %> style="width: 20px; height: 20px; accent-color: #0EA5E9;">
+            <span style="font-weight: 600;">Enable Falling Snow Animation</span>
+          </label>
+          <small style="color: #64748B; display: block; margin-top: 0.5rem; margin-left: 2rem;">Adds animated falling snowflakes to the hero section. Perfect for winter/holiday feel!</small>
         </div>
       </div>
     </div>
@@ -764,6 +767,33 @@
 document.getElementById('reviews_source').addEventListener('change', function() {
   document.getElementById('google-api-settings').style.display = this.value === 'google_api' ? 'block' : 'none';
   document.getElementById('third-party-settings').style.display = this.value === 'third_party' ? 'block' : 'none';
+});
+
+// Theme preview and animation options
+const themeColors = {
+  normal: { primary: '#0077B6', accent: '#84CC16', secondary: '#1A365D', label: 'Primary, Accent, Secondary' },
+  fall: { primary: '#B45309', accent: '#DC2626', secondary: '#78350F', label: 'Amber, Red, Brown' },
+  winter: { primary: '#0EA5E9', accent: '#06B6D4', secondary: '#1E3A5F', label: 'Sky Blue, Cyan, Navy' }
+};
+
+function updateThemePreview(theme) {
+  const colors = themeColors[theme] || themeColors.normal;
+  document.getElementById('preview-primary').style.background = colors.primary;
+  document.getElementById('preview-accent').style.background = colors.accent;
+  document.getElementById('preview-secondary').style.background = colors.secondary;
+  document.getElementById('preview-labels').textContent = colors.label;
+
+  // Show/hide animation options based on theme
+  document.getElementById('fall-animation-option').style.display = theme === 'fall' ? 'block' : 'none';
+  document.getElementById('winter-animation-option').style.display = theme === 'winter' ? 'block' : 'none';
+}
+
+// Initialize theme preview on page load
+updateThemePreview(document.getElementById('site_theme').value);
+
+// Update preview when theme changes
+document.getElementById('site_theme').addEventListener('change', function() {
+  updateThemePreview(this.value);
 });
 
 // Navigation management functions
