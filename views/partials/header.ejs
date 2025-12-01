@@ -110,13 +110,30 @@
         
         <nav class="main-nav">
           <ul class="nav-links">
-            <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a></li>
-            <li><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">About</a></li>
-            <li><a href="/services" class="<%= currentPath.startsWith('/services') ? 'active' : '' %>">Services</a></li>
-            <li><a href="/locations" class="<%= currentPath === '/locations' ? 'active' : '' %>">Locations</a></li>
-            <li><a href="/mobile-dentistry" class="<%= currentPath === '/mobile-dentistry' ? 'active' : '' %>">Mobile Dentistry</a></li>
-            <li><a href="/blog" class="<%= currentPath.startsWith('/blog') ? 'active' : '' %>">Blog</a></li>
-            <li><a href="/contact" class="<%= currentPath === '/contact' ? 'active' : '' %>">Contact</a></li>
+            <%
+              // Parse navigation items from settings
+              let navItems = [];
+              try {
+                navItems = JSON.parse(settings.main_nav_links || '[]');
+              } catch (e) {
+                navItems = [];
+              }
+              // Default navigation if none configured
+              if (navItems.length === 0) {
+                navItems = [
+                  { label: 'Home', url: '/', visible: true },
+                  { label: 'About', url: '/about', visible: true },
+                  { label: 'Services', url: '/services', visible: true },
+                  { label: 'Locations', url: '/locations', visible: true },
+                  { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
+                  { label: 'Blog', url: '/blog', visible: true },
+                  { label: 'Contact', url: '/contact', visible: true }
+                ];
+              }
+            %>
+            <% navItems.filter(item => item.visible !== false).forEach(item => { %>
+              <li><a href="<%= item.url %>" class="<%= currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url)) ? 'active' : '' %>"><%= item.label %></a></li>
+            <% }); %>
           </ul>
           
           <div class="header-cta">

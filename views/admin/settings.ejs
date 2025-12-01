@@ -378,6 +378,85 @@
     </div>
   </div>
 
+  <!-- Navigation Settings -->
+  <div style="grid-column: 1 / -1; margin-top: 1.5rem;">
+    <div class="card">
+      <div class="card-header">
+        <h2>Navigation Menu</h2>
+      </div>
+      <div class="card-body">
+        <p style="color: #64748B; margin-bottom: 1.5rem;">Configure the main navigation links. Drag to reorder, toggle visibility, or edit labels and URLs.</p>
+
+        <div id="nav-items-container">
+          <%
+            let navItems = [];
+            try {
+              navItems = JSON.parse(settings.main_nav_links || '[]');
+            } catch (e) {
+              // Default navigation items
+              navItems = [
+                { label: 'Home', url: '/', visible: true },
+                { label: 'About', url: '/about', visible: true },
+                { label: 'Services', url: '/services', visible: true },
+                { label: 'Locations', url: '/locations', visible: true },
+                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
+                { label: 'Blog', url: '/blog', visible: true },
+                { label: 'Contact', url: '/contact', visible: true }
+              ];
+            }
+            if (navItems.length === 0) {
+              navItems = [
+                { label: 'Home', url: '/', visible: true },
+                { label: 'About', url: '/about', visible: true },
+                { label: 'Services', url: '/services', visible: true },
+                { label: 'Locations', url: '/locations', visible: true },
+                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
+                { label: 'Blog', url: '/blog', visible: true },
+                { label: 'Contact', url: '/contact', visible: true }
+              ];
+            }
+          %>
+          <% navItems.forEach((item, index) => { %>
+          <div class="nav-item-row" data-index="<%= index %>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+            <div class="drag-handle" style="cursor: grab; color: #94A3B8; padding: 0.25rem;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+            </div>
+            <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+              <button type="button" onclick="moveNavItem(<%= index %>, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+              </button>
+              <button type="button" onclick="moveNavItem(<%= index %>, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+            <input type="text" name="nav_label_<%= index %>" value="<%= item.label %>" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+            <input type="text" name="nav_url_<%= index %>" value="<%= item.url %>" placeholder="/page-url" style="flex: 1.5; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+              <input type="checkbox" name="nav_visible_<%= index %>" value="true" <%= item.visible !== false ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: #0077B6;">
+              <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>
+            </label>
+            <button type="button" onclick="removeNavItem(<%= index %>)" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+
+        <input type="hidden" id="main_nav_links" name="main_nav_links" value='<%= JSON.stringify(navItems) %>'>
+        <input type="hidden" id="nav_item_count" name="nav_item_count" value="<%= navItems.length %>">
+
+        <button type="button" onclick="addNavItem()" class="btn btn-secondary" style="margin-top: 1rem;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Navigation Item
+        </button>
+
+        <div style="margin-top: 1rem; padding: 0.75rem; background: #DBEAFE; border-radius: 0.375rem; font-size: 0.875rem; color: #1E40AF;">
+          <strong>Tip:</strong> Use the up/down arrows to reorder items. Uncheck "Visible" to hide a link without deleting it.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer Content Section -->
   <div style="grid-column: 1 / -1; margin-top: 1.5rem;">
     <div class="card">
@@ -568,6 +647,114 @@ document.getElementById('reviews_source').addEventListener('change', function() 
   document.getElementById('google-api-settings').style.display = this.value === 'google_api' ? 'block' : 'none';
   document.getElementById('third-party-settings').style.display = this.value === 'third_party' ? 'block' : 'none';
 });
+
+// Navigation management functions
+function getNavItems() {
+  const items = [];
+  document.querySelectorAll('.nav-item-row').forEach((row, index) => {
+    const label = row.querySelector('input[name^="nav_label_"]').value;
+    const url = row.querySelector('input[name^="nav_url_"]').value;
+    const visible = row.querySelector('input[name^="nav_visible_"]').checked;
+    items.push({ label, url, visible });
+  });
+  return items;
+}
+
+function updateNavHiddenField() {
+  document.getElementById('main_nav_links').value = JSON.stringify(getNavItems());
+  document.getElementById('nav_item_count').value = document.querySelectorAll('.nav-item-row').length;
+}
+
+function moveNavItem(index, direction) {
+  const container = document.getElementById('nav-items-container');
+  const rows = Array.from(container.querySelectorAll('.nav-item-row'));
+  const newIndex = index + direction;
+
+  if (newIndex < 0 || newIndex >= rows.length) return;
+
+  const currentRow = rows[index];
+  const targetRow = rows[newIndex];
+
+  if (direction === -1) {
+    container.insertBefore(currentRow, targetRow);
+  } else {
+    container.insertBefore(targetRow, currentRow);
+  }
+
+  // Re-index all rows
+  reindexNavItems();
+  updateNavHiddenField();
+}
+
+function reindexNavItems() {
+  document.querySelectorAll('.nav-item-row').forEach((row, index) => {
+    row.dataset.index = index;
+    row.querySelector('input[name^="nav_label_"]').name = 'nav_label_' + index;
+    row.querySelector('input[name^="nav_url_"]').name = 'nav_url_' + index;
+    row.querySelector('input[name^="nav_visible_"]').name = 'nav_visible_' + index;
+
+    // Update button onclick handlers
+    const moveUpBtn = row.querySelectorAll('.move-btn')[0];
+    const moveDownBtn = row.querySelectorAll('.move-btn')[1];
+    const removeBtn = row.querySelector('.remove-nav-btn');
+
+    moveUpBtn.setAttribute('onclick', 'moveNavItem(' + index + ', -1)');
+    moveDownBtn.setAttribute('onclick', 'moveNavItem(' + index + ', 1)');
+    removeBtn.setAttribute('onclick', 'removeNavItem(' + index + ')');
+  });
+}
+
+function removeNavItem(index) {
+  const rows = document.querySelectorAll('.nav-item-row');
+  if (rows.length <= 1) {
+    alert('You must have at least one navigation item.');
+    return;
+  }
+  rows[index].remove();
+  reindexNavItems();
+  updateNavHiddenField();
+}
+
+function addNavItem() {
+  const container = document.getElementById('nav-items-container');
+  const index = container.querySelectorAll('.nav-item-row').length;
+
+  const newRow = document.createElement('div');
+  newRow.className = 'nav-item-row';
+  newRow.dataset.index = index;
+  newRow.style.cssText = 'display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;';
+
+  newRow.innerHTML = `
+    <div class="drag-handle" style="cursor: grab; color: #94A3B8; padding: 0.25rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+    </div>
+    <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+      <button type="button" onclick="moveNavItem(${index}, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+      </button>
+      <button type="button" onclick="moveNavItem(${index}, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+    <input type="text" name="nav_label_${index}" value="" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+    <input type="text" name="nav_url_${index}" value="" placeholder="/page-url" style="flex: 1.5; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+      <input type="checkbox" name="nav_visible_${index}" value="true" checked style="width: 18px; height: 18px; accent-color: #0077B6;">
+      <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>
+    </label>
+    <button type="button" onclick="removeNavItem(${index})" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+
+  container.appendChild(newRow);
+  updateNavHiddenField();
+  newRow.querySelector('input[name^="nav_label_"]').focus();
+}
+
+// Update hidden field when inputs change
+document.getElementById('nav-items-container').addEventListener('input', updateNavHiddenField);
+document.getElementById('nav-items-container').addEventListener('change', updateNavHiddenField);
 
 // Test email configuration
 document.getElementById('test-email-btn').addEventListener('click', async function() {
