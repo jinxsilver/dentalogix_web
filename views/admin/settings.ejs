@@ -418,34 +418,54 @@
             // Get list of top-level items for parent dropdown
             const topLevelItems = navItems.filter(item => !item.parent);
           %>
+          <!-- Column Headers -->
+          <div style="display: grid; grid-template-columns: 60px 1.5fr 1fr 140px 70px 40px; gap: 0.5rem; padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; font-size: 0.75rem; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div>Order</div>
+            <div>Menu Label</div>
+            <div>URL</div>
+            <div>Nest Under</div>
+            <div>Show</div>
+            <div></div>
+          </div>
+
           <% navItems.forEach((item, index) => { %>
-          <div class="nav-item-row" data-index="<%= index %>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: <%= item.parent ? '#EEF2FF' : '#F8FAFC' %>; border-radius: 0.5rem; margin-bottom: 0.5rem; <%= item.parent ? 'margin-left: 2rem; border-left: 3px solid #6366F1;' : '' %>">
-            <div class="drag-handle" style="cursor: grab; color: #94A3B8; padding: 0.25rem;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+          <div class="nav-item-row" data-index="<%= index %>" style="display: grid; grid-template-columns: 60px 1.5fr 1fr 140px 70px 40px; gap: 0.5rem; align-items: center; padding: 0.75rem; background: <%= item.parent ? '#EEF2FF' : '#F8FAFC' %>; border-radius: 0.5rem; margin-bottom: 0.5rem; <%= item.parent ? 'margin-left: 1.5rem; border-left: 3px solid #6366F1;' : '' %>">
+            <!-- Order/Move buttons -->
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 600; color: #94A3B8; font-size: 0.75rem; width: 20px;"><%= index + 1 %>.</span>
+              <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+                <button type="button" onclick="moveNavItem(<%= index %>, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+                </button>
+                <button type="button" onclick="moveNavItem(<%= index %>, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </div>
             </div>
-            <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
-              <button type="button" onclick="moveNavItem(<%= index %>, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
-              </button>
-              <button type="button" onclick="moveNavItem(<%= index %>, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-            </div>
-            <input type="text" name="nav_label_<%= index %>" value="<%= item.label %>" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
-            <input type="text" name="nav_url_<%= index %>" value="<%= item.url %>" placeholder="/page-url" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
-            <select name="nav_parent_<%= index %>" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; min-width: 100px;">
-              <option value="">Top level</option>
+
+            <!-- Menu Label -->
+            <input type="text" name="nav_label_<%= index %>" value="<%= item.label %>" placeholder="e.g., About Us" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500;">
+
+            <!-- URL -->
+            <input type="text" name="nav_url_<%= index %>" value="<%= item.url %>" placeholder="/page-url" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace; color: #6366F1;">
+
+            <!-- Nest Under (Parent) -->
+            <select name="nav_parent_<%= index %>" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; background: white;">
+              <option value="">— None —</option>
               <% navItems.forEach((parentItem, parentIndex) => { %>
                 <% if (parentIndex !== index && !parentItem.parent) { %>
-                  <option value="<%= parentItem.label %>" <%= item.parent === parentItem.label ? 'selected' : '' %>><%= parentItem.label %></option>
+                  <option value="<%= parentItem.label %>" <%= item.parent === parentItem.label ? 'selected' : '' %>>↳ <%= parentItem.label %></option>
                 <% } %>
               <% }); %>
             </select>
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+
+            <!-- Visible Toggle -->
+            <label style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
               <input type="checkbox" name="nav_visible_<%= index %>" value="true" <%= item.visible !== false ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: #0077B6;">
-              <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>
             </label>
-            <button type="button" onclick="removeNavItem(<%= index %>)" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove">
+
+            <!-- Delete -->
+            <button type="button" onclick="removeNavItem(<%= index %>)" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove this item">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
@@ -757,38 +777,37 @@ function addNavItem() {
   const topLevelItems = items.filter(item => !item.parent);
 
   // Build parent options HTML
-  let parentOptions = '<option value="">Top level</option>';
+  let parentOptions = '<option value="">— None —</option>';
   topLevelItems.forEach(item => {
-    parentOptions += `<option value="${item.label}">${item.label}</option>`;
+    parentOptions += `<option value="${item.label}">↳ ${item.label}</option>`;
   });
 
   const newRow = document.createElement('div');
   newRow.className = 'nav-item-row';
   newRow.dataset.index = index;
-  newRow.style.cssText = 'display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;';
+  newRow.style.cssText = 'display: grid; grid-template-columns: 60px 1.5fr 1fr 140px 70px 40px; gap: 0.5rem; align-items: center; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;';
 
   newRow.innerHTML = `
-    <div class="drag-handle" style="cursor: grab; color: #94A3B8; padding: 0.25rem;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+    <div style="display: flex; align-items: center; gap: 0.25rem;">
+      <span style="font-weight: 600; color: #94A3B8; font-size: 0.75rem; width: 20px;">${index + 1}.</span>
+      <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+        <button type="button" onclick="moveNavItem(${index}, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+        <button type="button" onclick="moveNavItem(${index}, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
-      <button type="button" onclick="moveNavItem(${index}, -1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
-      </button>
-      <button type="button" onclick="moveNavItem(${index}, 1)" class="move-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-    </div>
-    <input type="text" name="nav_label_${index}" value="" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
-    <input type="text" name="nav_url_${index}" value="" placeholder="/page-url" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
-    <select name="nav_parent_${index}" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; min-width: 100px;">
+    <input type="text" name="nav_label_${index}" value="" placeholder="e.g., About Us" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500;">
+    <input type="text" name="nav_url_${index}" value="" placeholder="/page-url" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace; color: #6366F1;">
+    <select name="nav_parent_${index}" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; background: white;">
       ${parentOptions}
     </select>
-    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
+    <label style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
       <input type="checkbox" name="nav_visible_${index}" value="true" checked style="width: 18px; height: 18px; accent-color: #0077B6;">
-      <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>
     </label>
-    <button type="button" onclick="removeNavItem(${index})" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove">
+    <button type="button" onclick="removeNavItem(${index})" class="remove-nav-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove this item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   `;
