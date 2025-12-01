@@ -251,6 +251,12 @@ router.post('/pages/home', requireAuth, homeUpload, (req, res) => {
       settingsData.stakes_section_image = '/uploads/' + req.files.stakes_section_image[0].filename;
     }
   }
+
+  // Handle trust_credentials from form body
+  if (req.body.trust_credentials) {
+    settingsData.trust_credentials = req.body.trust_credentials;
+  }
+
   if (Object.keys(settingsData).length > 0) {
     Settings.updateSettings(settingsData);
   }
