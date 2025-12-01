@@ -4695,6 +4695,10 @@ body.theme-fall .site-footer {
   background: linear-gradient(180deg, #B45309 0%, #92400E 100%);
 }
 
+body.theme-fall .footer-bottom {
+  border-top: none;
+}
+
 body.theme-fall .footer-location a,
 body.theme-fall .footer-location.coming-soon-text strong::after {
   color: #FCD34D;  /* Warm gold/yellow - easy to read on brown */
