@@ -23,6 +23,7 @@ const SocialPosts = require('../models/socialposts');
 const Quiz = require('../models/quiz');
 const GoogleReviewsService = require('../lib/googleReviews');
 const EmailService = require('../lib/email');
+const SeoFilename = require('../lib/seoFilename');
 
 // File upload configuration
 const storage = multer.diskStorage({
@@ -53,6 +54,64 @@ const upload = multer({
 const getAdminData = () => ({
   settings: Settings.getSettings(),
   newLeadsCount: Leads.getNewCount()
+});
+
+/**
+ * Check uploaded files for SEO optimization and create warnings
+ * @param {object} req - Express request object with files
+ * @param {object} context - Context for generating suggestions
+ * @returns {array} Array of warning objects
+ */
+function checkUploadedFilesSeo(req, context = {}) {
+  const warnings = [];
+  const files = [];
+
+  // Collect all uploaded files
+  if (req.file) {
+    files.push({ file: req.file, fieldname: req.file.fieldname });
+  }
+  if (req.files) {
+    if (Array.isArray(req.files)) {
+      req.files.forEach(f => files.push({ file: f, fieldname: f.fieldname }));
+    } else {
+      // req.files is an object with field names as keys
+      Object.keys(req.files).forEach(fieldname => {
+        req.files[fieldname].forEach(f => files.push({ file: f, fieldname }));
+      });
+    }
+  }
+
+  // Check each file
+  files.forEach(({ file, fieldname }) => {
+    const originalName = file.originalname;
+    const analysis = SeoFilename.analyzeFilename(originalName);
+
+    if (!analysis.isOptimized) {
+      const suggestions = SeoFilename.generateSuggestion(originalName, {
+        ...context,
+        fieldType: fieldname
+      });
+      const warning = SeoFilename.createWarningMessage(originalName, analysis, suggestions);
+      warning.fieldname = fieldname;
+      warnings.push(warning);
+    }
+  });
+
+  return warnings;
+}
+
+/**
+ * Encode SEO warnings for URL query parameter
+ */
+function encodeSeoWarnings(warnings) {
+  if (!warnings || warnings.length === 0) return '';
+  return encodeURIComponent(JSON.stringify(warnings));
+}
+
+// Middleware to pass SEO warnings to views
+router.use((req, res, next) => {
+  res.locals.seo_warning = req.query.seo_warning || null;
+  next();
 });
 
 // =====================
@@ -301,7 +360,11 @@ router.post('/posts', requireAuth, upload.single('featured_image'), (req, res) =
     data.featured_image = '/uploads/' + req.file.filename;
   }
   Posts.create(data);
-  res.redirect('/admin/posts');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { postTitle: data.title });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/posts' + warningParam);
 });
 
 router.get('/posts/:id/edit', requireAuth, (req, res) => {
@@ -323,7 +386,11 @@ router.post('/posts/:id', requireAuth, upload.single('featured_image'), (req, re
     data.featured_image = '/uploads/' + req.file.filename;
   }
   Posts.update(req.params.id, data);
-  res.redirect('/admin/posts');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { postTitle: data.title });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/posts' + warningParam);
 });
 
 router.post('/posts/:id/delete', requireAuth, (req, res) => {
@@ -386,7 +453,11 @@ router.post('/services', requireAuth, upload.single('image'), (req, res) => {
     data.image = '/uploads/' + req.file.filename;
   }
   Services.create(data);
-  res.redirect('/admin/services');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { serviceName: data.title || data.name });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/services' + warningParam);
 });
 
 router.get('/services/:id/edit', requireAuth, (req, res) => {
@@ -412,7 +483,11 @@ router.post('/services/:id', requireAuth, upload.single('image'), (req, res) => 
     data.image = existing.image;
   }
   Services.update(req.params.id, data);
-  res.redirect('/admin/services');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { serviceName: data.title || data.name });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/services' + warningParam);
 });
 
 router.post('/services/:id/delete', requireAuth, (req, res) => {
@@ -459,7 +534,11 @@ router.post('/team', requireAuth, teamUpload, (req, res) => {
     data.undergrad_logo = '/uploads/' + req.files.undergrad_logo_file[0].filename;
   }
   Team.create(data);
-  res.redirect('/admin/team');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { teamMember: data.name });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/team' + warningParam);
 });
 
 router.get('/team/:id/edit', requireAuth, (req, res) => {
@@ -503,7 +582,11 @@ router.post('/team/:id', requireAuth, teamUpload, (req, res) => {
   }
 
   Team.update(req.params.id, data);
-  res.redirect('/admin/team');
+
+  // Check for SEO warnings
+  const seoWarnings = checkUploadedFilesSeo(req, { teamMember: data.name });
+  const warningParam = seoWarnings.length > 0 ? `?seo_warning=${encodeSeoWarnings(seoWarnings)}` : '';
+  res.redirect('/admin/team' + warningParam);
 });
 
 router.post('/team/:id/delete', requireAuth, (req, res) => {

@@ -1,0 +1,56 @@
+<%
+// Parse SEO warnings from query parameter
+const queryWarnings = typeof seo_warning !== 'undefined' ? seo_warning : null;
+let seoWarnings = [];
+if (queryWarnings) {
+  try {
+    seoWarnings = JSON.parse(decodeURIComponent(queryWarnings));
+  } catch (e) {
+    // Invalid JSON, ignore
+  }
+}
+%>
+<% if (seoWarnings && seoWarnings.length > 0) { %>
+<div class="seo-warning-banner">
+  <div class="seo-warning-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="warning-icon">
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <strong>Image SEO Warning</strong>
+    <button type="button" class="seo-warning-close" onclick="this.closest('.seo-warning-banner').remove()">&times;</button>
+  </div>
+
+  <% seoWarnings.forEach(warning => { %>
+  <div class="seo-warning-item">
+    <p class="seo-warning-message"><%= warning.message %></p>
+
+    <% if (warning.issues && warning.issues.length > 0) { %>
+    <div class="seo-warning-issues">
+      <strong>Issues found:</strong>
+      <ul>
+        <% warning.issues.forEach(issue => { %>
+        <li><%= issue %></li>
+        <% }); %>
+      </ul>
+    </div>
+    <% } %>
+
+    <div class="seo-warning-suggestion">
+      <strong>Suggested filenames:</strong>
+      <pre><%= warning.suggestion %></pre>
+    </div>
+
+    <div class="seo-warning-tips">
+      <strong>SEO Tips for Image Filenames:</strong>
+      <ul>
+        <% warning.tips.forEach(tip => { %>
+        <li><%= tip %></li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+  <% }); %>
+</div>
+<% } %>

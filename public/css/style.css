@@ -3491,8 +3491,8 @@ section {
 }
 
 .credential-item img {
-  max-height: 40px;
-  max-width: 120px;
+  max-height: 100px;
+  max-width: 280px;
   object-fit: contain;
   filter: grayscale(30%);
   opacity: 0.8;
@@ -3523,15 +3523,15 @@ section {
 .credential-icon {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 1.1rem;
   color: var(--color-primary);
   background: var(--color-gray-100);
-  padding: 0.25rem 0.5rem;
+  padding: 0.4rem 0.6rem;
   border-radius: var(--radius-sm);
 }
 
 .credential-text {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--color-gray-600);
   font-weight: 500;
   white-space: nowrap;
@@ -3552,20 +3552,20 @@ section {
   }
 
   .credential-item img {
-    max-height: 32px;
-    max-width: 100px;
+    max-height: 55px;
+    max-width: 160px;
   }
 
   .credential-fallback {
-    padding: var(--space-xs) var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
   }
 
   .credential-icon {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
   }
 
   .credential-text {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
   }
 }
 
