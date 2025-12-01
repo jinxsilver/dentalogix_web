@@ -50,6 +50,19 @@ const upload = multer({
   }
 });
 
+// Separate upload handler for backup files (JSON)
+const backupUpload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === '.json') {
+      return cb(null, true);
+    }
+    cb(new Error('Only JSON backup files are allowed'));
+  }
+});
+
 // Helper function
 const getAdminData = () => ({
   settings: Settings.getSettings(),
@@ -850,7 +863,7 @@ router.get('/export', requireAuth, (req, res) => {
 });
 
 // Import data from JSON
-router.post('/import', requireAuth, upload.single('backup_file'), (req, res) => {
+router.post('/import', requireAuth, backupUpload.single('backup_file'), (req, res) => {
   try {
     if (!req.file) {
       return res.redirect('/admin/settings?error=No file uploaded');
