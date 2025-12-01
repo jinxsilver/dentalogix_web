@@ -487,6 +487,94 @@
     </div>
   </div>
 
+  <!-- Trust Credentials Section -->
+  <div style="grid-column: 1 / -1; margin-top: 1.5rem;">
+    <div class="card">
+      <div class="card-header">
+        <h2>Trust Credentials (Homepage)</h2>
+      </div>
+      <div class="card-body">
+        <p style="color: #64748B; margin-bottom: 1.5rem;">Manage the "Trusted & Accredited" logos displayed on your homepage. Upload credential images to <code style="background: #E2E8F0; padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/public/images/credentials/</code></p>
+
+        <div id="credentials-container">
+          <%
+            let credentials = [];
+            try {
+              credentials = JSON.parse(settings.trust_credentials || '[]');
+            } catch (e) {
+              credentials = [];
+            }
+            // Default credentials if none configured
+            if (credentials.length === 0) {
+              credentials = [
+                { name: 'American Dental Association', abbrev: 'ADA', image: '/images/credentials/ada-logo.png', visible: true },
+                { name: 'NYU College of Dentistry', abbrev: 'NYU', image: '/images/credentials/nyu-dentistry-logo.png', visible: true },
+                { name: 'New York State Licensed', abbrev: 'NY', image: '/images/credentials/ny-dental-license.png', visible: true },
+                { name: 'Connecticut State Licensed', abbrev: 'CT', image: '/images/credentials/ct-dental-license.png', visible: true }
+              ];
+            }
+          %>
+          <!-- Column Headers -->
+          <div style="display: grid; grid-template-columns: 60px 1.5fr 80px 1fr 70px 40px; gap: 0.5rem; padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; font-size: 0.75rem; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div>Order</div>
+            <div>Credential Name</div>
+            <div>Abbrev</div>
+            <div>Image Path</div>
+            <div>Show</div>
+            <div></div>
+          </div>
+
+          <% credentials.forEach((cred, index) => { %>
+          <div class="credential-row" data-index="<%= index %>" style="display: grid; grid-template-columns: 60px 1.5fr 80px 1fr 70px 40px; gap: 0.5rem; align-items: center; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+            <!-- Order/Move buttons -->
+            <div style="display: flex; align-items: center; gap: 0.25rem;">
+              <span style="font-weight: 600; color: #94A3B8; font-size: 0.75rem; width: 20px;"><%= index + 1 %>.</span>
+              <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+                <button type="button" onclick="moveCredential(<%= index %>, -1)" class="move-cred-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+                </button>
+                <button type="button" onclick="moveCredential(<%= index %>, 1)" class="move-cred-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Credential Name -->
+            <input type="text" name="cred_name_<%= index %>" value="<%= cred.name %>" placeholder="e.g., American Dental Association" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+
+            <!-- Abbreviation -->
+            <input type="text" name="cred_abbrev_<%= index %>" value="<%= cred.abbrev %>" placeholder="ADA" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; text-align: center; font-weight: 600;">
+
+            <!-- Image Path -->
+            <input type="text" name="cred_image_<%= index %>" value="<%= cred.image %>" placeholder="/images/credentials/logo.png" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.75rem; font-family: monospace; color: #6366F1;">
+
+            <!-- Visible Toggle -->
+            <label style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <input type="checkbox" name="cred_visible_<%= index %>" value="true" <%= cred.visible !== false ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: #0077B6;">
+            </label>
+
+            <!-- Delete -->
+            <button type="button" onclick="removeCredential(<%= index %>)" class="remove-cred-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove this credential">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <% }); %>
+        </div>
+
+        <input type="hidden" id="trust_credentials" name="trust_credentials" value='<%= JSON.stringify(credentials) %>'>
+
+        <button type="button" onclick="addCredential()" class="btn btn-secondary" style="margin-top: 1rem;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 0.5rem;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Credential
+        </button>
+
+        <div style="margin-top: 1rem; padding: 0.75rem; background: #DBEAFE; border-radius: 0.375rem; font-size: 0.875rem; color: #1E40AF;">
+          <strong>Tip:</strong> Upload your credential logos to <code style="background: rgba(0,0,0,0.1); padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/public/images/credentials/</code> folder, then enter the path here (e.g., <code style="background: rgba(0,0,0,0.1); padding: 0.125rem 0.375rem; border-radius: 0.25rem;">/images/credentials/my-logo.png</code>).
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer Content Section -->
   <div style="grid-column: 1 / -1; margin-top: 1.5rem;">
     <div class="card">
@@ -820,6 +908,117 @@ function addNavItem() {
 // Update hidden field when inputs change
 document.getElementById('nav-items-container').addEventListener('input', updateNavHiddenField);
 document.getElementById('nav-items-container').addEventListener('change', updateNavHiddenField);
+
+// Credential management functions
+function getCredentials() {
+  const items = [];
+  document.querySelectorAll('.credential-row').forEach((row) => {
+    const name = row.querySelector('input[name^="cred_name_"]').value;
+    const abbrev = row.querySelector('input[name^="cred_abbrev_"]').value;
+    const image = row.querySelector('input[name^="cred_image_"]').value;
+    const visible = row.querySelector('input[name^="cred_visible_"]').checked;
+    items.push({ name, abbrev, image, visible });
+  });
+  return items;
+}
+
+function updateCredentialsHiddenField() {
+  document.getElementById('trust_credentials').value = JSON.stringify(getCredentials());
+}
+
+function moveCredential(index, direction) {
+  const container = document.getElementById('credentials-container');
+  const rows = Array.from(container.querySelectorAll('.credential-row'));
+  const newIndex = index + direction;
+
+  if (newIndex < 0 || newIndex >= rows.length) return;
+
+  const currentRow = rows[index];
+  const targetRow = rows[newIndex];
+
+  if (direction === -1) {
+    container.insertBefore(currentRow, targetRow);
+  } else {
+    container.insertBefore(targetRow, currentRow);
+  }
+
+  reindexCredentials();
+  updateCredentialsHiddenField();
+}
+
+function reindexCredentials() {
+  document.querySelectorAll('.credential-row').forEach((row, index) => {
+    row.dataset.index = index;
+    row.querySelector('input[name^="cred_name_"]').name = 'cred_name_' + index;
+    row.querySelector('input[name^="cred_abbrev_"]').name = 'cred_abbrev_' + index;
+    row.querySelector('input[name^="cred_image_"]').name = 'cred_image_' + index;
+    row.querySelector('input[name^="cred_visible_"]').name = 'cred_visible_' + index;
+
+    // Update order number display
+    row.querySelector('span').textContent = (index + 1) + '.';
+
+    // Update button onclick handlers
+    const moveUpBtn = row.querySelectorAll('.move-cred-btn')[0];
+    const moveDownBtn = row.querySelectorAll('.move-cred-btn')[1];
+    const removeBtn = row.querySelector('.remove-cred-btn');
+
+    moveUpBtn.setAttribute('onclick', 'moveCredential(' + index + ', -1)');
+    moveDownBtn.setAttribute('onclick', 'moveCredential(' + index + ', 1)');
+    removeBtn.setAttribute('onclick', 'removeCredential(' + index + ')');
+  });
+}
+
+function removeCredential(index) {
+  const rows = document.querySelectorAll('.credential-row');
+  if (rows.length <= 1) {
+    alert('You must have at least one credential.');
+    return;
+  }
+  rows[index].remove();
+  reindexCredentials();
+  updateCredentialsHiddenField();
+}
+
+function addCredential() {
+  const container = document.getElementById('credentials-container');
+  const index = container.querySelectorAll('.credential-row').length;
+
+  const newRow = document.createElement('div');
+  newRow.className = 'credential-row';
+  newRow.dataset.index = index;
+  newRow.style.cssText = 'display: grid; grid-template-columns: 60px 1.5fr 80px 1fr 70px 40px; gap: 0.5rem; align-items: center; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;';
+
+  newRow.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 0.25rem;">
+      <span style="font-weight: 600; color: #94A3B8; font-size: 0.75rem; width: 20px;">${index + 1}.</span>
+      <div class="move-buttons" style="display: flex; flex-direction: column; gap: 2px;">
+        <button type="button" onclick="moveCredential(${index}, -1)" class="move-cred-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+        <button type="button" onclick="moveCredential(${index}, 1)" class="move-cred-btn" style="background: none; border: none; cursor: pointer; padding: 2px; color: #64748B;" title="Move down">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+    <input type="text" name="cred_name_${index}" value="" placeholder="e.g., American Dental Association" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
+    <input type="text" name="cred_abbrev_${index}" value="" placeholder="ADA" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; text-align: center; font-weight: 600;">
+    <input type="text" name="cred_image_${index}" value="" placeholder="/images/credentials/logo.png" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.75rem; font-family: monospace; color: #6366F1;">
+    <label style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
+      <input type="checkbox" name="cred_visible_${index}" value="true" checked style="width: 18px; height: 18px; accent-color: #0077B6;">
+    </label>
+    <button type="button" onclick="removeCredential(${index})" class="remove-cred-btn" style="background: none; border: none; cursor: pointer; padding: 0.5rem; color: #EF4444;" title="Remove this credential">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+
+  container.appendChild(newRow);
+  updateCredentialsHiddenField();
+  newRow.querySelector('input[name^="cred_name_"]').focus();
+}
+
+// Update hidden field when credential inputs change
+document.getElementById('credentials-container').addEventListener('input', updateCredentialsHiddenField);
+document.getElementById('credentials-container').addEventListener('change', updateCredentialsHiddenField);
 
 // Test email configuration
 document.getElementById('test-email-btn').addEventListener('click', async function() {
