@@ -2513,7 +2513,6 @@ section {
 
 .footer-bottom {
   padding-top: var(--space-xl);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4923,9 +4922,6 @@ body.theme-fall .site-footer {
   background: linear-gradient(180deg, #B45309 0%, #92400E 100%);
 }
 
-body.theme-fall .footer-bottom {
-  border-top: none;
-}
 
 body.theme-fall .footer-location a,
 body.theme-fall .footer-location.coming-soon-text strong::after {
@@ -5119,9 +5115,6 @@ body.theme-winter .section-label {
   color: var(--color-primary);
 }
 
-body.theme-winter .footer-bottom {
-  border-top: none;
-}
 
 body.theme-winter .site-footer {
   background: linear-gradient(180deg, #0369A1 0%, #1E3A5F 100%);
