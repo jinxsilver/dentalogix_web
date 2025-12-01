@@ -274,11 +274,13 @@ img {
 /* Dropdown Navigation */
 .nav-links li {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .nav-links li.has-dropdown > a {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.125rem;
 }
 
@@ -289,8 +291,6 @@ img {
   width: 10px;
   height: 10px;
   margin-left: 2px;
-  position: relative;
-  top: 1px;
 }
 
 .nav-links li.has-dropdown:hover .dropdown-arrow {
