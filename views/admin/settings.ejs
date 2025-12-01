@@ -385,7 +385,7 @@
         <h2>Navigation Menu</h2>
       </div>
       <div class="card-body">
-        <p style="color: #64748B; margin-bottom: 1.5rem;">Configure the main navigation links. Drag to reorder, toggle visibility, or edit labels and URLs.</p>
+        <p style="color: #64748B; margin-bottom: 1.5rem;">Configure the main navigation links. Use the "Parent" dropdown to create dropdown submenus.</p>
 
         <div id="nav-items-container">
           <%
@@ -395,29 +395,31 @@
             } catch (e) {
               // Default navigation items
               navItems = [
-                { label: 'Home', url: '/', visible: true },
-                { label: 'About', url: '/about', visible: true },
-                { label: 'Services', url: '/services', visible: true },
-                { label: 'Locations', url: '/locations', visible: true },
-                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
-                { label: 'Blog', url: '/blog', visible: true },
-                { label: 'Contact', url: '/contact', visible: true }
+                { label: 'Home', url: '/', visible: true, parent: '' },
+                { label: 'About', url: '/about', visible: true, parent: '' },
+                { label: 'Services', url: '/services', visible: true, parent: '' },
+                { label: 'Locations', url: '/locations', visible: true, parent: '' },
+                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true, parent: '' },
+                { label: 'Blog', url: '/blog', visible: true, parent: '' },
+                { label: 'Contact', url: '/contact', visible: true, parent: '' }
               ];
             }
             if (navItems.length === 0) {
               navItems = [
-                { label: 'Home', url: '/', visible: true },
-                { label: 'About', url: '/about', visible: true },
-                { label: 'Services', url: '/services', visible: true },
-                { label: 'Locations', url: '/locations', visible: true },
-                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
-                { label: 'Blog', url: '/blog', visible: true },
-                { label: 'Contact', url: '/contact', visible: true }
+                { label: 'Home', url: '/', visible: true, parent: '' },
+                { label: 'About', url: '/about', visible: true, parent: '' },
+                { label: 'Services', url: '/services', visible: true, parent: '' },
+                { label: 'Locations', url: '/locations', visible: true, parent: '' },
+                { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true, parent: '' },
+                { label: 'Blog', url: '/blog', visible: true, parent: '' },
+                { label: 'Contact', url: '/contact', visible: true, parent: '' }
               ];
             }
+            // Get list of top-level items for parent dropdown
+            const topLevelItems = navItems.filter(item => !item.parent);
           %>
           <% navItems.forEach((item, index) => { %>
-          <div class="nav-item-row" data-index="<%= index %>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F8FAFC; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+          <div class="nav-item-row" data-index="<%= index %>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: <%= item.parent ? '#EEF2FF' : '#F8FAFC' %>; border-radius: 0.5rem; margin-bottom: 0.5rem; <%= item.parent ? 'margin-left: 2rem; border-left: 3px solid #6366F1;' : '' %>">
             <div class="drag-handle" style="cursor: grab; color: #94A3B8; padding: 0.25rem;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
             </div>
@@ -430,7 +432,15 @@
               </button>
             </div>
             <input type="text" name="nav_label_<%= index %>" value="<%= item.label %>" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
-            <input type="text" name="nav_url_<%= index %>" value="<%= item.url %>" placeholder="/page-url" style="flex: 1.5; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+            <input type="text" name="nav_url_<%= index %>" value="<%= item.url %>" placeholder="/page-url" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+            <select name="nav_parent_<%= index %>" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; min-width: 100px;">
+              <option value="">Top level</option>
+              <% navItems.forEach((parentItem, parentIndex) => { %>
+                <% if (parentIndex !== index && !parentItem.parent) { %>
+                  <option value="<%= parentItem.label %>" <%= item.parent === parentItem.label ? 'selected' : '' %>><%= parentItem.label %></option>
+                <% } %>
+              <% }); %>
+            </select>
             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
               <input type="checkbox" name="nav_visible_<%= index %>" value="true" <%= item.visible !== false ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: #0077B6;">
               <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>
@@ -451,7 +461,7 @@
         </button>
 
         <div style="margin-top: 1rem; padding: 0.75rem; background: #DBEAFE; border-radius: 0.375rem; font-size: 0.875rem; color: #1E40AF;">
-          <strong>Tip:</strong> Use the up/down arrows to reorder items. Uncheck "Visible" to hide a link without deleting it.
+          <strong>Tip:</strong> Select a "Parent" to create dropdown submenus. Items with a parent will appear as dropdown items under that parent.
         </div>
       </div>
     </div>
@@ -654,8 +664,9 @@ function getNavItems() {
   document.querySelectorAll('.nav-item-row').forEach((row, index) => {
     const label = row.querySelector('input[name^="nav_label_"]').value;
     const url = row.querySelector('input[name^="nav_url_"]').value;
+    const parent = row.querySelector('select[name^="nav_parent_"]').value;
     const visible = row.querySelector('input[name^="nav_visible_"]').checked;
-    items.push({ label, url, visible });
+    items.push({ label, url, parent, visible });
   });
   return items;
 }
@@ -691,6 +702,7 @@ function reindexNavItems() {
     row.dataset.index = index;
     row.querySelector('input[name^="nav_label_"]').name = 'nav_label_' + index;
     row.querySelector('input[name^="nav_url_"]').name = 'nav_url_' + index;
+    row.querySelector('select[name^="nav_parent_"]').name = 'nav_parent_' + index;
     row.querySelector('input[name^="nav_visible_"]').name = 'nav_visible_' + index;
 
     // Update button onclick handlers
@@ -701,6 +713,29 @@ function reindexNavItems() {
     moveUpBtn.setAttribute('onclick', 'moveNavItem(' + index + ', -1)');
     moveDownBtn.setAttribute('onclick', 'moveNavItem(' + index + ', 1)');
     removeBtn.setAttribute('onclick', 'removeNavItem(' + index + ')');
+  });
+  updateParentDropdowns();
+}
+
+function updateParentDropdowns() {
+  const items = getNavItems();
+  const topLevelItems = items.filter(item => !item.parent);
+
+  document.querySelectorAll('.nav-parent-select').forEach((select, index) => {
+    const currentValue = select.value;
+    const currentLabel = items[index].label;
+
+    // Clear and rebuild options
+    select.innerHTML = '<option value="">Top level</option>';
+    topLevelItems.forEach(item => {
+      if (item.label !== currentLabel) {
+        const option = document.createElement('option');
+        option.value = item.label;
+        option.textContent = item.label;
+        if (item.label === currentValue) option.selected = true;
+        select.appendChild(option);
+      }
+    });
   });
 }
 
@@ -718,6 +753,14 @@ function removeNavItem(index) {
 function addNavItem() {
   const container = document.getElementById('nav-items-container');
   const index = container.querySelectorAll('.nav-item-row').length;
+  const items = getNavItems();
+  const topLevelItems = items.filter(item => !item.parent);
+
+  // Build parent options HTML
+  let parentOptions = '<option value="">Top level</option>';
+  topLevelItems.forEach(item => {
+    parentOptions += `<option value="${item.label}">${item.label}</option>`;
+  });
 
   const newRow = document.createElement('div');
   newRow.className = 'nav-item-row';
@@ -737,7 +780,10 @@ function addNavItem() {
       </button>
     </div>
     <input type="text" name="nav_label_${index}" value="" placeholder="Label" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem;">
-    <input type="text" name="nav_url_${index}" value="" placeholder="/page-url" style="flex: 1.5; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+    <input type="text" name="nav_url_${index}" value="" placeholder="/page-url" style="flex: 1; padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.875rem; font-family: monospace;">
+    <select name="nav_parent_${index}" class="nav-parent-select" style="padding: 0.5rem; border: 1px solid #E2E8F0; border-radius: 0.375rem; font-size: 0.8125rem; min-width: 100px;">
+      ${parentOptions}
+    </select>
     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; white-space: nowrap;">
       <input type="checkbox" name="nav_visible_${index}" value="true" checked style="width: 18px; height: 18px; accent-color: #0077B6;">
       <span style="font-size: 0.8125rem; color: #64748B;">Visible</span>

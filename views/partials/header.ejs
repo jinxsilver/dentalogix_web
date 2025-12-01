@@ -121,18 +121,40 @@
               // Default navigation if none configured
               if (navItems.length === 0) {
                 navItems = [
-                  { label: 'Home', url: '/', visible: true },
-                  { label: 'About', url: '/about', visible: true },
-                  { label: 'Services', url: '/services', visible: true },
-                  { label: 'Locations', url: '/locations', visible: true },
-                  { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true },
-                  { label: 'Blog', url: '/blog', visible: true },
-                  { label: 'Contact', url: '/contact', visible: true }
+                  { label: 'Home', url: '/', visible: true, parent: '' },
+                  { label: 'About', url: '/about', visible: true, parent: '' },
+                  { label: 'Services', url: '/services', visible: true, parent: '' },
+                  { label: 'Locations', url: '/locations', visible: true, parent: '' },
+                  { label: 'Mobile Dentistry', url: '/mobile-dentistry', visible: true, parent: '' },
+                  { label: 'Blog', url: '/blog', visible: true, parent: '' },
+                  { label: 'Contact', url: '/contact', visible: true, parent: '' }
                 ];
               }
+              // Filter visible items and separate top-level from children
+              const visibleItems = navItems.filter(item => item.visible !== false);
+              const topLevelItems = visibleItems.filter(item => !item.parent);
+              const getChildren = (parentLabel) => visibleItems.filter(item => item.parent === parentLabel);
             %>
-            <% navItems.filter(item => item.visible !== false).forEach(item => { %>
-              <li><a href="<%= item.url %>" class="<%= currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url)) ? 'active' : '' %>"><%= item.label %></a></li>
+            <% topLevelItems.forEach(item => {
+              const children = getChildren(item.label);
+              const hasChildren = children.length > 0;
+              const isActive = currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url)) || children.some(child => currentPath === child.url || (child.url !== '/' && currentPath.startsWith(child.url)));
+            %>
+              <% if (hasChildren) { %>
+              <li class="has-dropdown">
+                <a href="<%= item.url %>" class="<%= isActive ? 'active' : '' %>">
+                  <%= item.label %>
+                  <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 12px; height: 12px; margin-left: 4px;"><polyline points="6 9 12 15 18 9"/></svg>
+                </a>
+                <ul class="dropdown-menu">
+                  <% children.forEach(child => { %>
+                  <li><a href="<%= child.url %>" class="<%= currentPath === child.url || (child.url !== '/' && currentPath.startsWith(child.url)) ? 'active' : '' %>"><%= child.label %></a></li>
+                  <% }); %>
+                </ul>
+              </li>
+              <% } else { %>
+              <li><a href="<%= item.url %>" class="<%= isActive ? 'active' : '' %>"><%= item.label %></a></li>
+              <% } %>
             <% }); %>
           </ul>
           
