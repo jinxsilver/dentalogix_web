@@ -836,6 +836,19 @@ router.post('/test-email', requireAuth, async (req, res) => {
   }
 });
 
+// Upload credential image (AJAX)
+router.post('/upload-credential-image', requireAuth, upload.single('credential_image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.json({ success: false, error: 'No file uploaded' });
+    }
+    const imagePath = '/uploads/' + req.file.filename;
+    res.json({ success: true, imagePath });
+  } catch (error) {
+    res.json({ success: false, error: error.message });
+  }
+});
+
 // =====================
 // Backup & Restore
 // =====================
