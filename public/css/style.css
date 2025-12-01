@@ -4691,10 +4691,6 @@ body.theme-fall .section-label {
   color: var(--color-primary);
 }
 
-body.theme-fall .footer-bottom {
-  background: #92400E;
-}
-
 body.theme-fall .site-footer {
   background: linear-gradient(180deg, #B45309 0%, #92400E 100%);
 }
